@@ -1,7 +1,7 @@
 ---
 # comagen-22e0
 title: Homepage intro content from index.md
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-02-28T20:43:08Z
