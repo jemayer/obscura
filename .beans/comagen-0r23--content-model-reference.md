@@ -1,7 +1,7 @@
 ---
 # comagen-0r23
 title: Content model reference
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:57:46Z

@@ -1,7 +1,7 @@
 ---
 # comagen-7dvx
 title: v1.0
-status: todo
+status: completed
 type: milestone
 priority: high
 created_at: 2026-02-27T21:53:57Z

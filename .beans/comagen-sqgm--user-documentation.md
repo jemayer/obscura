@@ -1,7 +1,7 @@
 ---
 # comagen-sqgm
 title: User Documentation
-status: todo
+status: completed
 type: epic
 created_at: 2026-02-27T21:54:42Z
 updated_at: 2026-02-27T21:54:42Z

@@ -1,7 +1,7 @@
 ---
 # comagen-6moh
 title: Deployment guide
-status: todo
+status: completed
 type: task
 priority: low
 created_at: 2026-02-27T21:57:46Z
