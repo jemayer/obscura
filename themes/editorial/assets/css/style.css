@@ -279,7 +279,7 @@ a:hover {
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: 4px;
-  gap: 0 var(--grid-gap);
+  gap: var(--grid-gap);
 }
 
 @media (min-width: 40em) {
