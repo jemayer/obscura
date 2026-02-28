@@ -1,7 +1,7 @@
 ---
 # comagen-gf5l
 title: Redesign grid/masonry layout toggle
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-28T21:45:04Z

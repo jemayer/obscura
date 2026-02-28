@@ -1,7 +1,7 @@
 ---
 # comagen-bavp
 title: Fix overlapping title and location on gallery thumbnail hover
-status: todo
+status: completed
 type: bug
 priority: normal
 created_at: 2026-02-28T21:45:04Z
