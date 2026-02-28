@@ -1,7 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parse as parseYaml } from 'yaml';
-import type { SiteConfig, GalleryConfig, ImageConfig } from './types.js';
+import type {
+  SiteConfig,
+  GalleryConfig,
+  GalleryEntry,
+  ImageConfig,
+} from './types.js';
 
 const DEFAULT_IMAGE_CONFIG: ImageConfig = {
   breakpoints: [400, 800, 1200, 2400],
@@ -17,21 +22,51 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
 };
 
 const DEFAULT_GALLERY_CONFIG: GalleryConfig = {
-  galleries: [
-    { slug: 'post-assets', title: 'Post Assets', listed: false },
-  ],
+  galleries: [{ slug: 'post-assets', title: 'Post Assets', listed: false }],
 };
 
-async function loadYamlFile<T>(filePath: string): Promise<T> {
-  const content = await readFile(filePath, 'utf-8');
-  return parseYaml(content) as T;
+interface RawSiteConfig {
+  base_url?: string;
+  title?: string;
+  theme?: string;
+  recent_shots_count?: number;
+  images?: {
+    breakpoints?: number[];
+    webp_quality?: number;
+  };
 }
 
-export async function loadSiteConfig(
-  projectRoot: string,
-): Promise<SiteConfig> {
+interface RawGalleryEntry {
+  slug: string;
+  title: string;
+  description?: string;
+  listed?: boolean;
+}
+
+interface RawGalleryConfig {
+  galleries?: RawGalleryEntry[];
+}
+
+async function loadYamlFile(filePath: string): Promise<unknown> {
+  const content = await readFile(filePath, 'utf-8');
+  return parseYaml(content) as unknown;
+}
+
+function isSiteConfig(value: unknown): value is RawSiteConfig {
+  return typeof value === 'object' && value !== null;
+}
+
+function isGalleryConfig(value: unknown): value is RawGalleryConfig {
+  return typeof value === 'object' && value !== null;
+}
+
+export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
   const filePath = resolve(projectRoot, 'config', 'site.yaml');
-  const raw = await loadYamlFile<Partial<SiteConfig>>(filePath);
+  const raw = await loadYamlFile(filePath);
+
+  if (!isSiteConfig(raw)) {
+    return DEFAULT_SITE_CONFIG;
+  }
 
   return {
     base_url: raw.base_url ?? DEFAULT_SITE_CONFIG.base_url,
@@ -40,8 +75,7 @@ export async function loadSiteConfig(
     recent_shots_count:
       raw.recent_shots_count ?? DEFAULT_SITE_CONFIG.recent_shots_count,
     images: {
-      breakpoints:
-        raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
+      breakpoints: raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
       webp_quality:
         raw.images?.webp_quality ?? DEFAULT_IMAGE_CONFIG.webp_quality,
     },
@@ -52,18 +86,25 @@ export async function loadGalleryConfig(
   projectRoot: string,
 ): Promise<GalleryConfig> {
   const filePath = resolve(projectRoot, 'config', 'galleries.yaml');
-  const raw = await loadYamlFile<Partial<GalleryConfig>>(filePath);
+  const raw = await loadYamlFile(filePath);
 
-  if (!raw.galleries || !Array.isArray(raw.galleries)) {
+  if (!isGalleryConfig(raw) || !Array.isArray(raw.galleries)) {
     return DEFAULT_GALLERY_CONFIG;
   }
 
-  return {
-    galleries: raw.galleries.map((g) => ({
-      slug: g.slug,
-      title: g.title,
-      description: g.description,
-      listed: g.listed ?? true,
-    })),
-  };
+  const galleries: GalleryEntry[] = raw.galleries.map(
+    (g: RawGalleryEntry): GalleryEntry => {
+      const entry: GalleryEntry = {
+        slug: g.slug,
+        title: g.title,
+        listed: g.listed ?? true,
+      };
+      if (g.description !== undefined) {
+        return { ...entry, description: g.description };
+      }
+      return entry;
+    },
+  );
+
+  return { galleries };
 }

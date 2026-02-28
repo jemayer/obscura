@@ -9,7 +9,10 @@
     "dev": "echo 'TODO: implement watch mode'",
     "test": "echo 'TODO: configure vitest'",
     "typecheck": "tsc --noEmit",
-    "compile": "tsc"
+    "compile": "tsc",
+    "lint": "eslint src/",
+    "format": "prettier --write 'src/**/*.ts'",
+    "format:check": "prettier --check 'src/**/*.ts'"
   },
   "keywords": [
     "static-site-generator",
@@ -18,8 +21,12 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^25.3.2",
-    "typescript": "^5.9.3"
+    "eslint": "^10.0.2",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
     "yaml": "^2.8.2"
