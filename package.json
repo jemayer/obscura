@@ -1,0 +1,23 @@
+{
+  "name": "comagen",
+  "version": "0.1.0",
+  "description": "A purpose-built static site generator for photography portfolio websites.",
+  "type": "module",
+  "main": "dist-build/index.js",
+  "scripts": {
+    "build": "echo 'TODO: implement full build pipeline'",
+    "dev": "echo 'TODO: implement watch mode'",
+    "test": "echo 'TODO: configure vitest'",
+    "typecheck": "tsc --noEmit",
+    "compile": "tsc"
+  },
+  "keywords": [
+    "static-site-generator",
+    "photography",
+    "portfolio"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
