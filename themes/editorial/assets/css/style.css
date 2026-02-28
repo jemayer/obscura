@@ -597,18 +597,18 @@ a:hover {
 }
 
 .post-list__tags {
-  display: flex;
-  gap: var(--space-sm);
   margin-top: var(--space-sm);
-  flex-wrap: wrap;
 }
 
 .tag {
   font-size: var(--font-size-xs);
   color: var(--color-text-tertiary);
-  border: 1px solid var(--color-border);
-  padding: 0.125rem 0.5rem;
   letter-spacing: 0.02em;
+}
+
+.tag + .tag::before {
+  content: ' · ';
+  color: var(--color-border);
 }
 
 /* Blog post body */
