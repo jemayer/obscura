@@ -1,7 +1,7 @@
 ---
 # comagen-pzxg
 title: Full build pipeline orchestrator
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-02-27T21:57:09Z

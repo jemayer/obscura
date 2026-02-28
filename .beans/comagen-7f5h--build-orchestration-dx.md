@@ -1,7 +1,7 @@
 ---
 # comagen-7f5h
 title: Build Orchestration & DX
-status: todo
+status: completed
 type: epic
 priority: normal
 created_at: 2026-02-27T21:54:42Z

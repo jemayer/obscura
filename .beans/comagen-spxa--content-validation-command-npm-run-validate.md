@@ -1,7 +1,7 @@
 ---
 # comagen-spxa
 title: Content validation command (npm run validate)
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T22:03:47Z
