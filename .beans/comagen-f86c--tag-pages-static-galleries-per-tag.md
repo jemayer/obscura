@@ -1,7 +1,7 @@
 ---
 # comagen-f86c
 title: Tag pages — static galleries per tag
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-02-28T21:03:51Z

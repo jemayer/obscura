@@ -1,7 +1,7 @@
 ---
 # comagen-pe2m
 title: Fix inconsistent Back to Gallery link position on photo detail
-status: todo
+status: completed
 type: bug
 priority: normal
 created_at: 2026-02-28T21:03:48Z

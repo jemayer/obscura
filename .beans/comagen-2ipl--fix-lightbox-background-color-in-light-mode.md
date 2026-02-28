@@ -1,7 +1,7 @@
 ---
 # comagen-2ipl
 title: Fix lightbox background color in light mode
-status: todo
+status: completed
 type: bug
 priority: normal
 created_at: 2026-02-28T21:03:46Z
