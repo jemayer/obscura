@@ -29,6 +29,7 @@
     "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
+    "exifr": "^7.1.3",
     "yaml": "^2.8.2"
   }
 }
