@@ -19,7 +19,7 @@
     "photography",
     "portfolio"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.3.2",
