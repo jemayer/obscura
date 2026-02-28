@@ -74,14 +74,44 @@
     // Layout toggle (grid ↔ masonry)
     (function() {
       var STORAGE_KEY = 'gallery-layout';
+      var ROW_HEIGHT = 4; // matches grid-auto-rows in CSS
       var saved = localStorage.getItem(STORAGE_KEY);
 
-      // Initialize all grids on the page
-      document.querySelectorAll('.gallery-grid').forEach(function(grid) {
-        var defaultLayout = grid.getAttribute('data-default-layout') || 'grid';
-        var layout = saved || defaultLayout;
-        if (layout === 'masonry') grid.classList.add('gallery-grid--masonry');
-      });
+      // Measure images and set row spans for masonry grid
+      function layoutMasonry(grid) {
+        var gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+        grid.querySelectorAll('.gallery-item').forEach(function(item) {
+          // Reset span to measure natural height
+          item.style.gridRowEnd = '';
+          var img = item.querySelector('img');
+          if (!img || !img.naturalHeight) return;
+          var colWidth = item.getBoundingClientRect().width;
+          var imgHeight = (img.naturalHeight / img.naturalWidth) * colWidth;
+          var span = Math.ceil((imgHeight + gap) / (ROW_HEIGHT + gap));
+          item.style.gridRowEnd = 'span ' + span;
+        });
+      }
+
+      function clearMasonry(grid) {
+        grid.querySelectorAll('.gallery-item').forEach(function(item) {
+          item.style.gridRowEnd = '';
+        });
+      }
+
+      function applyLayout(layout) {
+        document.querySelectorAll('.gallery-grid').forEach(function(grid) {
+          var isMasonry = layout === 'masonry';
+          grid.classList.toggle('gallery-grid--masonry', isMasonry);
+          if (isMasonry) {
+            layoutMasonry(grid);
+          } else {
+            clearMasonry(grid);
+          }
+        });
+      }
+
+      // Initialize all grids
+      var initial = saved || (document.querySelector('.gallery-grid[data-default-layout]') || {}).getAttribute('data-default-layout') || 'grid';
 
       // Update toggle button active states
       function updateButtons(layout) {
@@ -90,18 +120,37 @@
         });
       }
 
-      // Set initial active state
-      var initial = saved || (document.querySelector('.gallery-grid[data-default-layout]') || {}).getAttribute('data-default-layout') || 'grid';
       updateButtons(initial);
+
+      // Wait for images to load before measuring
+      function initMasonry() {
+        if (initial === 'masonry') applyLayout('masonry');
+      }
+
+      // Apply masonry on load and after all images are ready
+      if (initial === 'masonry') {
+        document.querySelectorAll('.gallery-grid').forEach(function(grid) {
+          grid.classList.add('gallery-grid--masonry');
+        });
+      }
+      window.addEventListener('load', initMasonry);
+
+      // Re-layout on resize
+      var resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          var current = localStorage.getItem(STORAGE_KEY) || initial;
+          if (current === 'masonry') applyLayout('masonry');
+        }, 150);
+      });
 
       // Listen for clicks on toggle buttons
       document.addEventListener('click', function(e) {
         var btn = e.target.closest('.layout-btn');
         if (!btn) return;
         var layout = btn.getAttribute('data-layout');
-        document.querySelectorAll('.gallery-grid').forEach(function(grid) {
-          grid.classList.toggle('gallery-grid--masonry', layout === 'masonry');
-        });
+        applyLayout(layout);
         localStorage.setItem(STORAGE_KEY, layout);
         updateButtons(layout);
       });
