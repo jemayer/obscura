@@ -255,9 +255,14 @@ export async function renderBlogIndex(
 export async function renderBlogPost(
   engine: RenderingEngine,
   post: BlogPost,
+  galleries: readonly Gallery[],
   distDir: string,
 ): Promise<void> {
-  await renderToFile(engine, 'blog-post.html', { post }, distDir, `blog/${post.slug}/index.html`);
+  // Replace shortcodes in rendered content with photo cards
+  const photoIndex = buildPhotoIndex(galleries);
+  const content = replaceShortcodes(post.renderedContent, photoIndex);
+  const postWithCards = { ...post, renderedContent: content };
+  await renderToFile(engine, 'blog-post.html', { post: postWithCards }, distDir, `blog/${post.slug}/index.html`);
 }
 
 /** Render a simple page (/<slug>/) */
@@ -338,7 +343,7 @@ export async function renderAll(
   // Blog
   await renderBlogIndex(engine, posts, distDir);
   for (const post of posts) {
-    await renderBlogPost(engine, post, distDir);
+    await renderBlogPost(engine, post, galleries, distDir);
   }
 
   // Pages
@@ -373,4 +378,85 @@ function getBackLinkSlugs(
 function bareSlug(namespacedSlug: string): string {
   const parts = namespacedSlug.split('/');
   return parts.length > 1 ? parts.slice(1).join('/') : namespacedSlug;
+}
+
+/**
+ * Build a lookup map from photo slug (both namespaced and bare) to photo + gallery.
+ */
+function buildPhotoIndex(
+  galleries: readonly Gallery[],
+): Map<string, { photo: Photo; gallery: Gallery }> {
+  const index = new Map<string, { photo: Photo; gallery: Gallery }>();
+  for (const gallery of galleries) {
+    for (const photo of gallery.photos) {
+      index.set(photo.slug, { photo, gallery });
+      // Also index by bare slug for shortcode matching
+      const bare = bareSlug(photo.slug);
+      if (!index.has(bare)) {
+        index.set(bare, { photo, gallery });
+      }
+    }
+  }
+  return index;
+}
+
+/**
+ * Replace {{< photo "slug" >}} shortcodes in rendered HTML with photo cards.
+ */
+function replaceShortcodes(
+  html: string,
+  photoIndex: Map<string, { photo: Photo; gallery: Gallery }>,
+): string {
+  // Split on <pre>/<code> blocks to avoid replacing shortcodes inside them
+  const parts = html.split(/(<pre[\s>][\s\S]*?<\/pre>|<code[\s>][\s\S]*?<\/code>)/g);
+  const shortcodeRe = /(?:<p>)?\{\{(?:&lt;|&#x3C;)\s*photo\s+(?:&quot;|&#x22;|")([^"&]+)(?:&quot;|&#x22;|")\s*(?:&gt;|&#x3E;|>)\}\}(?:<\/p>)?/g;
+
+  const result = parts.map((part, i) => {
+    // Odd-indexed parts are <pre>/<code> blocks — leave them alone
+    if (i % 2 === 1) return part;
+    return part.replace(shortcodeRe, (_match, slug: string) => {
+      const entry = photoIndex.get(slug);
+      if (!entry) return `<!-- photo not found: ${slug} -->`;
+      return renderPhotoCard(entry.photo, entry.gallery);
+    });
+  });
+
+  return result.join('');
+}
+
+/**
+ * Render a photo card for use inside blog post content.
+ */
+function renderPhotoCard(photo: Photo, gallery: Gallery): string {
+  const best = bestVariant(photo.variants, 800);
+  if (!best) return '';
+
+  const alt = escapeAttr(photo.metadata.title || bareSlug(photo.slug));
+  const href = `/photography/${gallery.slug}/${bareSlug(photo.slug)}/`;
+  const title = photo.metadata.title;
+  const meta: string[] = [];
+  if (photo.metadata.location) meta.push(escapeAttr(photo.metadata.location));
+  if (photo.metadata.camera) meta.push(escapeAttr(photo.metadata.camera));
+
+  return [
+    '<div class="photo-card">',
+    `  <a href="${href}">`,
+    '    <div class="photo-card__image">',
+    `      <img src="${best.path}" srcset="${srcset(photo.variants)}" sizes="(max-width: 42rem) 100vw, 42rem" alt="${alt}" loading="lazy" decoding="async">`,
+    '    </div>',
+    '    <div class="photo-card__info">',
+    title ? `      <span class="photo-card__title">${escapeAttr(title)}</span>` : '',
+    meta.length ? `      <span class="photo-card__meta">${meta.join(' · ')}</span>` : '',
+    '    </div>',
+    '  </a>',
+    '</div>',
+  ].filter(Boolean).join('\n');
+}
+
+function escapeAttr(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
