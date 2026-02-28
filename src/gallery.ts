@@ -75,6 +75,7 @@ export async function loadGalleries(
       slug: entry.slug,
       title: entry.title,
       listed: entry.listed,
+      layout: entry.layout,
       photos,
     };
     if (entry.description !== undefined) {

@@ -24,6 +24,7 @@ export interface GalleryEntry {
   readonly title: string;
   readonly description?: string;
   readonly listed: boolean;
+  readonly layout?: 'grid' | 'masonry' | undefined;
 }
 
 export interface GalleryConfig {
@@ -79,6 +80,7 @@ export interface Gallery {
   readonly title: string;
   readonly description?: string;
   readonly listed: boolean;
+  readonly layout?: 'grid' | 'masonry' | undefined;
   readonly photos: readonly Photo[];
 }
 

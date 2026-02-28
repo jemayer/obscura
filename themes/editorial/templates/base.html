@@ -70,5 +70,42 @@
       });
     })();
   </script>
+  <script>
+    // Layout toggle (grid ↔ masonry)
+    (function() {
+      var STORAGE_KEY = 'gallery-layout';
+      var saved = localStorage.getItem(STORAGE_KEY);
+
+      // Initialize all grids on the page
+      document.querySelectorAll('.gallery-grid').forEach(function(grid) {
+        var defaultLayout = grid.getAttribute('data-default-layout') || 'grid';
+        var layout = saved || defaultLayout;
+        if (layout === 'masonry') grid.classList.add('gallery-grid--masonry');
+      });
+
+      // Update toggle button active states
+      function updateButtons(layout) {
+        document.querySelectorAll('.layout-btn').forEach(function(btn) {
+          btn.classList.toggle('is-active', btn.getAttribute('data-layout') === layout);
+        });
+      }
+
+      // Set initial active state
+      var initial = saved || (document.querySelector('.gallery-grid[data-default-layout]') || {}).getAttribute('data-default-layout') || 'grid';
+      updateButtons(initial);
+
+      // Listen for clicks on toggle buttons
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.layout-btn');
+        if (!btn) return;
+        var layout = btn.getAttribute('data-layout');
+        document.querySelectorAll('.gallery-grid').forEach(function(grid) {
+          grid.classList.toggle('gallery-grid--masonry', layout === 'masonry');
+        });
+        localStorage.setItem(STORAGE_KEY, layout);
+        updateButtons(layout);
+      });
+    })();
+  </script>
 </body>
 </html>

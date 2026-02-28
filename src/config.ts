@@ -41,6 +41,7 @@ interface RawGalleryEntry {
   title: string;
   description?: string;
   listed?: boolean;
+  layout?: 'grid' | 'masonry';
 }
 
 interface RawGalleryConfig {
@@ -98,6 +99,7 @@ export async function loadGalleryConfig(
         slug: g.slug,
         title: g.title,
         listed: g.listed ?? true,
+        layout: g.layout,
       };
       if (g.description !== undefined) {
         return { ...entry, description: g.description };

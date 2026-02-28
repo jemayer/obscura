@@ -12,11 +12,14 @@
 
   <div class="recent-shots__header">
     <h2 class="section-label">Recent Shots</h2>
-    <a class="recent-shots__link" href="{{ '/photography/' | url }}">All galleries &rarr;</a>
+    <div class="recent-shots__actions">
+      {% include "partials/layout-toggle.html" %}
+      <a class="recent-shots__link" href="{{ '/photography/' | url }}">All galleries &rarr;</a>
+    </div>
   </div>
 
   {% if recent_photos.length %}
-  <div class="gallery-grid">
+  <div class="gallery-grid" data-default-layout="grid">
     {% for item in recent_photos %}
     <a class="gallery-item"
        href="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}"
