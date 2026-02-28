@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% set nav_current = page.slug %}
+
+{% block title %}{{ page.frontmatter.title }} — {{ site.title }}{% endblock %}
+
+{% block content %}
+<div class="content content--narrow">
+  <h1 class="page-title">{{ page.frontmatter.title }}</h1>
+  <div class="page-body">
+    {{ page.renderedContent | safe_html }}
+  </div>
+</div>
+{% endblock %}

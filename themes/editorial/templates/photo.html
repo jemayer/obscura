@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% set nav_current = 'photography' %}
+
+{% block title %}{{ photo.metadata.title or photo.slug }} — {{ site.title }}{% endblock %}
+{% block description %}{{ photo.metadata.caption or photo.metadata.title or photo.slug }}{% endblock %}
+
+{% block og_meta %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ photo.metadata.title or photo.slug }}">
+{% if photo.metadata.caption %}
+<meta property="og:description" content="{{ photo.metadata.caption }}">
+{% endif %}
+{% if photo.variants.length %}
+<meta property="og:image" content="{{ (photo.variants | bestvariant(1200)).path | absurl }}">
+{% endif %}
+<meta property="og:url" content="{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | absurl }}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="photo-detail">
+    <div class="photo-detail__image">
+      {% if photo.variants.length %}
+      <img src="{{ (photo.variants | bestvariant(2400)).path }}"
+           srcset="{{ photo.variants | srcset }}"
+           sizes="(max-width: 1200px) 100vw, 1200px"
+           alt="{{ photo.metadata.title or photo.slug }}">
+      {% endif %}
+    </div>
+
+    <div class="photo-detail__body">
+      <h1 class="photo-detail__title">{{ photo.metadata.title or photo.slug }}</h1>
+
+      {% if photo.metadata.caption %}
+      <p class="photo-detail__caption">{{ photo.metadata.caption }}</p>
+      {% endif %}
+
+      <ul class="photo-meta">
+        {% if photo.metadata.date %}
+        <li>
+          <span class="photo-meta__label">Date</span>
+          <span class="photo-meta__value">
+            <time datetime="{{ photo.metadata.date | isodate }}">{{ photo.metadata.date | datereadable }}</time>
+          </span>
+        </li>
+        {% endif %}
+        {% if photo.metadata.camera %}
+        <li>
+          <span class="photo-meta__label">Camera</span>
+          <span class="photo-meta__value">{{ photo.metadata.camera }}</span>
+        </li>
+        {% endif %}
+        {% if photo.metadata.lens %}
+        <li>
+          <span class="photo-meta__label">Lens</span>
+          <span class="photo-meta__value">{{ photo.metadata.lens }}</span>
+        </li>
+        {% endif %}
+        {% if photo.metadata.location %}
+        <li>
+          <span class="photo-meta__label">Location</span>
+          <span class="photo-meta__value">{{ photo.metadata.location }}</span>
+        </li>
+        {% endif %}
+      </ul>
+
+      {% if photo.metadata.tags.length %}
+      <div class="post-list__tags">
+        {% for tag in photo.metadata.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if back_links.length %}
+      <div class="photo-backlinks">
+        <h2 class="photo-backlinks__title">Referenced in</h2>
+        <ul class="photo-backlinks__list">
+          {% for post in back_links %}
+          <li>
+            <a href="{{ ('/blog/' + post.slug + '/') | url }}">{{ post.frontmatter.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <p style="margin-top: var(--space-lg)">
+        <a href="{{ ('/photography/' + gallery.slug + '/') | url }}">&larr; Back to {{ gallery.title }}</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

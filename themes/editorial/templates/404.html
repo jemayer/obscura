@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found — {{ site.title }}{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="error-page">
+    <div class="error-page__code">404</div>
+    <p class="error-page__message">This page doesn't exist — perhaps the light has shifted.</p>
+    <div class="error-page__links">
+      <a href="{{ '/' | url }}">Homepage</a>
+      <a href="{{ '/photography/' | url }}">Photography</a>
+      <a href="{{ '/blog/' | url }}">Blog</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ '/' | absurl }}</loc>
+  </url>
+  <url>
+    <loc>{{ '/photography/' | absurl }}</loc>
+  </url>
+  {% for gallery in galleries %}
+  {% if gallery.listed %}
+  <url>
+    <loc>{{ ('/photography/' + gallery.slug + '/') | absurl }}</loc>
+  </url>
+  {% endif %}
+  {% for photo in gallery.photos %}
+  <url>
+    <loc>{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | absurl }}</loc>
+  </url>
+  {% endfor %}
+  {% endfor %}
+  <url>
+    <loc>{{ '/blog/' | absurl }}</loc>
+  </url>
+  {% for post in posts %}
+  <url>
+    <loc>{{ ('/blog/' + post.slug + '/') | absurl }}</loc>
+  </url>
+  {% endfor %}
+  {% for page in pages %}
+  <url>
+    <loc>{{ ('/' + page.slug + '/') | absurl }}</loc>
+  </url>
+  {% endfor %}
+</urlset>

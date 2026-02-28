@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% set nav_current = 'blog' %}
+
+{% block title %}Blog — {{ site.title }}{% endblock %}
+{% block description %}Blog posts from {{ site.title }}{% endblock %}
+
+{% block content %}
+<div class="content content--narrow">
+  <h1 class="page-title">Blog</h1>
+
+  {% if posts.length %}
+  <div class="post-list">
+    {% for post in posts %}
+    <article class="post-list__item">
+      <time class="post-list__date" datetime="{{ post.frontmatter.date | isodate }}">
+        {{ post.frontmatter.date | datereadable }}
+      </time>
+      <h2 class="post-list__title">
+        <a href="{{ ('/blog/' + post.slug + '/') | url }}">{{ post.frontmatter.title }}</a>
+      </h2>
+      {% if post.frontmatter.summary %}
+      <p class="post-list__summary">{{ post.frontmatter.summary }}</p>
+      {% endif %}
+      {% if post.frontmatter.tags.length %}
+      <div class="post-list__tags">
+        {% for tag in post.frontmatter.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

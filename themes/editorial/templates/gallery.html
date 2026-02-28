@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% set nav_current = 'photography' %}
+
+{% block title %}{{ gallery.title }} — {{ site.title }}{% endblock %}
+{% block description %}{{ gallery.description or gallery.title }}{% endblock %}
+
+{% block content %}
+<div class="content content--full">
+  <h1 class="page-title">{{ gallery.title }}</h1>
+  {% if gallery.description %}
+  <p class="page-subtitle">{{ gallery.description }}</p>
+  {% endif %}
+
+  {% if gallery.photos.length %}
+  <div class="gallery-grid">
+    {% for photo in gallery.photos %}
+    <a class="gallery-item"
+       href="{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | url }}"
+       data-pswp-src="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).path }}{% endif %}"
+       data-pswp-width="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).width }}{% endif %}"
+       data-pswp-height=""
+       data-pswp-title="{{ photo.metadata.title }}"
+       data-pswp-location="{{ photo.metadata.location }}"
+       data-pswp-camera="{{ photo.metadata.camera }}"
+       data-pswp-date="{% if photo.metadata.date %}{{ photo.metadata.date | dateformat }}{% endif %}"
+       data-pswp-permalink="{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | url }}">
+      {% if photo.variants.length %}
+      <img src="{{ (photo.variants | bestvariant(800)).path }}"
+           srcset="{{ photo.variants | srcset }}"
+           sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+           alt="{{ photo.metadata.title or photo.slug }}"
+           loading="lazy" decoding="async">
+      {% endif %}
+      <div class="gallery-item__overlay">
+        <span class="gallery-item__title">{{ photo.metadata.title }}</span>
+        {% if photo.metadata.location %}
+        <span class="gallery-item__location">{{ photo.metadata.location }}</span>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

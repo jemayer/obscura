@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% set nav_current = 'blog' %}
+
+{% block title %}{{ post.frontmatter.title }} — {{ site.title }}{% endblock %}
+{% block description %}{{ post.frontmatter.summary or post.frontmatter.title }}{% endblock %}
+
+{% block og_meta %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ post.frontmatter.title }}">
+{% if post.frontmatter.summary %}
+<meta property="og:description" content="{{ post.frontmatter.summary }}">
+{% endif %}
+<meta property="og:url" content="{{ ('/blog/' + post.slug + '/') | absurl }}">
+{% endblock %}
+
+{% block content %}
+<div class="content content--narrow">
+  <article>
+    <header class="post-header">
+      <time class="post-header__date" datetime="{{ post.frontmatter.date | isodate }}">
+        {{ post.frontmatter.date | datereadable }}
+      </time>
+      <h1 class="post-header__title">{{ post.frontmatter.title }}</h1>
+      {% if post.frontmatter.tags.length %}
+      <div class="post-list__tags">
+        {% for tag in post.frontmatter.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </header>
+
+    <div class="post-body">
+      {{ post.renderedContent | safe_html }}
+    </div>
+  </article>
+</div>
+{% endblock %}

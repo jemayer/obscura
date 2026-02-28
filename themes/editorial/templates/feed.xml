@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ site.title }}</title>
+    <link>{{ '/' | absurl }}</link>
+    <description>{{ site.title }}</description>
+    <atom:link href="{{ '/feed.xml' | absurl }}" rel="self" type="application/rss+xml"/>
+    <language>en</language>
+    {% for post in posts %}
+    <item>
+      <title>{{ post.frontmatter.title }}</title>
+      <link>{{ ('/blog/' + post.slug + '/') | absurl }}</link>
+      <guid isPermaLink="true">{{ ('/blog/' + post.slug + '/') | absurl }}</guid>
+      <pubDate>{{ post.frontmatter.date | isodate }}</pubDate>
+      <description>{{ post.frontmatter.summary or (post.content | truncatewords(50)) }}</description>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>
