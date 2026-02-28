@@ -7,10 +7,12 @@ import type {
   Photo,
   BlogPost,
   Page,
+  TagPage,
   BuildContext,
   CrossReferenceGraph,
 } from './types.js';
 import { srcset, sizes, bestVariant, responsiveImg } from './responsive.js';
+import { slugifyTag } from './slugs.js';
 
 // ---------------------------------------------------------------------------
 // Nunjucks Environment
@@ -105,6 +107,12 @@ export function createRenderingEngine(
   env.addFilter('bareslug', (slug: unknown) => {
     if (typeof slug !== 'string') return '';
     return bareSlug(slug);
+  });
+
+  // Slugify a tag for URL: {{ tag | slugifytag }}
+  env.addFilter('slugifytag', (tag: unknown) => {
+    if (typeof tag !== 'string') return '';
+    return slugifyTag(tag);
   });
 
   // URL builder: {{ "/photography/" | url }} → root-relative path
@@ -281,6 +289,30 @@ export async function renderPage(
   await renderToFile(engine, 'page.html', { page }, distDir, `${page.slug}/index.html`);
 }
 
+/** Render the tag index (/tags/) */
+export async function renderTagIndex(
+  engine: RenderingEngine,
+  tagPages: readonly TagPage[],
+  distDir: string,
+): Promise<void> {
+  await renderToFile(engine, 'tag-index.html', { tag_pages: tagPages }, distDir, 'tags/index.html');
+}
+
+/** Render a single tag page (/tags/<slug>/) */
+export async function renderTagPage(
+  engine: RenderingEngine,
+  tagPage: TagPage,
+  distDir: string,
+): Promise<void> {
+  await renderToFile(
+    engine,
+    'tag.html',
+    { tag_page: tagPage },
+    distDir,
+    `tags/${tagPage.slug}/index.html`,
+  );
+}
+
 /** Render the 404 page */
 export async function render404(
   engine: RenderingEngine,
@@ -304,11 +336,11 @@ export async function renderSitemap(
   context: BuildContext,
   distDir: string,
 ): Promise<void> {
-  const { galleries, posts, pages } = context;
+  const { galleries, posts, pages, tagPages } = context;
   await renderToFile(
     engine,
     'sitemap.xml',
-    { galleries, posts, pages },
+    { galleries, posts, pages, tag_pages: tagPages },
     distDir,
     'sitemap.xml',
   );
@@ -326,7 +358,7 @@ export async function renderAll(
   context: BuildContext,
   distDir: string,
 ): Promise<void> {
-  const { galleries, posts, pages, crossReferences, homepageContent } = context;
+  const { galleries, posts, pages, crossReferences, tagPages, homepageContent } = context;
 
   // Homepage
   await renderHomepage(engine, galleries, homepageContent, distDir);
@@ -356,6 +388,14 @@ export async function renderAll(
   // Pages
   for (const page of pages) {
     await renderPage(engine, page, distDir);
+  }
+
+  // Tags
+  if (tagPages.length > 0) {
+    await renderTagIndex(engine, tagPages, distDir);
+    for (const tagPage of tagPages) {
+      await renderTagPage(engine, tagPage, distDir);
+    }
   }
 
   // 404

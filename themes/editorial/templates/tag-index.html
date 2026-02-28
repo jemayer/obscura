@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Tags — {{ site.title }}{% endblock %}
+
+{% block content %}
+<div class="content">
+  <h1 class="page-title">Tags</h1>
+
+  {% if tag_pages.length %}
+  <ul class="tag-list">
+    {% for tp in tag_pages %}
+    <li class="tag-list__item">
+      <a href="{{ ('/tags/' + tp.slug + '/') | url }}">{{ tp.tag }}</a>
+      <span class="tag-list__count">{{ tp.photos.length }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

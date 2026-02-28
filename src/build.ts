@@ -6,6 +6,7 @@ import { validateAllGalleryFormats } from './image-validation.js';
 import { loadGalleries } from './gallery.js';
 import { loadAllBlogPosts, loadAllPages, loadHomepageContent } from './markdown.js';
 import { buildCrossReferenceGraph } from './crossref.js';
+import { buildTagPages } from './tags.js';
 import { processAllPhotosWithCache } from './image-cache.js';
 import { formatExifWarnings } from './exif.js';
 import { loadTheme, copyThemeAssets } from './theme.js';
@@ -115,12 +116,16 @@ export async function build(projectDir: string): Promise<BuildResult> {
   // -- 13. Render all pages --
   const engine = createRenderingEngine(theme.templatesDir, siteConfig);
 
+  // -- Build tag pages --
+  const tagPages = buildTagPages(galleriesWithImages);
+
   const buildContext: BuildContext = {
     siteConfig,
     galleries: galleriesWithImages,
     posts,
     pages,
     crossReferences,
+    tagPages,
     homepageContent,
   };
 
@@ -138,6 +143,7 @@ export async function build(projectDir: string): Promise<BuildResult> {
     1 + // blog index
     posts.length + // blog posts
     pages.length + // pages
+    (tagPages.length > 0 ? 1 + tagPages.length : 0) + // tag index + tag pages
     1 + // 404
     1 + // feed.xml
     1; // sitemap.xml

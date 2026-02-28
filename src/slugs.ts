@@ -16,6 +16,18 @@ export function slugifyFilename(filename: string): string {
 }
 
 /**
+ * Slugify a tag string for use in URLs.
+ */
+export function slugifyTag(tag: string): string {
+  return tag
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/**
  * Build a fully namespaced slug: <gallery-slug>/<photo-slug>
  */
 export function namespacedSlug(

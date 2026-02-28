@@ -31,4 +31,14 @@
     <loc>{{ ('/' + page.slug + '/') | absurl }}</loc>
   </url>
   {% endfor %}
+  {% if tag_pages.length %}
+  <url>
+    <loc>{{ '/tags/' | absurl }}</loc>
+  </url>
+  {% for tp in tag_pages %}
+  <url>
+    <loc>{{ ('/tags/' + tp.slug + '/') | absurl }}</loc>
+  </url>
+  {% endfor %}
+  {% endif %}
 </urlset>
