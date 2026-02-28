@@ -68,7 +68,7 @@
       {% if photo.metadata.tags.length %}
       <div class="post-list__tags">
         {% for tag in photo.metadata.tags %}
-        <span class="tag">{{ tag }}</span>
+        <a class="tag" href="{{ ('/tags/' + (tag | slugifytag) + '/') | url }}">{{ tag }}</a>
         {% endfor %}
       </div>
       {% endif %}
@@ -86,9 +86,9 @@
       </div>
       {% endif %}
 
-      <p style="margin-top: var(--space-lg)">
+      <div class="photo-detail__back">
         <a href="{{ ('/photography/' + gallery.slug + '/') | url }}">&larr; Back to {{ gallery.title }}</a>
-      </p>
+      </div>
     </div>
   </div>
 </div>
