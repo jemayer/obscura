@@ -1,0 +1,147 @@
+/**
+ * comagen lightbox — PhotoSwipe integration
+ *
+ * Expects gallery items with this markup:
+ *
+ *   <a class="gallery-item" href="/photography/gallery/photo/"
+ *      data-pswp-src="/assets/images/gallery/photo-2400w.webp"
+ *      data-pswp-width="2400"
+ *      data-pswp-height="1600"
+ *      data-pswp-title="Photo Title"
+ *      data-pswp-location="Berlin, Germany"
+ *      data-pswp-camera="Leica M10"
+ *      data-pswp-date="2024-11-15"
+ *      data-pswp-permalink="/photography/gallery/photo/">
+ *     <img src="..." alt="..." />
+ *   </a>
+ */
+
+(function () {
+  'use strict';
+
+  function initLightbox() {
+    var grids = document.querySelectorAll('.gallery-grid');
+    if (!grids.length) return;
+
+    // PhotoSwipe must be loaded globally (via script tag or import)
+    if (typeof PhotoSwipe === 'undefined') {
+      console.warn('PhotoSwipe not loaded — lightbox disabled');
+      return;
+    }
+
+    grids.forEach(function (grid) {
+      grid.addEventListener('click', function (e) {
+        var item = e.target.closest('.gallery-item');
+        if (!item) return;
+        e.preventDefault();
+
+        var items = Array.from(grid.querySelectorAll('.gallery-item'));
+        var index = items.indexOf(item);
+
+        var slides = items.map(function (el) {
+          return {
+            src: el.getAttribute('data-pswp-src') || '',
+            width: parseInt(el.getAttribute('data-pswp-width') || '0', 10),
+            height: parseInt(el.getAttribute('data-pswp-height') || '0', 10),
+            alt: el.querySelector('img')
+              ? el.querySelector('img').getAttribute('alt') || ''
+              : '',
+            title: el.getAttribute('data-pswp-title') || '',
+            location: el.getAttribute('data-pswp-location') || '',
+            camera: el.getAttribute('data-pswp-camera') || '',
+            date: el.getAttribute('data-pswp-date') || '',
+            permalink: el.getAttribute('data-pswp-permalink') || '',
+          };
+        });
+
+        openLightbox(slides, index);
+      });
+    });
+  }
+
+  function openLightbox(slides, index) {
+    var pswpOptions = {
+      dataSource: slides,
+      index: index,
+      bgOpacity: 0.95,
+      showHideAnimationType: 'fade',
+      padding: { top: 20, bottom: 40, left: 20, right: 20 },
+      closeOnVerticalDrag: true,
+
+      // Custom caption
+      captionEl: true,
+    };
+
+    var lightbox = new PhotoSwipe(pswpOptions);
+
+    // Add custom caption UI
+    lightbox.on('uiRegister', function () {
+      lightbox.ui.registerElement({
+        name: 'custom-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        onInit: function (el) {
+          el.classList.add('pswp-caption');
+
+          lightbox.on('change', function () {
+            var slide = lightbox.currSlide;
+            if (!slide || !slide.data) {
+              el.innerHTML = '';
+              return;
+            }
+
+            var data = slide.data;
+            var parts = [];
+
+            if (data.title) {
+              parts.push(
+                '<span class="pswp-caption__title">' +
+                  escapeHtml(data.title) +
+                  '</span>',
+              );
+            }
+
+            var meta = [];
+            if (data.location) meta.push(escapeHtml(data.location));
+            if (data.camera) meta.push(escapeHtml(data.camera));
+            if (data.date) meta.push(escapeHtml(data.date));
+
+            if (meta.length) {
+              parts.push(
+                '<span class="pswp-caption__meta">' +
+                  meta.join(' &middot; ') +
+                  '</span>',
+              );
+            }
+
+            if (data.permalink) {
+              parts.push(
+                '<a class="pswp-caption__link" href="' +
+                  escapeHtml(data.permalink) +
+                  '">View details &rarr;</a>',
+              );
+            }
+
+            el.innerHTML = parts.join('');
+          });
+        },
+      });
+    });
+
+    lightbox.init();
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // Init on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLightbox);
+  } else {
+    initLightbox();
+  }
+})();

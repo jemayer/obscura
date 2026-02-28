@@ -1,0 +1,47 @@
+/* ==========================================================================
+   PhotoSwipe caption customisation for editorial theme
+   ========================================================================== */
+
+.pswp-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: auto;
+}
+
+.pswp-caption__title {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: #ffffff;
+}
+
+.pswp-caption__meta {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+}
+
+.pswp-caption__link {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin-left: auto;
+  transition: color 150ms, border-color 150ms;
+}
+
+.pswp-caption__link:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
