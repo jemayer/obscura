@@ -294,13 +294,16 @@ a:hover {
 }
 
 .gallery-grid--masonry .gallery-item {
+  display: block;
   break-inside: avoid;
   margin-bottom: var(--grid-gap);
   aspect-ratio: auto;
 }
 
 .gallery-grid--masonry .gallery-item img {
+  width: 100%;
   height: auto;
+  object-fit: contain;
 }
 
 /* Layout toggle */
