@@ -5,14 +5,15 @@
   "type": "module",
   "main": "dist-build/index.js",
   "scripts": {
-    "build": "echo 'TODO: implement full build pipeline'",
+    "build": "tsc && node dist-build/cli.js",
     "dev": "echo 'TODO: implement watch mode'",
     "test": "echo 'TODO: configure vitest'",
     "typecheck": "tsc --noEmit",
     "compile": "tsc",
     "lint": "eslint src/",
     "format": "prettier --write 'src/**/*.ts'",
-    "format:check": "prettier --check 'src/**/*.ts'"
+    "format:check": "prettier --check 'src/**/*.ts'",
+    "validate": "tsc && node dist-build/validate.js"
   },
   "keywords": [
     "static-site-generator",
