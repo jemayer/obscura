@@ -1,0 +1,111 @@
+# Theming Guide
+
+## Theme Structure
+
+Each theme lives in its own folder under `themes/`:
+
+```
+themes/editorial/
+├── manifest.yaml        # Theme metadata
+├── templates/           # Nunjucks HTML templates
+│   ├── base.html        # Base layout (all pages extend this)
+│   ├── homepage.html    # Homepage (/)
+│   ├── gallery-index.html  # Gallery listing (/photography/)
+│   ├── gallery.html     # Single gallery page
+│   ├── photo.html       # Photo permalink page
+│   ├── blog-index.html  # Blog listing (/blog/)
+│   ├── blog-post.html   # Single blog post
+│   ├── page.html        # Simple page (about, contact)
+│   ├── 404.html         # Not found page
+│   ├── feed.xml         # RSS feed
+│   └── sitemap.xml      # Sitemap
+└── assets/              # Static assets (copied to dist/assets/theme/)
+    ├── css/
+    │   ├── style.css    # Main stylesheet
+    │   └── lightbox.css # PhotoSwipe caption styles
+    └── js/
+        └── lightbox.js  # PhotoSwipe integration
+```
+
+## Manifest
+
+Every theme needs a `manifest.yaml`:
+
+```yaml
+name: editorial
+description: A clean, magazine-inspired theme for photography portfolios
+version: "1.0.0"
+author: comagen
+```
+
+## Customising the Editorial Theme
+
+The editorial theme uses CSS custom properties for all colours, typography, and spacing. Override them in your own CSS or modify `style.css` directly.
+
+### Key Custom Properties
+
+```css
+:root {
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-base: 1rem;
+
+  /* Colours */
+  --color-bg: #faf9f7;
+  --color-text: #1a1917;
+  --color-text-secondary: #6b6860;
+  --color-accent: #8b4513;
+  --color-border: #e8e6e1;
+
+  /* Spacing */
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+
+  /* Layout */
+  --content-width: 72rem;
+  --content-narrow: 42rem;
+}
+```
+
+### Dark Mode
+
+The editorial theme includes automatic dark mode via `@media (prefers-color-scheme: dark)`. It overrides the colour custom properties for dark backgrounds and light text.
+
+## Creating a New Theme
+
+1. Create a folder under `themes/` with your theme name
+2. Add a `manifest.yaml`
+3. Create the required templates (see the list above)
+4. Add your CSS/JS in `assets/`
+5. Set `theme: your-theme-name` in `config/site.yaml`
+
+### Template Variables
+
+All templates have access to:
+
+- `site` — the site configuration object (title, base_url, etc.)
+- `current_year` — the current year (for copyright notices)
+
+### Template Filters
+
+| Filter | Description | Example |
+|--------|-------------|---------|
+| `dateformat` | Format a date | `{{ date \| dateformat("YYYY-MM-DD") }}` |
+| `datereadable` | Human-readable date | `{{ date \| datereadable }}` → "15 June 2024" |
+| `isodate` | ISO 8601 date string | `{{ date \| isodate }}` |
+| `srcset` | Generate srcset from variants | `{{ photo.variants \| srcset }}` |
+| `sizes` | Generate sizes attribute | `{{ photo \| sizes }}` |
+| `bestvariant` | Get best variant for width | `{{ variants \| bestvariant(800) }}` |
+| `responsiveimg` | Full `<img>` tag | `{{ photo \| responsiveimg("class") }}` |
+| `bareslug` | Extract photo slug from namespaced slug | `{{ photo.slug \| bareslug }}` |
+| `url` | Build URL with base_url | `{{ "/blog/" \| url }}` |
+| `absurl` | Build absolute URL | `{{ "/blog/" \| absurl }}` |
+| `truncatewords` | Truncate to N words | `{{ text \| truncatewords(50) }}` |
+| `safe_html` | Mark as safe (no escaping) | `{{ html \| safe_html }}` |
+
+### Page-Specific Variables
+
+Each template receives specific context variables. Refer to the editorial theme templates for examples.
