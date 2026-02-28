@@ -1,0 +1,7 @@
+base_url: https://coma.photography
+title: "coma.photography"
+theme: editorial
+recent_shots_count: 12
+images:
+  breakpoints: [400, 800, 1200, 2400]
+  webp_quality: 85
