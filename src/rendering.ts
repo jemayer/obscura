@@ -107,12 +107,10 @@ export function createRenderingEngine(
     return bareSlug(slug);
   });
 
-  // URL builder: {{ "/photography/" | url }}
+  // URL builder: {{ "/photography/" | url }} → root-relative path
   env.addFilter('url', (path: unknown) => {
     if (typeof path !== 'string') return '';
-    const base = siteConfig.base_url.replace(/\/+$/, '');
-    const clean = path.startsWith('/') ? path : `/${path}`;
-    return `${base}${clean}`;
+    return path.startsWith('/') ? path : `/${path}`;
   });
 
   // Absolute URL (same as url, but explicit name for RSS/sitemap)
