@@ -1,7 +1,7 @@
 ---
 # comagen-e4sr
 title: Unit tests — EXIF reader
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:57:29Z

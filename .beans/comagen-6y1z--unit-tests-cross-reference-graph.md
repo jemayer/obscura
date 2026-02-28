@@ -1,7 +1,7 @@
 ---
 # comagen-6y1z
 title: Unit tests — cross-reference graph
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:57:29Z

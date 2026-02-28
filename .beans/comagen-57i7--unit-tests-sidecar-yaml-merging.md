@@ -1,7 +1,7 @@
 ---
 # comagen-57i7
 title: Unit tests — sidecar YAML merging
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:57:29Z

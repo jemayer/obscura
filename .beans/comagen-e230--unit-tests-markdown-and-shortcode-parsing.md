@@ -1,7 +1,7 @@
 ---
 # comagen-e230
 title: Unit tests — Markdown and shortcode parsing
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:57:29Z
