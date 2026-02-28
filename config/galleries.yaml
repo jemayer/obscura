@@ -1,4 +1,9 @@
 galleries:
+  - slug: sample
+    title: Sample Gallery
+    description: A small collection of street and landscape photographs to get you started.
+    listed: true
+
   - slug: post-assets
     title: Post Assets
     listed: false
