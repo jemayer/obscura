@@ -19,12 +19,11 @@ async function main(): Promise<void> {
   console.log('comagen — validating content…\n');
 
   // -- 1. Config --
-  const configDir = resolve(projectDir, 'config');
   let siteConfig;
   let galleryConfig;
 
   try {
-    siteConfig = await loadSiteConfig(resolve(configDir, 'site.yaml'));
+    siteConfig = await loadSiteConfig(projectDir);
     console.log('  ✓ site.yaml');
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'unknown error';
@@ -33,7 +32,7 @@ async function main(): Promise<void> {
   }
 
   try {
-    galleryConfig = await loadGalleryConfig(resolve(configDir, 'galleries.yaml'));
+    galleryConfig = await loadGalleryConfig(projectDir);
     console.log('  ✓ galleries.yaml');
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'unknown error';

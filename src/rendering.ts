@@ -101,6 +101,12 @@ export function createRenderingEngine(
     );
   });
 
+  // Extract bare photo slug from namespaced slug: {{ photo.slug | bareslug }}
+  env.addFilter('bareslug', (slug: unknown) => {
+    if (typeof slug !== 'string') return '';
+    return bareSlug(slug);
+  });
+
   // URL builder: {{ "/photography/" | url }}
   env.addFilter('url', (path: unknown) => {
     if (typeof path !== 'string') return '';
@@ -234,7 +240,7 @@ export async function renderPhotoPage(
     'photo.html',
     { photo, gallery, back_links: backLinks },
     distDir,
-    `photography/${gallery.slug}/${photo.slug}/index.html`,
+    `photography/${gallery.slug}/${bareSlug(photo.slug)}/index.html`,
   );
 }
 
@@ -361,4 +367,12 @@ function getBackLinkSlugs(
   photoSlug: string,
 ): readonly string[] {
   return crossReferences.photoToPostSlugs.get(photoSlug) ?? [];
+}
+
+/**
+ * Extract the bare photo slug from a namespaced slug (gallery/photo → photo).
+ */
+function bareSlug(namespacedSlug: string): string {
+  const parts = namespacedSlug.split('/');
+  return parts.length > 1 ? parts.slice(1).join('/') : namespacedSlug;
 }

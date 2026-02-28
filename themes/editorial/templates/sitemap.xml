@@ -14,7 +14,7 @@
   {% endif %}
   {% for photo in gallery.photos %}
   <url>
-    <loc>{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | absurl }}</loc>
+    <loc>{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | absurl }}</loc>
   </url>
   {% endfor %}
   {% endfor %}

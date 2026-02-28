@@ -2,19 +2,19 @@
 
 {% set nav_current = 'photography' %}
 
-{% block title %}{{ photo.metadata.title or photo.slug }} — {{ site.title }}{% endblock %}
-{% block description %}{{ photo.metadata.caption or photo.metadata.title or photo.slug }}{% endblock %}
+{% block title %}{{ photo.metadata.title or (photo.slug | bareslug) }} — {{ site.title }}{% endblock %}
+{% block description %}{{ photo.metadata.caption or photo.metadata.title or (photo.slug | bareslug) }}{% endblock %}
 
 {% block og_meta %}
 <meta property="og:type" content="article">
-<meta property="og:title" content="{{ photo.metadata.title or photo.slug }}">
+<meta property="og:title" content="{{ photo.metadata.title or (photo.slug | bareslug) }}">
 {% if photo.metadata.caption %}
 <meta property="og:description" content="{{ photo.metadata.caption }}">
 {% endif %}
 {% if photo.variants.length %}
 <meta property="og:image" content="{{ (photo.variants | bestvariant(1200)).path | absurl }}">
 {% endif %}
-<meta property="og:url" content="{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | absurl }}">
+<meta property="og:url" content="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | absurl }}">
 {% endblock %}
 
 {% block content %}
@@ -25,12 +25,12 @@
       <img src="{{ (photo.variants | bestvariant(2400)).path }}"
            srcset="{{ photo.variants | srcset }}"
            sizes="(max-width: 1200px) 100vw, 1200px"
-           alt="{{ photo.metadata.title or photo.slug }}">
+           alt="{{ photo.metadata.title or (photo.slug | bareslug) }}">
       {% endif %}
     </div>
 
     <div class="photo-detail__body">
-      <h1 class="photo-detail__title">{{ photo.metadata.title or photo.slug }}</h1>
+      <h1 class="photo-detail__title">{{ photo.metadata.title or (photo.slug | bareslug) }}</h1>
 
       {% if photo.metadata.caption %}
       <p class="photo-detail__caption">{{ photo.metadata.caption }}</p>

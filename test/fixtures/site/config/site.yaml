@@ -1,0 +1,7 @@
+base_url: https://test.example.com
+title: "Test Site"
+theme: editorial
+recent_shots_count: 4
+images:
+  breakpoints: [400, 800]
+  webp_quality: 80

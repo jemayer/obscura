@@ -13,7 +13,7 @@
   <div class="gallery-grid">
     {% for item in recent_photos %}
     <a class="gallery-item"
-       href="{{ ('/photography/' + item.gallery.slug + '/' + item.photo.slug + '/') | url }}"
+       href="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}"
        data-pswp-src="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).path }}{% endif %}"
        data-pswp-width="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).width }}{% endif %}"
        data-pswp-height=""
@@ -21,12 +21,12 @@
        data-pswp-location="{{ item.photo.metadata.location }}"
        data-pswp-camera="{{ item.photo.metadata.camera }}"
        data-pswp-date="{% if item.photo.metadata.date %}{{ item.photo.metadata.date | dateformat }}{% endif %}"
-       data-pswp-permalink="{{ ('/photography/' + item.gallery.slug + '/' + item.photo.slug + '/') | url }}">
+       data-pswp-permalink="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}">
       {% if item.photo.variants.length %}
       <img src="{{ (item.photo.variants | bestvariant(800)).path }}"
            srcset="{{ item.photo.variants | srcset }}"
            sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
-           alt="{{ item.photo.metadata.title or item.photo.slug }}"
+           alt="{{ item.photo.metadata.title or (item.photo.slug | bareslug) }}"
            loading="lazy" decoding="async">
       {% endif %}
       <div class="gallery-item__overlay">

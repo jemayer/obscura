@@ -34,9 +34,8 @@ export async function build(projectDir: string): Promise<BuildResult> {
   const warnings: string[] = [];
 
   // -- 1. Load configuration --
-  const configDir = resolve(projectDir, 'config');
-  const siteConfig = await loadSiteConfig(resolve(configDir, 'site.yaml'));
-  const galleryConfig = await loadGalleryConfig(resolve(configDir, 'galleries.yaml'));
+  const siteConfig = await loadSiteConfig(projectDir);
+  const galleryConfig = await loadGalleryConfig(projectDir);
 
   // -- 2. Resolve directories --
   const photosDir = resolve(projectDir, 'content', 'photos');

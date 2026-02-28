@@ -16,7 +16,7 @@
   <div class="gallery-grid">
     {% for photo in gallery.photos %}
     <a class="gallery-item"
-       href="{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | url }}"
+       href="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | url }}"
        data-pswp-src="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).path }}{% endif %}"
        data-pswp-width="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).width }}{% endif %}"
        data-pswp-height=""
@@ -24,12 +24,12 @@
        data-pswp-location="{{ photo.metadata.location }}"
        data-pswp-camera="{{ photo.metadata.camera }}"
        data-pswp-date="{% if photo.metadata.date %}{{ photo.metadata.date | dateformat }}{% endif %}"
-       data-pswp-permalink="{{ ('/photography/' + gallery.slug + '/' + photo.slug + '/') | url }}">
+       data-pswp-permalink="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | url }}">
       {% if photo.variants.length %}
       <img src="{{ (photo.variants | bestvariant(800)).path }}"
            srcset="{{ photo.variants | srcset }}"
            sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
-           alt="{{ photo.metadata.title or photo.slug }}"
+           alt="{{ photo.metadata.title or (photo.slug | bareslug) }}"
            loading="lazy" decoding="async">
       {% endif %}
       <div class="gallery-item__overlay">

@@ -1,0 +1,5 @@
+galleries:
+  - slug: test-gallery
+    title: Test Gallery
+    description: A gallery for testing
+    listed: true
