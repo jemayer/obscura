@@ -1,7 +1,7 @@
 ---
 # comagen-psin
 title: Grid/masonry layout toggle for photo grids
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-02-28T21:17:27Z
