@@ -51,13 +51,14 @@ export async function processPhoto(
     const filename = variantFilename(photoBase, breakpoint);
     const outPath = resolve(outDir, filename);
 
-    await sharp(sourcePath)
+    const info = await sharp(sourcePath)
       .resize(breakpoint, undefined, { withoutEnlargement: true })
       .webp({ quality: config.webp_quality })
       .toFile(outPath);
 
     variants.push({
-      width: breakpoint,
+      width: info.width,
+      height: info.height,
       path: `/assets/images/${gallerySlug}/${filename}`,
     });
   }
@@ -68,12 +69,13 @@ export async function processPhoto(
     const filename = variantFilename(photoBase, sourceWidth);
     const outPath = resolve(outDir, filename);
 
-    await sharp(sourcePath)
+    const info = await sharp(sourcePath)
       .webp({ quality: config.webp_quality })
       .toFile(outPath);
 
     variants.push({
-      width: sourceWidth,
+      width: info.width,
+      height: info.height,
       path: `/assets/images/${gallerySlug}/${filename}`,
     });
   }

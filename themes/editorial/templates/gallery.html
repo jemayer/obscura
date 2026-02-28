@@ -19,7 +19,7 @@
        href="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | url }}"
        data-pswp-src="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).path }}{% endif %}"
        data-pswp-width="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).width }}{% endif %}"
-       data-pswp-height=""
+       data-pswp-height="{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).height }}{% endif %}"
        data-pswp-title="{{ photo.metadata.title }}"
        data-pswp-location="{{ photo.metadata.location }}"
        data-pswp-camera="{{ photo.metadata.camera }}"

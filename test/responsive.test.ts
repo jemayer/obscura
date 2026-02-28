@@ -3,10 +3,10 @@ import { srcset, sizes, bestVariant } from '../src/responsive.js';
 import type { ImageVariant } from '../src/types.js';
 
 const variants: readonly ImageVariant[] = [
-  { width: 400, path: '/img/photo-400w.webp' },
-  { width: 800, path: '/img/photo-800w.webp' },
-  { width: 1200, path: '/img/photo-1200w.webp' },
-  { width: 2400, path: '/img/photo-2400w.webp' },
+  { width: 400, height: 267, path: '/img/photo-400w.webp' },
+  { width: 800, height: 533, path: '/img/photo-800w.webp' },
+  { width: 1200, height: 800, path: '/img/photo-1200w.webp' },
+  { width: 2400, height: 1600, path: '/img/photo-2400w.webp' },
 ];
 
 describe('srcset', () => {
@@ -35,15 +35,15 @@ describe('sizes', () => {
 
 describe('bestVariant', () => {
   it('returns the smallest variant >= target width', () => {
-    expect(bestVariant(variants, 500)).toEqual({ width: 800, path: '/img/photo-800w.webp' });
+    expect(bestVariant(variants, 500)).toEqual({ width: 800, height: 533, path: '/img/photo-800w.webp' });
   });
 
   it('returns exact match when available', () => {
-    expect(bestVariant(variants, 800)).toEqual({ width: 800, path: '/img/photo-800w.webp' });
+    expect(bestVariant(variants, 800)).toEqual({ width: 800, height: 533, path: '/img/photo-800w.webp' });
   });
 
   it('returns largest variant when target exceeds all', () => {
-    expect(bestVariant(variants, 5000)).toEqual({ width: 2400, path: '/img/photo-2400w.webp' });
+    expect(bestVariant(variants, 5000)).toEqual({ width: 2400, height: 1600, path: '/img/photo-2400w.webp' });
   });
 
   it('returns undefined for empty variants', () => {

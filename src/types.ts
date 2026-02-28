@@ -56,6 +56,7 @@ export interface PhotoMetadata {
 
 export interface ImageVariant {
   readonly width: number;
+  readonly height: number;
   readonly path: string;
 }
 
