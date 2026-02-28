@@ -178,6 +178,7 @@ export async function renderToFile(
 export async function renderHomepage(
   engine: RenderingEngine,
   galleries: readonly Gallery[],
+  homepageContent: string | undefined,
   distDir: string,
 ): Promise<void> {
   // Collect all photos from listed galleries, sort by date descending
@@ -191,7 +192,13 @@ export async function renderHomepage(
     })
     .slice(0, engine.siteConfig.recent_shots_count);
 
-  await renderToFile(engine, 'homepage.html', { recent_photos: allPhotos }, distDir, 'index.html');
+  await renderToFile(
+    engine,
+    'homepage.html',
+    { recent_photos: allPhotos, homepage_content: homepageContent },
+    distDir,
+    'index.html',
+  );
 }
 
 /** Render the gallery index (/photography/) */
@@ -319,10 +326,10 @@ export async function renderAll(
   context: BuildContext,
   distDir: string,
 ): Promise<void> {
-  const { galleries, posts, pages, crossReferences } = context;
+  const { galleries, posts, pages, crossReferences, homepageContent } = context;
 
   // Homepage
-  await renderHomepage(engine, galleries, distDir);
+  await renderHomepage(engine, galleries, homepageContent, distDir);
 
   // Gallery index
   await renderGalleryIndex(engine, galleries, distDir);

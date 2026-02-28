@@ -137,4 +137,6 @@ export interface BuildContext {
   readonly posts: readonly BlogPost[];
   readonly pages: readonly Page[];
   readonly crossReferences: CrossReferenceGraph;
+  /** Rendered HTML from content/pages/index.md, if present */
+  readonly homepageContent?: string | undefined;
 }

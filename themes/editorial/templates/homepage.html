@@ -4,6 +4,12 @@
 
 {% block content %}
 <div class="content content--full">
+  {% if homepage_content %}
+  <div class="homepage-intro prose">
+    {{ homepage_content | safe_html }}
+  </div>
+  {% endif %}
+
   <div class="recent-shots__header">
     <h2 class="section-label">Recent Shots</h2>
     <a class="recent-shots__link" href="{{ '/photography/' | url }}">All galleries &rarr;</a>

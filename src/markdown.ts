@@ -216,6 +216,8 @@ export async function loadAllPages(pagesDir: string): Promise<Page[]> {
     const dirEntries = await readdir(pagesDir);
     entries = dirEntries
       .filter((f) => extname(f).toLowerCase() === '.md')
+      // Exclude index.md — it's used for homepage content, not a standalone page
+      .filter((f) => basename(f, extname(f)) !== 'index')
       .sort();
   } catch {
     return [];
@@ -229,4 +231,18 @@ export async function loadAllPages(pagesDir: string): Promise<Page[]> {
   }
 
   return pages;
+}
+
+/**
+ * Load optional homepage content from content/pages/index.md.
+ * Returns the rendered HTML string, or undefined if the file doesn't exist.
+ */
+export async function loadHomepageContent(pagesDir: string): Promise<string | undefined> {
+  const filePath = resolve(pagesDir, 'index.md');
+  try {
+    const raw = await readFile(filePath, 'utf-8');
+    return await renderMarkdown(raw);
+  } catch {
+    return undefined;
+  }
 }

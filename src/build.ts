@@ -4,7 +4,7 @@ import { loadSiteConfig, loadGalleryConfig } from './config.js';
 import { generateAllSidecars } from './sidecar.js';
 import { validateAllGalleryFormats } from './image-validation.js';
 import { loadGalleries } from './gallery.js';
-import { loadAllBlogPosts, loadAllPages } from './markdown.js';
+import { loadAllBlogPosts, loadAllPages, loadHomepageContent } from './markdown.js';
 import { buildCrossReferenceGraph } from './crossref.js';
 import { processAllPhotosWithCache } from './image-cache.js';
 import { formatExifWarnings } from './exif.js';
@@ -70,8 +70,9 @@ export async function build(projectDir: string): Promise<BuildResult> {
   // -- 7. Load blog posts (with shortcode resolution) --
   const posts = await loadAllBlogPosts(postsDir, slugIndex);
 
-  // -- 8. Load pages --
+  // -- 8. Load pages and optional homepage content --
   const pages = await loadAllPages(pagesDir);
+  const homepageContent = await loadHomepageContent(pagesDir);
 
   // -- 9. Build cross-reference graph --
   const crossReferences = buildCrossReferenceGraph(posts);
@@ -120,6 +121,7 @@ export async function build(projectDir: string): Promise<BuildResult> {
     posts,
     pages,
     crossReferences,
+    homepageContent,
   };
 
   await renderAll(engine, buildContext, distDir);

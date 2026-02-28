@@ -752,6 +752,19 @@ a:hover {
    Homepage — Recent Shots
    -------------------------------------------------------------------------- */
 
+.homepage-intro {
+  max-width: var(--content-narrow);
+  margin: 0 auto var(--space-xl);
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.homepage-intro p:last-child {
+  margin-bottom: 0;
+}
+
 .recent-shots__header {
   display: flex;
   justify-content: space-between;
