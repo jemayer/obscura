@@ -1,7 +1,7 @@
 ---
 # comagen-dt4j
 title: 404 page template
-status: todo
+status: completed
 type: task
 priority: low
 created_at: 2026-02-27T21:56:15Z

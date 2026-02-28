@@ -1,7 +1,7 @@
 ---
 # comagen-cpu7
 title: Gallery index and gallery page templates
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:56:14Z

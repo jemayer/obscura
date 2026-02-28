@@ -1,7 +1,7 @@
 ---
 # comagen-s6v8
 title: Photo permalink template
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:56:15Z

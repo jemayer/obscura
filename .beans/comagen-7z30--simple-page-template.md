@@ -1,7 +1,7 @@
 ---
 # comagen-7z30
 title: Simple page template
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:56:15Z

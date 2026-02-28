@@ -1,7 +1,7 @@
 ---
 # comagen-hydq
 title: Base layout template
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-02-27T21:56:14Z

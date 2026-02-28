@@ -1,7 +1,7 @@
 ---
 # comagen-ktkl
 title: Homepage template
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:56:14Z

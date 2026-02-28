@@ -1,7 +1,7 @@
 ---
 # comagen-95yi
 title: Nunjucks environment setup
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-02-27T21:56:14Z

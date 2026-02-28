@@ -1,7 +1,7 @@
 ---
 # comagen-jhhm
 title: Sitemap generator
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-27T21:56:15Z

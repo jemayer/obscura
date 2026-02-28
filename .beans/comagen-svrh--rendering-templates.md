@@ -1,7 +1,7 @@
 ---
 # comagen-svrh
 title: Rendering & Templates
-status: todo
+status: completed
 type: epic
 priority: normal
 created_at: 2026-02-27T21:54:41Z
