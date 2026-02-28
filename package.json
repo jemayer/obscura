@@ -34,6 +34,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "sharp": "^0.34.5",
     "unified": "^11.0.5",
     "yaml": "^2.8.2"
   }
