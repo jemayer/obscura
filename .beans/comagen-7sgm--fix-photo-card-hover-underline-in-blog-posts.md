@@ -1,7 +1,7 @@
 ---
 # comagen-7sgm
 title: Fix photo card hover underline in blog posts
-status: todo
+status: completed
 type: bug
 priority: normal
 created_at: 2026-02-28T20:50:25Z

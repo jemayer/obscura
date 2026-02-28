@@ -1,7 +1,7 @@
 ---
 # comagen-f5aq
 title: Light/dark mode toggle with system default
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-02-28T20:50:47Z
