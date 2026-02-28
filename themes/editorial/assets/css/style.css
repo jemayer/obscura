@@ -507,6 +507,12 @@ a:hover {
 
 .photo-card a {
   display: block;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.photo-card a:hover {
+  border-bottom: none;
 }
 
 .photo-card__image {
@@ -856,8 +862,9 @@ a:hover {
    Dark Mode
    -------------------------------------------------------------------------- */
 
+/* System preference — applies when no manual override is set */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-bg: #111110;
     --color-bg-subtle: #1a1a18;
     --color-surface: #1e1e1c;
@@ -873,6 +880,57 @@ a:hover {
     --color-overlay: rgba(17, 17, 16, 0.8);
     --color-overlay-light: rgba(232, 230, 225, 0.04);
   }
+}
+
+/* Manual dark override */
+:root[data-theme="dark"] {
+  --color-bg: #111110;
+  --color-bg-subtle: #1a1a18;
+  --color-surface: #1e1e1c;
+  --color-text: #e8e6e1;
+  --color-text-secondary: #9e9a90;
+  --color-text-tertiary: #6b6860;
+  --color-border: #2e2e2a;
+  --color-border-subtle: #242420;
+  --color-accent: #e8e6e1;
+  --color-accent-hover: #c8c6c1;
+  --color-link: #e8e6e1;
+  --color-link-hover: #9e9a90;
+  --color-overlay: rgba(17, 17, 16, 0.8);
+  --color-overlay-light: rgba(232, 230, 225, 0.04);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs);
+  line-height: 1;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.theme-toggle:hover {
+  color: var(--color-text);
+}
+
+.theme-toggle svg {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+
+/* Show sun in dark mode, moon in light mode */
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun  { display: none; }
+
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun  { display: block; }
 }
 
 /* --------------------------------------------------------------------------
