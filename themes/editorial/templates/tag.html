@@ -7,10 +7,12 @@
   <div class="tag-page__header">
     <h1 class="page-title">{{ tag_page.tag }}</h1>
     <span class="tag-page__count">{{ tag_page.photos.length }} photo{{ 's' if tag_page.photos.length != 1 else '' }}</span>
-    {% include "partials/layout-toggle.html" %}
   </div>
 
   {% if tag_page.photos.length %}
+  <div class="gallery-grid__toolbar">
+    {% include "partials/layout-toggle.html" %}
+  </div>
   <div class="gallery-grid" data-default-layout="grid">
     {% for item in tag_page.photos %}
     <a class="gallery-item"
