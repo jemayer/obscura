@@ -1,7 +1,7 @@
 ---
 # comagen-tags
 title: Minimalistic tag styling on photo detail page
-status: todo
+status: completed
 type: enhancement
 priority: normal
 created_at: 2026-02-28T16:00:00Z

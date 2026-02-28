@@ -1,7 +1,7 @@
 ---
 # comagen-lbox
 title: Fix lightbox vertical alignment
-status: todo
+status: completed
 type: bug
 priority: high
 created_at: 2026-02-28T16:00:00Z
