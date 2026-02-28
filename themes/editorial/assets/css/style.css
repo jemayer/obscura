@@ -276,25 +276,21 @@ a:hover {
 
 /* Masonry layout variant */
 .gallery-grid--masonry {
-  display: columns;
-  columns: 1;
+  display: block;
+  column-count: 1;
   column-gap: var(--grid-gap);
 }
 
 @media (min-width: 40em) {
-  .gallery-grid--masonry { columns: 2; }
+  .gallery-grid--masonry { column-count: 2; }
 }
 
 @media (min-width: 64em) {
-  .gallery-grid--masonry { columns: 3; }
+  .gallery-grid--masonry { column-count: 3; }
 }
 
 @media (min-width: 90em) {
-  .gallery-grid--masonry { columns: 4; }
-}
-
-.gallery-grid--masonry {
-  display: block;
+  .gallery-grid--masonry { column-count: 4; }
 }
 
 .gallery-grid--masonry .gallery-item {
