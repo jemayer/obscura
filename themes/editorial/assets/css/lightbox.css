@@ -2,6 +2,11 @@
    PhotoSwipe caption customisation for editorial theme
    ========================================================================== */
 
+/* Lightbox background adapts to theme */
+.pswp {
+  --pswp-bg: var(--color-bg);
+}
+
 .pswp-caption {
   position: absolute;
   bottom: 0;
@@ -14,8 +19,8 @@
   flex-wrap: wrap;
   background: linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0) 100%
+    var(--color-overlay) 0%,
+    transparent 100%
   );
   pointer-events: auto;
 }
@@ -23,25 +28,25 @@
 .pswp-caption__title {
   font-weight: 500;
   font-size: 0.9375rem;
-  color: #ffffff;
+  color: var(--color-text);
 }
 
 .pswp-caption__meta {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   letter-spacing: 0.02em;
 }
 
 .pswp-caption__link {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid var(--color-border);
   margin-left: auto;
   transition: color 150ms, border-color 150ms;
 }
 
 .pswp-caption__link:hover {
-  color: #ffffff;
-  border-color: #ffffff;
+  color: var(--color-text);
+  border-color: var(--color-text);
 }
