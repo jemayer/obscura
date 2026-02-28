@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Site output
+dist/
+
+# Compiled TypeScript
+dist-build/
+
+# Original image files (per ADR-011)
+content/photos/**/*.jpg
+content/photos/**/*.jpeg
+content/photos/**/*.png
+content/photos/**/*.tiff
+content/photos/**/*.tif
+content/photos/**/*.webp
+
+# OS files
+.DS_Store
+Thumbs.db
