@@ -6,7 +6,7 @@
   "main": "dist-build/index.js",
   "scripts": {
     "build": "tsc && node dist-build/cli.js",
-    "dev": "echo 'TODO: implement watch mode'",
+    "dev": "tsc && node dist-build/dev.js",
     "test": "echo 'TODO: configure vitest'",
     "typecheck": "tsc --noEmit",
     "compile": "tsc",
@@ -31,6 +31,7 @@
     "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
+    "chokidar": "^3.6.0",
     "exifr": "^7.1.3",
     "nunjucks": "^3.2.4",
     "photoswipe": "^5.4.4",
