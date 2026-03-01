@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen requires both unit tests (EXIF reading, slug generation, shortcode parsing, etc.) and integration tests (full build pipeline, correct output files). The test framework must:
+Obscura requires both unit tests (EXIF reading, slug generation, shortcode parsing, etc.) and integration tests (full build pipeline, correct output files). The test framework must:
 
 - Support TypeScript natively (no separate compilation step)
 - Be fast — the test suite will grow as features are added

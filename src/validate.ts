@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   const warnings: string[] = [];
   let hasErrors = false;
 
-  console.log('comagen — validating content…\n');
+  console.log('Obscura — validating content…\n');
 
   // -- 1. Config --
   let siteConfig;

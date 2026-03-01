@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen is a Node.js CLI tool with a non-trivial data pipeline: EXIF extraction, YAML parsing, Markdown rendering, shortcode resolution, cross-reference graph building, and image processing. Bugs in any stage can produce subtle, hard-to-diagnose output errors (wrong metadata on a photo page, broken back-links, missing image variants).
+Obscura is a Node.js CLI tool with a non-trivial data pipeline: EXIF extraction, YAML parsing, Markdown rendering, shortcode resolution, cross-reference graph building, and image processing. Bugs in any stage can produce subtle, hard-to-diagnose output errors (wrong metadata on a photo page, broken back-links, missing image variants).
 
 We need a language that catches as many of these errors as possible at compile time rather than at runtime or — worse — in production.
 

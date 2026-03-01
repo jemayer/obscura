@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen automatically extracts metadata from photo files: date taken, camera model, lens, and GPS coordinates. The EXIF reading library must:
+Obscura automatically extracts metadata from photo files: date taken, camera model, lens, and GPS coordinates. The EXIF reading library must:
 
 - Parse EXIF, IPTC, and XMP data from JPEG, TIFF, and WebP files
 - Handle missing, partial, or corrupt metadata gracefully (return what it can, not throw)

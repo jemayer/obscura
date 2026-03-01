@@ -1,6 +1,6 @@
 # Getting Started
 
-A step-by-step guide to setting up your photography portfolio with comagen.
+A step-by-step guide to setting up your photography portfolio with Obscura.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ A step-by-step guide to setting up your photography portfolio with comagen.
 ## Installation
 
 ```bash
-git clone https://github.com/comagen/comagen.git my-portfolio
+git clone https://github.com/jcm/obscura.git my-portfolio
 cd my-portfolio
 npm install
 ```
@@ -66,7 +66,7 @@ mkdir -p content/photos/street
 cp ~/Pictures/street-photos/*.jpg content/photos/street/
 ```
 
-3. Build the site — comagen will auto-generate sidecar YAML files for each photo:
+3. Build the site — Obscura will auto-generate sidecar YAML files for each photo:
 
 ```bash
 npm run build

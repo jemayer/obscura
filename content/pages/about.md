@@ -2,7 +2,7 @@
 title: About
 ---
 
-This is a photography portfolio built with [comagen](https://github.com/comagen/comagen), a static site generator made for photographers.
+This is a photography portfolio built with [Obscura](https://github.com/jcm/obscura), a static site generator made for photographers.
 
 ## Getting Started
 

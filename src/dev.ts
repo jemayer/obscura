@@ -25,7 +25,7 @@ async function main(): Promise<void> {
   const port = 3000;
 
   // Initial build
-  console.log('comagen dev — initial build…\n');
+  console.log('Obscura dev — initial build…\n');
   try {
     const result = await build(projectDir);
     console.log(

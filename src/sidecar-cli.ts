@@ -186,7 +186,7 @@ async function promptForEdits(
 async function main(): Promise<void> {
   const projectDir = resolve(process.cwd());
 
-  p.intro('comagen — sidecar editor');
+  p.intro('Obscura — sidecar editor');
 
   // Load gallery config
   let galleryConfig;

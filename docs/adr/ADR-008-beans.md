@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen needs a way to track work — epics, tickets, status, and sequencing. The tracking system should:
+Obscura needs a way to track work — epics, tickets, status, and sequencing. The tracking system should:
 
 - Live in the repository alongside the code (no external service)
 - Be human-readable and editable

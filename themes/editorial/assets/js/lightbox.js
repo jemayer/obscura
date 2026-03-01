@@ -1,5 +1,5 @@
 /**
- * comagen lightbox — PhotoSwipe integration
+ * Obscura lightbox — PhotoSwipe integration
  *
  * Expects gallery items with this markup:
  *

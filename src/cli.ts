@@ -4,7 +4,7 @@ import { build } from './build.js';
 async function main(): Promise<void> {
   const projectDir = resolve(process.cwd());
 
-  console.log('comagen — building site…\n');
+  console.log('Obscura — building site…\n');
 
   try {
     const result = await build(projectDir);

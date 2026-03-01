@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen enforces strict TypeScript (no `any`, ever). But TypeScript's compiler only catches type errors — it doesn't enforce code style, catch common anti-patterns, or ensure consistent formatting across files and contributors.
+Obscura enforces strict TypeScript (no `any`, ever). But TypeScript's compiler only catches type errors — it doesn't enforce code style, catch common anti-patterns, or ensure consistent formatting across files and contributors.
 
 Without automated linting and formatting, code style becomes a manual concern that erodes over time, especially when AI assistants are generating code.
 

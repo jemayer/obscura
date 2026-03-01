@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen renders Markdown to HTML for blog posts and simple pages. Beyond basic Markdown, it needs:
+Obscura renders Markdown to HTML for blog posts and simple pages. Beyond basic Markdown, it needs:
 
 - YAML frontmatter parsing
 - A custom shortcode syntax (`{{< photo "slug" >}}`) that must be resolved against the content graph before rendering

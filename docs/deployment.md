@@ -1,6 +1,6 @@
 # Deployment Guide
 
-comagen generates a static site in `dist/`. You can host it anywhere that serves static files.
+Obscura generates a static site in `dist/`. You can host it anywhere that serves static files.
 
 ## GitHub Pages
 

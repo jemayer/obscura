@@ -35,7 +35,7 @@ Every theme needs a `manifest.yaml`:
 name: editorial
 description: A clean, magazine-inspired theme for photography portfolios
 version: "1.0.0"
-author: comagen
+author: Obscura
 ```
 
 ## Customising the Editorial Theme

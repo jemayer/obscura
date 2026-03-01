@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-comagen is a static site generator for photography portfolio websites, written in TypeScript/Node.js. See `docs/product/PRD.md` for the full spec.
+Obscura is a static site generator for photography portfolio websites, written in TypeScript/Node.js. See `docs/product/PRD.md` for the full spec.
 
 ## Commands
 

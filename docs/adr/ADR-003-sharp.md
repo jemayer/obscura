@@ -5,7 +5,7 @@
 
 ## Context
 
-comagen must generate multiple resized variants of every photo at configurable breakpoints, convert them to WebP, and produce thumbnails. This is the most computationally expensive part of the build. The image processing library must:
+Obscura must generate multiple resized variants of every photo at configurable breakpoints, convert them to WebP, and produce thumbnails. This is the most computationally expensive part of the build. The image processing library must:
 
 - Handle JPEG, PNG, TIFF, and WebP input
 - Resize with high quality (Lanczos or similar)

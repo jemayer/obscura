@@ -1,13 +1,13 @@
 ---
-title: Welcome to comagen
+title: Welcome to Obscura
 date: 2024-09-01
 tags:
-  - comagen
+  - obscura
   - getting started
 summary: Your photography portfolio is ready. Here's how to make it yours.
 ---
 
-Welcome to **comagen** — a static site generator built for photographers.
+Welcome to **Obscura** — a static site generator built for photographers.
 
 This is a sample blog post to show you how everything works. You're looking at rendered Markdown with a photo shortcode embedded below.
 

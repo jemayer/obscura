@@ -20,7 +20,7 @@ Output goes to `dist/`.
 
 **On success:**
 ```
-comagen — building site…
+Obscura — building site…
 
 ✓ Built 42 pages, 28 photos in 1234ms
 ```
@@ -77,7 +77,7 @@ Changes are saved to disk immediately after each photo. Already-saved edits are 
 ```
 $ npm run sidecar
 
-  comagen — sidecar editor
+  Obscura — sidecar editor
 
 ◆  Which gallery?
 │  ● Sample Gallery (10 photos)
