@@ -298,6 +298,8 @@ a:hover {
   aspect-ratio: auto;
   overflow: hidden;
   border-radius: 0;
+  /* Fallback height until JS computes the real row span */
+  grid-row-end: span 40;
 }
 
 .gallery-grid--masonry .gallery-item img {

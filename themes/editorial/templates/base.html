@@ -77,18 +77,38 @@
       var ROW_HEIGHT = 4; // matches grid-auto-rows in CSS
       var saved = localStorage.getItem(STORAGE_KEY);
 
+      // Measure a single masonry item and set its row span
+      function layoutMasonryItem(item, gap) {
+        var img = item.querySelector('img');
+        if (!img || !img.naturalHeight) return;
+        var colWidth = item.getBoundingClientRect().width;
+        if (!colWidth) return;
+        var imgHeight = (img.naturalHeight / img.naturalWidth) * colWidth;
+        var span = Math.ceil((imgHeight + gap) / (ROW_HEIGHT + gap));
+        item.style.gridRowEnd = 'span ' + span;
+      }
+
       // Measure images and set row spans for masonry grid
       function layoutMasonry(grid) {
         var gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
         grid.querySelectorAll('.gallery-item').forEach(function(item) {
-          // Reset span to measure natural height
-          item.style.gridRowEnd = '';
+          layoutMasonryItem(item, gap);
+        });
+      }
+
+      // Watch for lazy-loaded images and re-layout their grid item
+      function observeMasonryImages(grid) {
+        var gap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+        grid.querySelectorAll('.gallery-item').forEach(function(item) {
           var img = item.querySelector('img');
-          if (!img || !img.naturalHeight) return;
-          var colWidth = item.getBoundingClientRect().width;
-          var imgHeight = (img.naturalHeight / img.naturalWidth) * colWidth;
-          var span = Math.ceil((imgHeight + gap) / (ROW_HEIGHT + gap));
-          item.style.gridRowEnd = 'span ' + span;
+          if (!img) return;
+          if (img.complete && img.naturalHeight) {
+            layoutMasonryItem(item, gap);
+          } else {
+            img.addEventListener('load', function() {
+              layoutMasonryItem(item, gap);
+            });
+          }
         });
       }
 
@@ -104,6 +124,7 @@
           grid.classList.toggle('gallery-grid--masonry', isMasonry);
           if (isMasonry) {
             layoutMasonry(grid);
+            observeMasonryImages(grid);
           } else {
             clearMasonry(grid);
           }
@@ -127,10 +148,11 @@
         if (initial === 'masonry') applyLayout('masonry');
       }
 
-      // Apply masonry on load and after all images are ready
+      // Apply masonry class immediately so CSS kicks in, then observe images
       if (initial === 'masonry') {
         document.querySelectorAll('.gallery-grid').forEach(function(grid) {
           grid.classList.add('gallery-grid--masonry');
+          observeMasonryImages(grid);
         });
       }
       window.addEventListener('load', initMasonry);
