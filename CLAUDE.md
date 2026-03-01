@@ -15,6 +15,7 @@ comagen is a static site generator for photography portfolio websites, written i
 - `npm run format:check` — Prettier (check only)
 - `npm run build` — full site build to dist/
 - `npm run dev` — watch mode with rebuild
+- `npm run sidecar` — interactive sidecar YAML editor (fill in titles, locations, captions, tags)
 - `npm test` — run Vitest test suite
 
 ## Architecture

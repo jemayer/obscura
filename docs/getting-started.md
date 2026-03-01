@@ -72,7 +72,15 @@ cp ~/Pictures/street-photos/*.jpg content/photos/street/
 npm run build
 ```
 
-4. Edit the generated sidecar files (e.g., `content/photos/street/photo-name.yaml`) to add titles, locations, and captions:
+4. Fill in titles, locations, and captions using the interactive sidecar editor:
+
+```bash
+npm run sidecar
+```
+
+The editor walks you through each photo with an image preview and prompts for each field. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
+
+Alternatively, you can edit the generated sidecar files by hand (e.g., `content/photos/street/photo-name.yaml`):
 
 ```yaml
 title: Morning Light

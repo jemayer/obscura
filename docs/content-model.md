@@ -24,6 +24,8 @@ Sidecar values always win over EXIF data when both are present. Empty sidecar fi
 
 When you run `npm run build`, comagen creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens) so you only need to add titles, locations, and captions.
 
+Use `npm run sidecar` to fill in missing fields interactively with terminal image previews, or edit the YAML files by hand. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
+
 ### Supported Image Formats
 
 JPEG (`.jpg`, `.jpeg`), PNG (`.png`), TIFF (`.tif`, `.tiff`), WebP (`.webp`).

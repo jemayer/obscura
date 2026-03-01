@@ -53,6 +53,81 @@ Starts a local development server with file watching:
 
 Press `Ctrl+C` to stop.
 
+### `npm run sidecar`
+
+Interactive editor for filling in sidecar YAML metadata photo-by-photo, with terminal image previews.
+
+After importing a batch of photos, their auto-generated sidecars have EXIF data (date, camera, lens) but leave `title`, `location`, `caption`, and `tags` empty. This tool walks you through each photo so you can fill in the missing fields without hand-editing YAML files.
+
+**Workflow:**
+
+1. **Gallery selection** — pick a gallery or edit across all galleries
+2. **Filter** — edit all photos, or narrow to those missing a specific field (title, location, caption, or tags)
+3. **Per-photo editing** — for each photo:
+   - Displays an image preview in the terminal (requires iTerm2 or Kitty for best results; falls back gracefully in other terminals)
+   - Shows read-only EXIF context (camera, date, lens)
+   - Prompts for title, location, caption, and tags
+   - Press Enter on any field to keep its current value
+4. **Navigation** — after each photo, continue to the next or quit early
+
+Changes are saved to disk immediately after each photo. Already-saved edits are preserved if you quit partway through.
+
+**Example session:**
+
+```
+$ npm run sidecar
+
+  comagen — sidecar editor
+
+◆  Which gallery?
+│  ● Sample Gallery (10 photos)
+│  ○ All galleries (10 photos)
+└
+
+◆  Which photos?
+│  ● All photos (10)
+│  ○ Missing title (6)
+│  ○ Missing location (8)
+│  ○ Missing caption (9)
+│  ○ Missing tags (7)
+└
+
+◇  Photo 1 of 6 — coma-photography-poly-00063.jpg
+│
+│  [image preview]
+│
+│  LEICA CAMERA AG LEICA Q2 · 2022-07-14
+
+◆  Title (current: "")
+│  Red Umbrella
+└
+
+◆  Location (current: "")
+│  Baltic Sea, Germany
+└
+
+◆  Caption (current: "")
+│  A lone figure with a red umbrella stands against the fog.
+└
+
+◆  Tags (comma-separated, current: none)
+│  baltic sea, minimalistic, moody
+└
+
+✓  Saved coma-photography-poly-00063.yaml
+
+◆  Next action?
+│  ● Continue to next photo
+│  ○ Quit
+└
+```
+
+**Tips:**
+
+- Run `npm run sidecar` right after importing new photos — the tool auto-generates any missing sidecar files before starting the edit loop
+- Use the "Missing \<field\>" filters to focus on incomplete metadata
+- Press `Ctrl+C` at any prompt to quit; already-saved photos are not affected
+
 ### `npm run validate`
 
 Fast content validation without image processing. Checks:
