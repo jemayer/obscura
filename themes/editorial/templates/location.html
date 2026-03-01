@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ location_page.location }} — {{ site.title }}{% endblock %}
+
+{% block content %}
+<div class="content content--full">
+  <div class="tag-page__header">
+    <h1 class="page-title">{{ location_page.location }}</h1>
+    <span class="tag-page__count">{{ location_page.photos.length }} photo{{ 's' if location_page.photos.length != 1 else '' }}</span>
+  </div>
+
+  {% if location_page.photos.length %}
+  <div class="gallery-grid__toolbar">
+    {% include "partials/layout-toggle.html" %}
+  </div>
+  <div class="gallery-grid" data-default-layout="grid">
+    {% for item in location_page.photos %}
+    <a class="gallery-item"
+       href="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}"
+       data-pswp-src="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).path }}{% endif %}"
+       data-pswp-width="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).width }}{% endif %}"
+       data-pswp-height="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).height }}{% endif %}"
+       data-pswp-title="{{ item.photo.metadata.title }}"
+       data-pswp-location="{{ item.photo.metadata.location }}"
+       data-pswp-camera="{{ item.photo.metadata.camera }}"
+       data-pswp-date="{% if item.photo.metadata.date %}{{ item.photo.metadata.date | dateformat }}{% endif %}"
+       data-pswp-permalink="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}">
+      {% if item.photo.variants.length %}
+      <img src="{{ (item.photo.variants | bestvariant(800)).path }}"
+           srcset="{{ item.photo.variants | srcset }}"
+           sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
+           alt="{{ item.photo.metadata.title or (item.photo.slug | bareslug) }}"
+           loading="lazy" decoding="async">
+      {% endif %}
+      <div class="gallery-item__overlay">
+        <span class="gallery-item__title">{{ item.photo.metadata.title }}</span>
+        {% if item.photo.metadata.location %}
+        <span class="gallery-item__location">{{ item.photo.metadata.location }}</span>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <p class="tag-page__back">
+    <a href="{{ '/locations/' | url }}">&larr; All locations</a>
+  </p>
+</div>
+{% endblock %}

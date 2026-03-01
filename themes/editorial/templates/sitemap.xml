@@ -41,4 +41,14 @@
   </url>
   {% endfor %}
   {% endif %}
+  {% if location_pages.length %}
+  <url>
+    <loc>{{ '/locations/' | absurl }}</loc>
+  </url>
+  {% for lp in location_pages %}
+  <url>
+    <loc>{{ ('/locations/' + lp.slug + '/') | absurl }}</loc>
+  </url>
+  {% endfor %}
+  {% endif %}
 </urlset>

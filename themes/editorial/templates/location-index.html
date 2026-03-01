@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Locations — {{ site.title }}{% endblock %}
+
+{% block content %}
+<div class="content">
+  <h1 class="page-title">Locations</h1>
+
+  {% if location_pages.length %}
+  <ul class="tag-list">
+    {% for lp in location_pages %}
+    <li class="tag-list__item">
+      <a href="{{ ('/locations/' + lp.slug + '/') | url }}">{{ lp.location }}</a>
+      <span class="tag-list__count">{{ lp.photos.length }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

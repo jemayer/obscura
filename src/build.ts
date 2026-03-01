@@ -7,6 +7,7 @@ import { loadGalleries } from './gallery.js';
 import { loadAllBlogPosts, loadAllPages, loadHomepageContent } from './markdown.js';
 import { buildCrossReferenceGraph } from './crossref.js';
 import { buildTagPages } from './tags.js';
+import { buildLocationPages } from './locations.js';
 import { processAllPhotosWithCache } from './image-cache.js';
 import { formatExifWarnings } from './exif.js';
 import { loadTheme, copyThemeAssets } from './theme.js';
@@ -119,6 +120,9 @@ export async function build(projectDir: string): Promise<BuildResult> {
   // -- Build tag pages --
   const tagPages = buildTagPages(galleriesWithImages);
 
+  // -- Build location pages --
+  const locationPages = buildLocationPages(galleriesWithImages);
+
   const buildContext: BuildContext = {
     siteConfig,
     galleries: galleriesWithImages,
@@ -126,6 +130,7 @@ export async function build(projectDir: string): Promise<BuildResult> {
     pages,
     crossReferences,
     tagPages,
+    locationPages,
     homepageContent,
   };
 
@@ -144,6 +149,7 @@ export async function build(projectDir: string): Promise<BuildResult> {
     posts.length + // blog posts
     pages.length + // pages
     (tagPages.length > 0 ? 1 + tagPages.length : 0) + // tag index + tag pages
+    (locationPages.length > 0 ? 1 + locationPages.length : 0) + // location index + location pages
     1 + // 404
     1 + // feed.xml
     1; // sitemap.xml

@@ -8,6 +8,8 @@ import {
   writeSidecarEdits,
   scanGallery,
   countByFilter,
+  collectAllTags,
+  collectAllLocations,
   type SidecarEditTarget,
   type SidecarFilter,
 } from '../src/sidecar-edit.js';
@@ -328,5 +330,109 @@ describe('scanGallery', () => {
     expect(targets[0]!.sidecarPath).toBe(resolve(galleryDir, 'img.yaml'));
     expect(targets[0]!.filename).toBe('img.jpg');
     expect(targets[0]!.gallerySlug).toBe('slug');
+  });
+});
+
+describe('collectAllTags', () => {
+  it('collects unique tags across multiple targets', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: '', caption: '', tags: ['a', 'b'] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: '', caption: '', tags: ['c'] },
+      }),
+    ];
+    expect(collectAllTags(targets)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('returns sorted array', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: '', caption: '', tags: ['zebra', 'apple'] },
+      }),
+    ];
+    expect(collectAllTags(targets)).toEqual(['apple', 'zebra']);
+  });
+
+  it('returns empty array when no targets have tags', () => {
+    const targets = [
+      makeTarget(),
+      makeTarget(),
+    ];
+    expect(collectAllTags(targets)).toEqual([]);
+  });
+
+  it('deduplicates tags that appear on multiple photos', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: '', caption: '', tags: ['moody', 'street'] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: '', caption: '', tags: ['moody', 'landscape'] },
+      }),
+    ];
+    expect(collectAllTags(targets)).toEqual(['landscape', 'moody', 'street']);
+  });
+});
+
+describe('collectAllLocations', () => {
+  it('collects unique locations across targets', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: 'Berlin', caption: '', tags: [] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: 'Paris', caption: '', tags: [] },
+      }),
+    ];
+    expect(collectAllLocations(targets)).toEqual(['Berlin', 'Paris']);
+  });
+
+  it('returns sorted array', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: 'Zurich', caption: '', tags: [] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: 'Amsterdam', caption: '', tags: [] },
+      }),
+    ];
+    expect(collectAllLocations(targets)).toEqual(['Amsterdam', 'Zurich']);
+  });
+
+  it('skips empty location strings', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: '', caption: '', tags: [] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: 'Berlin', caption: '', tags: [] },
+      }),
+    ];
+    expect(collectAllLocations(targets)).toEqual(['Berlin']);
+  });
+
+  it('deduplicates locations appearing on multiple photos', () => {
+    const targets = [
+      makeTarget({
+        currentValues: { title: '', location: 'Berlin', caption: '', tags: [] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: 'Berlin', caption: '', tags: [] },
+      }),
+      makeTarget({
+        currentValues: { title: '', location: 'Paris', caption: '', tags: [] },
+      }),
+    ];
+    expect(collectAllLocations(targets)).toEqual(['Berlin', 'Paris']);
+  });
+
+  it('returns empty array when no targets have locations', () => {
+    const targets = [
+      makeTarget(),
+      makeTarget(),
+    ];
+    expect(collectAllLocations(targets)).toEqual([]);
   });
 });

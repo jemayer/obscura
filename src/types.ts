@@ -129,6 +129,16 @@ export interface TagPage {
 }
 
 // ---------------------------------------------------------------------------
+// Location Page
+// ---------------------------------------------------------------------------
+
+export interface LocationPage {
+  readonly location: string;
+  readonly slug: string;
+  readonly photos: readonly { readonly photo: Photo; readonly gallery: Gallery }[];
+}
+
+// ---------------------------------------------------------------------------
 // Cross-Reference Graph
 // ---------------------------------------------------------------------------
 
@@ -150,6 +160,7 @@ export interface BuildContext {
   readonly pages: readonly Page[];
   readonly crossReferences: CrossReferenceGraph;
   readonly tagPages: readonly TagPage[];
+  readonly locationPages: readonly LocationPage[];
   /** Rendered HTML from content/pages/index.md, if present */
   readonly homepageContent?: string | undefined;
 }

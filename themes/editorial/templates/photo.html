@@ -60,7 +60,7 @@
         {% if photo.metadata.location %}
         <li>
           <span class="photo-meta__label">Location</span>
-          <span class="photo-meta__value">{{ photo.metadata.location }}</span>
+          <span class="photo-meta__value"><a href="{{ ('/locations/' + (photo.metadata.location | slugifylocation) + '/') | url }}">{{ photo.metadata.location }}</a></span>
         </li>
         {% endif %}
       </ul>

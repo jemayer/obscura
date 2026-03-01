@@ -28,6 +28,18 @@ export function slugifyTag(tag: string): string {
 }
 
 /**
+ * Slugify a location string for use in URLs.
+ */
+export function slugifyLocation(location: string): string {
+  return location
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-{2,}/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/**
  * Build a fully namespaced slug: <gallery-slug>/<photo-slug>
  */
 export function namespacedSlug(

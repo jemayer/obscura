@@ -160,6 +160,30 @@ export async function writeSidecarEdits(
   await writeFile(sidecarPath, doc.toString(), 'utf-8');
 }
 
+export function collectAllTags(
+  targets: readonly SidecarEditTarget[],
+): readonly string[] {
+  const seen = new Set<string>();
+  for (const t of targets) {
+    for (const tag of t.currentValues.tags) {
+      seen.add(tag);
+    }
+  }
+  return [...seen].sort();
+}
+
+export function collectAllLocations(
+  targets: readonly SidecarEditTarget[],
+): readonly string[] {
+  const seen = new Set<string>();
+  for (const t of targets) {
+    if (t.currentValues.location !== '') {
+      seen.add(t.currentValues.location);
+    }
+  }
+  return [...seen].sort();
+}
+
 export function countByFilter(
   targets: readonly SidecarEditTarget[],
 ): Record<EditableField | 'all', number> {

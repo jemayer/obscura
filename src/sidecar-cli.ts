@@ -8,6 +8,8 @@ import {
   scanGallery,
   filterTargets,
   countByFilter,
+  collectAllTags,
+  collectAllLocations,
   writeSidecarEdits,
   type EditableField,
   type SidecarFilter,
@@ -47,6 +49,8 @@ async function showPreview(photoPath: string): Promise<void> {
 
 async function promptForEdits(
   target: SidecarEditTarget,
+  knownTags: ReadonlySet<string>,
+  knownLocations: ReadonlySet<string>,
 ): Promise<SidecarEdits | 'skip' | 'quit'> {
   const edits: {
     title?: string;
@@ -63,13 +67,53 @@ async function promptForEdits(
   if (p.isCancel(titleResult)) return 'quit';
   if (titleResult !== '') edits.title = titleResult;
 
-  const locationResult = await p.text({
-    message: `Location (current: "${target.currentValues.location}")`,
-    placeholder: 'Leave empty to keep current value',
-    defaultValue: '',
-  });
-  if (p.isCancel(locationResult)) return 'quit';
-  if (locationResult !== '') edits.location = locationResult;
+  const sortedLocations = [...knownLocations].sort();
+  let locationValue = '';
+
+  if (sortedLocations.length > 0) {
+    const NEW_LOCATION = '__new__';
+    const KEEP_CURRENT = '__keep__';
+    const locationOptions: { value: string; label: string }[] = [];
+
+    locationOptions.push({ value: KEEP_CURRENT, label: `Keep current ("${target.currentValues.location || '(empty)'}")` });
+    for (const loc of sortedLocations) {
+      locationOptions.push({ value: loc, label: loc });
+    }
+    locationOptions.push({ value: NEW_LOCATION, label: 'Enter new location' });
+
+    const locationSelect = await p.select({
+      message: `Location (current: "${target.currentValues.location}")`,
+      options: locationOptions,
+      initialValue: target.currentValues.location !== '' && knownLocations.has(target.currentValues.location)
+        ? target.currentValues.location
+        : KEEP_CURRENT,
+    });
+    if (p.isCancel(locationSelect)) return 'quit';
+
+    if (locationSelect === NEW_LOCATION) {
+      const newLoc = await p.text({
+        message: 'Enter new location',
+        placeholder: 'Leave empty to keep current value',
+        defaultValue: '',
+      });
+      if (p.isCancel(newLoc)) return 'quit';
+      locationValue = newLoc;
+    } else if (locationSelect !== KEEP_CURRENT) {
+      locationValue = locationSelect;
+    }
+  } else {
+    const locationResult = await p.text({
+      message: `Location (current: "${target.currentValues.location}")`,
+      placeholder: 'Leave empty to keep current value',
+      defaultValue: '',
+    });
+    if (p.isCancel(locationResult)) return 'quit';
+    locationValue = locationResult;
+  }
+
+  if (locationValue !== '' && locationValue !== target.currentValues.location) {
+    edits.location = locationValue;
+  }
 
   const captionResult = await p.text({
     message: `Caption (current: "${target.currentValues.caption}")`,
@@ -79,21 +123,51 @@ async function promptForEdits(
   if (p.isCancel(captionResult)) return 'quit';
   if (captionResult !== '') edits.caption = captionResult;
 
-  const currentTags =
-    target.currentValues.tags.length > 0
-      ? target.currentValues.tags.join(', ')
-      : 'none';
-  const tagsResult = await p.text({
-    message: `Tags (comma-separated, current: ${currentTags})`,
-    placeholder: 'Leave empty to keep current value',
+  // --- Tag editing ---
+  const currentPhotoTags = target.currentValues.tags;
+  const sortedKnown = [...knownTags].sort();
+
+  let selectedTags: string[];
+
+  if (sortedKnown.length > 0) {
+    const multiResult = await p.multiselect({
+      message: 'Tags (select existing)',
+      options: sortedKnown.map((t) => ({ value: t, label: t })),
+      initialValues: [...currentPhotoTags],
+      required: false,
+    });
+    if (p.isCancel(multiResult)) return 'quit';
+    selectedTags = multiResult;
+  } else {
+    selectedTags = [];
+  }
+
+  const newTagsResult = await p.text({
+    message:
+      sortedKnown.length > 0
+        ? 'Add new tags (comma-separated, or leave empty)'
+        : 'Tags (comma-separated)',
+    placeholder: 'Leave empty to skip',
     defaultValue: '',
   });
-  if (p.isCancel(tagsResult)) return 'quit';
-  if (tagsResult !== '') {
-    edits.tags = tagsResult
-      .split(',')
-      .map((t) => t.trim())
-      .filter((t) => t !== '');
+  if (p.isCancel(newTagsResult)) return 'quit';
+
+  const newTags =
+    newTagsResult !== ''
+      ? newTagsResult
+          .split(',')
+          .map((t) => t.trim())
+          .filter((t) => t !== '')
+      : [];
+
+  const finalTags = [...selectedTags, ...newTags];
+
+  const tagsChanged =
+    finalTags.length !== currentPhotoTags.length ||
+    finalTags.some((t, i) => t !== currentPhotoTags[i]);
+
+  if (tagsChanged) {
+    edits.tags = finalTags;
   }
 
   // If no edits were made, treat as skip
@@ -196,6 +270,9 @@ async function main(): Promise<void> {
     return;
   }
 
+  const knownTags = new Set(collectAllTags(allTargets));
+  const knownLocations = new Set(collectAllLocations(allTargets));
+
   // Filter selection
   const counts = countByFilter(allTargets);
   const filterOptions: { value: EditableField | 'all'; label: string; hint?: string }[] = [
@@ -241,7 +318,7 @@ async function main(): Promise<void> {
     await showPreview(target.photoPath);
     p.log.info(buildContextLine(target));
 
-    const result = await promptForEdits(target);
+    const result = await promptForEdits(target, knownTags, knownLocations);
 
     if (result === 'quit') {
       p.cancel('Cancelled.');
@@ -254,6 +331,14 @@ async function main(): Promise<void> {
     }
 
     await writeSidecarEdits(target.sidecarPath, result);
+    if (result.tags) {
+      for (const tag of result.tags) {
+        knownTags.add(tag);
+      }
+    }
+    if (result.location) {
+      knownLocations.add(result.location);
+    }
     editedCount++;
     p.log.success(`Saved ${target.filename}`);
 

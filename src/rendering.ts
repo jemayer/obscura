@@ -8,11 +8,12 @@ import type {
   BlogPost,
   Page,
   TagPage,
+  LocationPage,
   BuildContext,
   CrossReferenceGraph,
 } from './types.js';
 import { srcset, sizes, bestVariant, responsiveImg } from './responsive.js';
-import { slugifyTag } from './slugs.js';
+import { slugifyTag, slugifyLocation } from './slugs.js';
 
 // ---------------------------------------------------------------------------
 // Nunjucks Environment
@@ -113,6 +114,12 @@ export function createRenderingEngine(
   env.addFilter('slugifytag', (tag: unknown) => {
     if (typeof tag !== 'string') return '';
     return slugifyTag(tag);
+  });
+
+  // Slugify a location for URL: {{ location | slugifylocation }}
+  env.addFilter('slugifylocation', (location: unknown) => {
+    if (typeof location !== 'string') return '';
+    return slugifyLocation(location);
   });
 
   // URL builder: {{ "/photography/" | url }} → root-relative path
@@ -313,6 +320,30 @@ export async function renderTagPage(
   );
 }
 
+/** Render the location index (/locations/) */
+export async function renderLocationIndex(
+  engine: RenderingEngine,
+  locationPages: readonly LocationPage[],
+  distDir: string,
+): Promise<void> {
+  await renderToFile(engine, 'location-index.html', { location_pages: locationPages }, distDir, 'locations/index.html');
+}
+
+/** Render a single location page (/locations/<slug>/) */
+export async function renderLocationPage(
+  engine: RenderingEngine,
+  locationPage: LocationPage,
+  distDir: string,
+): Promise<void> {
+  await renderToFile(
+    engine,
+    'location.html',
+    { location_page: locationPage },
+    distDir,
+    `locations/${locationPage.slug}/index.html`,
+  );
+}
+
 /** Render the 404 page */
 export async function render404(
   engine: RenderingEngine,
@@ -336,11 +367,11 @@ export async function renderSitemap(
   context: BuildContext,
   distDir: string,
 ): Promise<void> {
-  const { galleries, posts, pages, tagPages } = context;
+  const { galleries, posts, pages, tagPages, locationPages } = context;
   await renderToFile(
     engine,
     'sitemap.xml',
-    { galleries, posts, pages, tag_pages: tagPages },
+    { galleries, posts, pages, tag_pages: tagPages, location_pages: locationPages },
     distDir,
     'sitemap.xml',
   );
@@ -358,7 +389,7 @@ export async function renderAll(
   context: BuildContext,
   distDir: string,
 ): Promise<void> {
-  const { galleries, posts, pages, crossReferences, tagPages, homepageContent } = context;
+  const { galleries, posts, pages, crossReferences, tagPages, locationPages, homepageContent } = context;
 
   // Homepage
   await renderHomepage(engine, galleries, homepageContent, distDir);
@@ -395,6 +426,14 @@ export async function renderAll(
     await renderTagIndex(engine, tagPages, distDir);
     for (const tagPage of tagPages) {
       await renderTagPage(engine, tagPage, distDir);
+    }
+  }
+
+  // Locations
+  if (locationPages.length > 0) {
+    await renderLocationIndex(engine, locationPages, distDir);
+    for (const locationPage of locationPages) {
+      await renderLocationPage(engine, locationPage, distDir);
     }
   }
 
