@@ -79,4 +79,42 @@ describe('mergeMetadata', () => {
     expect(result.gps_lat).toBe(48.856);
     expect(result.gps_lon).toBe(2.352);
   });
+
+  it('treats Unix epoch date (1 Jan 1970) from EXIF as missing', () => {
+    const epochExif: ExifData = {
+      date: new Date('1970-01-01T00:00:00.000Z'),
+      camera: 'Canon EOS R5',
+    };
+    const result = mergeMetadata(epochExif, undefined);
+    expect(result.date).toBeUndefined();
+    expect(result.camera).toBe('Canon EOS R5');
+  });
+
+  it('treats Unix epoch date (1 Jan 1970) from sidecar as missing', () => {
+    const emptyExif: ExifData = {};
+    const sidecar = {
+      title: 'Photo',
+      date: '1970-01-01',
+    };
+    const result = mergeMetadata(emptyExif, sidecar);
+    expect(result.date).toBeUndefined();
+  });
+
+  it('treats Unix epoch Date object from sidecar as missing', () => {
+    const emptyExif: ExifData = {};
+    const sidecar = {
+      title: 'Photo',
+      date: new Date('1970-01-01T00:00:00.000Z'),
+    };
+    const result = mergeMetadata(emptyExif, sidecar);
+    expect(result.date).toBeUndefined();
+  });
+
+  it('does not filter non-epoch dates from 1970', () => {
+    const exif: ExifData = {
+      date: new Date('1970-06-15'),
+    };
+    const result = mergeMetadata(exif, undefined);
+    expect(result.date).toEqual(new Date('1970-06-15'));
+  });
 });

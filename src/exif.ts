@@ -52,8 +52,14 @@ function buildCameraString(
   return model;
 }
 
+/** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a EXIF default, not a real date. */
+function isEpochDate(date: Date): boolean {
+  return date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1;
+}
+
 function buildExifData(parsed: ExifrOutput): ExifData {
-  const date = parsed.DateTimeOriginal ?? parsed.CreateDate;
+  const rawDate = parsed.DateTimeOriginal ?? parsed.CreateDate;
+  const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
   const gps_lat = parsed.latitude;
