@@ -1,11 +1,11 @@
 ---
 # comagen-wvfv
 title: Ideation for a command line tool to handle sidecar YAMLs
-status: draft
+status: completed
 type: task
 priority: normal
 created_at: 2026-02-28T22:11:42Z
-updated_at: 2026-02-28T22:16:25Z
+updated_at: 2026-03-01T12:26:58Z
 ---
 
 This is an ideation ticket.
