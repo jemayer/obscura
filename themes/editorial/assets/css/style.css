@@ -484,7 +484,34 @@ a:hover {
 @media (min-width: 48em) {
   .photo-detail__body {
     grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr;
     max-width: none;
+  }
+
+  .photo-detail__title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .photo-detail__caption {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .photo-meta {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+  }
+
+  .photo-detail__body > .post-list__tags,
+  .photo-detail__body > .photo-backlinks {
+    grid-column: 1;
+  }
+
+  .photo-detail__back {
+    grid-column: 1 / -1;
   }
 }
 
