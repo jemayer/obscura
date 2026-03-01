@@ -208,13 +208,17 @@ async function main(): Promise<void> {
 
   const photosDir = resolve(projectDir, 'content', 'photos');
 
-  // Count photos per gallery for display
+  // Scan all galleries to count photos and collect global tags/locations
   const galleryCounts = new Map<string, number>();
+  let globalTargets: SidecarEditTarget[] = [];
   for (const gallery of listedGalleries) {
     const galleryDir = resolve(photosDir, gallery.slug);
     const targets = await scanGallery(galleryDir, gallery.slug);
     galleryCounts.set(gallery.slug, targets.length);
+    globalTargets = globalTargets.concat(targets);
   }
+  const knownTags = new Set(collectAllTags(globalTargets));
+  const knownLocations = new Set(collectAllLocations(globalTargets));
 
   // Gallery selection — use slug strings as values, with 'all' as a special key
   const galleryOptions: { value: string; label: string; hint?: string }[] =
@@ -269,9 +273,6 @@ async function main(): Promise<void> {
     p.outro('No photos found.');
     return;
   }
-
-  const knownTags = new Set(collectAllTags(allTargets));
-  const knownLocations = new Set(collectAllLocations(allTargets));
 
   // Filter selection
   const counts = countByFilter(allTargets);
