@@ -1,5 +1,6 @@
 # Claude
 .claude/
+.beans/
 
 # Dependencies
 node_modules/
