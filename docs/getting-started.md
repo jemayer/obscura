@@ -6,33 +6,63 @@ A step-by-step guide to setting up your photography portfolio with Obscura.
 
 - [Node.js](https://nodejs.org/) 20 or later
 - A terminal (Terminal on macOS, Command Prompt or PowerShell on Windows)
+- A [GitHub](https://github.com) account (for hosting and updates)
 - Your photos (JPEG, PNG, TIFF, or WebP)
 
-## Installation
+## Setup
+
+### 1. Fork the Repository
+
+Fork [Obscura on GitHub](https://github.com/jcm/obscura) to create your own copy, then clone your fork:
 
 ```bash
-git clone https://github.com/jcm/obscura.git my-portfolio
+git clone https://github.com/YOUR-USERNAME/obscura.git my-portfolio
 cd my-portfolio
 npm install
 ```
+
+### 2. Add the Upstream Remote
+
+This lets you pull code updates from the original Obscura repository later:
+
+```bash
+git remote add upstream https://github.com/jcm/obscura.git
+```
+
+You now have two remotes:
+- **origin** — your fork (your content, your site)
+- **upstream** — the Obscura source (engine updates, theme improvements)
 
 ## Project Structure
 
 ```
 my-portfolio/
-├── config/
-│   ├── site.yaml         # Site settings (title, URL, etc.)
-│   └── galleries.yaml    # Gallery definitions
-├── content/
-│   ├── photos/           # Your photo galleries
-│   │   └── <gallery>/    # One folder per gallery
-│   ├── posts/            # Blog posts (Markdown)
-│   └── pages/            # Static pages (about, contact)
+├── config/                # ← Your site settings
+│   ├── site.yaml
+│   └── galleries.yaml
+├── content/               # ← Your content
+│   ├── photos/            #    Photo galleries (images + sidecar YAML)
+│   ├── posts/             #    Blog posts (Markdown)
+│   └── pages/             #    Static pages (about, contact, homepage)
 ├── themes/
-│   └── editorial/        # Default theme
-├── dist/                 # Generated site (after build)
-└── .cache/               # Build cache (auto-created, gitignored)
+│   └── editorial/         # Default theme
+├── src/                   # Obscura engine (TypeScript)
+├── dist/                  # Generated site (gitignored)
+└── .cache/                # Build cache (gitignored)
 ```
+
+**What's yours:** `config/`, `content/`, and any CSS tweaks in `themes/`. These are the files you'll edit day-to-day.
+
+**What's Obscura's:** `src/`, `package.json`, `docs/`. These are updated when you pull from upstream.
+
+### A Note on Photos and Git
+
+Original photo files (JPEG, PNG, TIFF, WebP) in `content/photos/` are **gitignored** to keep the repository small — a portfolio of 100 photos could easily exceed 2 GB. The sidecar YAML files (titles, locations, captions) *are* committed, so your metadata library is always version-controlled.
+
+This means:
+- Your photos live on your local machine (back them up separately — cloud storage, NAS, external drive)
+- A fresh clone of your repo won't have the images until you copy them back into `content/photos/`
+- The build will warn about sidecars that reference missing images
 
 ## Configure Your Site
 
@@ -108,7 +138,25 @@ Open http://localhost:3000 in your browser. The site rebuilds automatically when
 npm run build
 ```
 
-The generated site is in `dist/`. Upload its contents to any static hosting provider. Subsequent builds are faster because processed images are cached — only new or modified photos are re-processed. If you ever need a guaranteed-fresh build, use `npm run build:clean`.
+The generated site is in `dist/`. Subsequent builds are faster because processed images are cached — only new or modified photos are re-processed. If you ever need a guaranteed-fresh build, use `npm run build:clean`.
+
+## Pulling Upstream Updates
+
+When Obscura releases new features or bug fixes, pull them into your fork:
+
+```bash
+git fetch upstream
+git merge upstream/main
+```
+
+Conflicts are rare because your content (`config/`, `content/`) and the engine code (`src/`, `package.json`) live in separate directories. If you've customised theme CSS in `themes/`, you may occasionally need to resolve a merge conflict there — git will tell you.
+
+After merging, install any new dependencies and rebuild:
+
+```bash
+npm install
+npm run build:clean
+```
 
 ## Next Steps
 
