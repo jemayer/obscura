@@ -3,9 +3,9 @@
 title: Improve sidecar CLI tool for batch editing
 status: draft
 type: task
-priority: normal
+priority: low
 created_at: 2026-03-01T13:15:07Z
-updated_at: 2026-03-01T13:16:12Z
+updated_at: 2026-03-01T17:24:18Z
 ---
 
 The CLI tool for handling our sidecar YAMLs shoud have an edit mode where it
