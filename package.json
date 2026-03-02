@@ -17,7 +17,8 @@
     "format": "prettier --write 'src/**/*.ts'",
     "format:check": "prettier --check 'src/**/*.ts'",
     "validate": "tsc && node dist-build/validate.js",
-    "sidecar": "tsc && node dist-build/sidecar-cli.js"
+    "sidecar": "tsc && node dist-build/sidecar-cli.js",
+    "init": "tsc && node dist-build/init.js"
   },
   "keywords": [
     "static-site-generator",

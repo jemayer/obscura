@@ -21,7 +21,17 @@ cd my-portfolio
 npm install
 ```
 
-### 2. Add the Upstream Remote
+### 2. Initialise Example Content
+
+A fresh clone doesn't include `config/` or `content/` — the demo site lives in `examples/` to avoid merge conflicts when you pull engine updates. Run the init script to get started:
+
+```bash
+npm run init
+```
+
+This copies the example site (config files, sample gallery, pages, and a blog post) into `config/` and `content/`. You can skip this step if you prefer to create your config and content from scratch.
+
+### 3. Add the Upstream Remote (Optional)
 
 This lets you pull code updates from the original Obscura repository later:
 
@@ -37,13 +47,15 @@ You now have two remotes:
 
 ```
 my-portfolio/
-├── config/                # ← Your site settings
+├── config/                # ← Your site settings (created by npm run init)
 │   ├── site.yaml
 │   └── galleries.yaml
-├── content/               # ← Your content
+├── content/               # ← Your content (created by npm run init)
 │   ├── photos/            #    Photo galleries (images + sidecar YAML)
 │   ├── posts/             #    Blog posts (Markdown)
 │   └── pages/             #    Static pages (about, contact, homepage)
+├── examples/
+│   └── default-site/      # Example content (source for npm run init)
 ├── themes/
 │   └── editorial/         # Default theme
 ├── src/                   # Obscura engine (TypeScript)
@@ -51,9 +63,9 @@ my-portfolio/
 └── .cache/                # Build cache (gitignored)
 ```
 
-**What's yours:** `config/`, `content/`, and any CSS tweaks in `themes/`. These are the files you'll edit day-to-day.
+**What's yours:** `config/`, `content/`, and any CSS tweaks in `themes/`. These directories are created by `npm run init` and are yours to edit day-to-day. They're not tracked in the upstream repo, so pulling updates will never cause merge conflicts on your content.
 
-**What's Obscura's:** `src/`, `package.json`, `docs/`. These are updated when you pull from upstream.
+**What's Obscura's:** `src/`, `examples/`, `package.json`, `docs/`. These are updated when you pull from upstream.
 
 ### A Note on Photos and Git
 
@@ -149,7 +161,7 @@ git fetch upstream
 git merge upstream/main
 ```
 
-Conflicts are rare because your content (`config/`, `content/`) and the engine code (`src/`, `package.json`) live in separate directories. If you've customised theme CSS in `themes/`, you may occasionally need to resolve a merge conflict there — git will tell you.
+Conflicts are rare because your content (`config/`, `content/`) isn't tracked in the upstream repo at all — only engine code changes come through. If you've customised theme CSS in `themes/`, you may occasionally need to resolve a merge conflict there — git will tell you.
 
 After merging, install any new dependencies and rebuild:
 

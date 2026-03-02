@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { parse as parseYaml } from 'yaml';
@@ -63,6 +64,16 @@ function isGalleryConfig(value: unknown): value is RawGalleryConfig {
 
 export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
   const filePath = resolve(projectRoot, 'config', 'site.yaml');
+
+  if (!existsSync(filePath)) {
+    throw new Error(
+      `Config file not found: ${filePath}\n\n` +
+        `It looks like your site hasn't been initialised yet.\n` +
+        `Run "npm run init" to populate config/ and content/ with example content,\n` +
+        `or create config/site.yaml manually.`,
+    );
+  }
+
   const raw = await loadYamlFile(filePath);
 
   if (!isSiteConfig(raw)) {
