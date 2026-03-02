@@ -23,11 +23,16 @@ async function main(): Promise<void> {
   const projectDir = resolve(process.cwd());
   const distDir = resolve(projectDir, 'dist');
   const port = 3000;
+  const clean = process.argv.includes('--clean');
 
   // Initial build
-  console.log('Obscura dev — initial build…\n');
+  console.log(
+    clean
+      ? 'Obscura dev — clean initial build…\n'
+      : 'Obscura dev — initial build…\n',
+  );
   try {
-    const result = await build(projectDir);
+    const result = await build(projectDir, { clean });
     console.log(
       `✓ Built ${String(result.pageCount)} pages in ${String(result.durationMs)}ms\n`,
     );

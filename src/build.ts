@@ -31,7 +31,14 @@ export interface BuildResult {
 // Full build pipeline
 // ---------------------------------------------------------------------------
 
-export async function build(projectDir: string): Promise<BuildResult> {
+export interface BuildOptions {
+  readonly clean?: boolean;
+}
+
+export async function build(
+  projectDir: string,
+  options: BuildOptions = {},
+): Promise<BuildResult> {
   const startTime = performance.now();
   const warnings: string[] = [];
 
@@ -46,25 +53,33 @@ export async function build(projectDir: string): Promise<BuildResult> {
   const themesDir = resolve(projectDir, 'themes');
   const distDir = resolve(projectDir, 'dist');
 
-  // -- 3. Clean dist, preserving cached image output --
-  const imagesDir = resolve(distDir, 'assets', 'images');
-  try {
-    const entries = await readdir(distDir);
-    for (const entry of entries) {
-      if (entry === 'assets') continue;
-      await rm(resolve(distDir, entry), { recursive: true, force: true });
+  // -- 3. Clean dist --
+  if (options.clean) {
+    // Full wipe: remove dist/ and .cache/ entirely
+    await rm(distDir, { recursive: true, force: true });
+    await rm(resolve(projectDir, '.cache'), { recursive: true, force: true });
+    await mkdir(distDir, { recursive: true });
+  } else {
+    // Incremental: preserve dist/assets/images/ for cache hits
+    const imagesDir = resolve(distDir, 'assets', 'images');
+    try {
+      const entries = await readdir(distDir);
+      for (const entry of entries) {
+        if (entry === 'assets') continue;
+        await rm(resolve(distDir, entry), { recursive: true, force: true });
+      }
+      // Clean non-image assets (theme, vendor) but keep images/
+      const assetsDir = resolve(distDir, 'assets');
+      const assetEntries = await readdir(assetsDir);
+      for (const entry of assetEntries) {
+        if (entry === 'images') continue;
+        await rm(resolve(assetsDir, entry), { recursive: true, force: true });
+      }
+    } catch {
+      // dist/ doesn't exist yet — that's fine
     }
-    // Clean non-image assets (theme, vendor) but keep images/
-    const assetsDir = resolve(distDir, 'assets');
-    const assetEntries = await readdir(assetsDir);
-    for (const entry of assetEntries) {
-      if (entry === 'images') continue;
-      await rm(resolve(assetsDir, entry), { recursive: true, force: true });
-    }
-  } catch {
-    // dist/ doesn't exist yet — that's fine
+    await mkdir(imagesDir, { recursive: true });
   }
-  await mkdir(imagesDir, { recursive: true });
 
   // -- 4. Validate image formats (hard error on unsupported) --
   const gallerySlugs = galleryConfig.galleries.map((g) => g.slug);

@@ -6,7 +6,9 @@
   "main": "dist-build/index.js",
   "scripts": {
     "build": "tsc && node dist-build/cli.js",
+    "build:clean": "tsc && node dist-build/cli.js --clean",
     "dev": "tsc && node dist-build/dev.js",
+    "dev:clean": "tsc && node dist-build/dev.js --clean",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",

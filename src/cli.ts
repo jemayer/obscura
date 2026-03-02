@@ -3,11 +3,14 @@ import { build } from './build.js';
 
 async function main(): Promise<void> {
   const projectDir = resolve(process.cwd());
+  const clean = process.argv.includes('--clean');
 
-  console.log('Obscura — building site…\n');
+  console.log(
+    clean ? 'Obscura — clean build…\n' : 'Obscura — building site…\n',
+  );
 
   try {
-    const result = await build(projectDir);
+    const result = await build(projectDir, { clean });
 
     // Print warnings
     if (result.warnings.length > 0) {
