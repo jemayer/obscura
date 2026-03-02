@@ -483,7 +483,7 @@ a:hover {
 
 @media (min-width: 48em) {
   .photo-detail__body {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 3fr 2fr;
     grid-template-rows: auto 1fr;
     max-width: none;
   }
@@ -505,7 +505,6 @@ a:hover {
     align-self: start;
   }
 
-  .photo-detail__body > .post-list__tags,
   .photo-detail__body > .photo-backlinks {
     grid-column: 1;
   }
@@ -553,6 +552,14 @@ a:hover {
 .photo-meta__value {
   color: var(--color-text);
   text-align: right;
+  min-width: 0;
+}
+
+.photo-meta__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0;
 }
 
 /* Back-links */

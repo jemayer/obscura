@@ -7,6 +7,24 @@
   --pswp-bg: var(--color-bg);
 }
 
+/* Make close/arrow icons solid in light mode.
+   By default PhotoSwipe uses white fill + dark stroke, which looks outlined
+   against a light background. Override so the icon is a solid dark shape. */
+:root:not([data-theme="dark"]) .pswp {
+  --pswp-icon-color: var(--color-text);
+  --pswp-icon-color-secondary: var(--color-bg);
+  --pswp-icon-stroke-color: var(--color-bg);
+}
+
+/* Undo the override when system prefers dark and no explicit light theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .pswp {
+    --pswp-icon-color: #fff;
+    --pswp-icon-color-secondary: #4f4f4f;
+    --pswp-icon-stroke-color: #4f4f4f;
+  }
+}
+
 .pswp-caption {
   position: absolute;
   bottom: 0;

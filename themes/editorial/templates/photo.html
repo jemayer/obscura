@@ -63,15 +63,17 @@
           <span class="photo-meta__value"><a href="{{ ('/locations/' + (photo.metadata.location | slugifylocation) + '/') | url }}">{{ photo.metadata.location }}</a></span>
         </li>
         {% endif %}
+        {% if photo.metadata.tags.length %}
+        <li class="photo-meta__tags-row">
+          <span class="photo-meta__label">Tags</span>
+          <span class="photo-meta__value photo-meta__tags">
+            {% for tag in photo.metadata.tags %}
+            <a class="tag" href="{{ ('/tags/' + (tag | slugifytag) + '/') | url }}">{{ tag }}</a>
+            {% endfor %}
+          </span>
+        </li>
+        {% endif %}
       </ul>
-
-      {% if photo.metadata.tags.length %}
-      <div class="post-list__tags">
-        {% for tag in photo.metadata.tags %}
-        <a class="tag" href="{{ ('/tags/' + (tag | slugifytag) + '/') | url }}">{{ tag }}</a>
-        {% endfor %}
-      </div>
-      {% endif %}
 
       {% if back_links.length %}
       <div class="photo-backlinks">
