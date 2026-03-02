@@ -13,7 +13,7 @@ A step-by-step guide to setting up your photography portfolio with Obscura.
 
 ### 1. Fork the Repository
 
-Fork [Obscura on GitHub](https://github.com/jcm/obscura) to create your own copy, then clone your fork:
+Fork [Obscura on GitHub](https://github.com/jemayer/obscura) to create your own copy, then clone your fork:
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/obscura.git my-portfolio
@@ -26,7 +26,7 @@ npm install
 This lets you pull code updates from the original Obscura repository later:
 
 ```bash
-git remote add upstream https://github.com/jcm/obscura.git
+git remote add upstream https://github.com/jemayer/obscura.git
 ```
 
 You now have two remotes:
