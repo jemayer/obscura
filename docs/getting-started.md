@@ -30,7 +30,8 @@ my-portfolio/
 │   └── pages/            # Static pages (about, contact)
 ├── themes/
 │   └── editorial/        # Default theme
-└── dist/                 # Generated site (after build)
+├── dist/                 # Generated site (after build)
+└── .cache/               # Build cache (auto-created, gitignored)
 ```
 
 ## Configure Your Site
@@ -107,7 +108,7 @@ Open http://localhost:3000 in your browser. The site rebuilds automatically when
 npm run build
 ```
 
-The generated site is in `dist/`. Upload its contents to any static hosting provider.
+The generated site is in `dist/`. Upload its contents to any static hosting provider. Subsequent builds are faster because processed images are cached — only new or modified photos are re-processed. If you ever need a guaranteed-fresh build, use `npm run build:clean`.
 
 ## Next Steps
 

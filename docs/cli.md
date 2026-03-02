@@ -4,7 +4,7 @@
 
 ### `npm run build`
 
-Runs the full build pipeline:
+Runs the build pipeline with incremental image caching:
 
 1. Loads configuration (`config/site.yaml`, `config/galleries.yaml`)
 2. Validates image formats
@@ -12,17 +12,18 @@ Runs the full build pipeline:
 4. Reads EXIF data and merges with sidecars
 5. Loads blog posts and resolves photo shortcodes
 6. Loads pages
-7. Processes images (resize, WebP conversion, thumbnails)
+7. Processes images (resize, WebP conversion, thumbnails) — **skips unchanged photos via cache**
 8. Renders all templates
 9. Generates RSS feed and sitemap
 
-Output goes to `dist/`.
+Output goes to `dist/`. The image cache manifest is stored in `.cache/image-cache.json` and persists across builds. Previously processed images in `dist/assets/images/` are preserved, so only new or modified photos are re-processed.
 
-**On success:**
+**On success (cached):**
 ```
 Obscura — building site…
 
-✓ Built 42 pages, 28 photos in 1234ms
+Image cache: 28/28 photos skipped (unchanged)
+✓ Built 42 pages, 28 photos in 210ms
 ```
 
 **With warnings** (e.g., missing EXIF data):
@@ -42,16 +43,34 @@ Obscura — building site…
 ✗ Build failed: Unsupported image format: content/photos/mono/sketch.psd
 ```
 
+### `npm run build:clean`
+
+Same as `npm run build`, but wipes `dist/` and `.cache/` entirely before building. All images are re-processed from scratch. Use this when you suspect cache inconsistencies or want a guaranteed-fresh output.
+
+```
+Obscura — clean build…
+
+✓ Built 42 pages, 28 photos in 12800ms
+```
+
+You can also pass the flag directly: `npm run build -- --clean`.
+
 ### `npm run dev`
 
 Starts a local development server with file watching:
 
-- Builds the site
+- Builds the site (with image caching)
 - Serves `dist/` at http://localhost:3000
 - Watches `content/`, `config/`, and `themes/` for changes
 - Rebuilds automatically on file changes
 
 Press `Ctrl+C` to stop.
+
+### `npm run dev:clean`
+
+Same as `npm run dev`, but the initial build wipes `dist/` and `.cache/` for a clean start. Subsequent watch-triggered rebuilds use caching normally.
+
+You can also pass the flag directly: `npm run dev -- --clean`.
 
 ### `npm run sidecar`
 

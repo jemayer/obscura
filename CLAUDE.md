@@ -13,8 +13,10 @@ Obscura is a static site generator for photography portfolio websites, written i
 - `npm run lint` — ESLint (strict, no `any`)
 - `npm run format` — Prettier (auto-fix)
 - `npm run format:check` — Prettier (check only)
-- `npm run build` — full site build to dist/
-- `npm run dev` — watch mode with rebuild
+- `npm run build` — incremental site build to dist/ (cached images are preserved)
+- `npm run build:clean` — full clean build (wipes dist/ and .cache/)
+- `npm run dev` — watch mode with incremental rebuild
+- `npm run dev:clean` — watch mode with clean initial build
 - `npm run sidecar` — interactive sidecar YAML editor (fill in titles, locations, captions, tags)
 - `npm test` — run Vitest test suite
 
@@ -49,6 +51,7 @@ Core types live in `src/types.ts` — these are the contract between pipeline st
 - `content/pages/` — simple Markdown pages
 - `themes/` — theme directories (CSS, templates, manifest)
 - `dist/` — generated site output (gitignored)
+- `.cache/` — build cache (image processing manifest, gitignored)
 - `docs/` — PRD, ADRs, user documentation
 - `.beans/` — project tickets
 

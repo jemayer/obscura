@@ -2,6 +2,7 @@
 
 - **Date:** 2026-02-27
 - **Status:** Accepted
+- **Updated:** 2026-03-02
 
 ## Context
 
@@ -13,12 +14,25 @@ During development and content authoring, most builds change only one or two pho
 
 Implement a content-hash image cache. Before processing a photo, compute a hash of the source file's contents and the processing parameters (breakpoints, quality). If the hash matches a previous build, skip processing and reuse the existing output.
 
-The cache manifest is stored at `dist/.image-cache.json` (gitignored along with the rest of `dist/`). It maps `<source-path>:<params-hash>` to the set of generated output files.
+The cache manifest is stored at `.cache/image-cache.json` (gitignored). It maps `<photo-slug>` to a cache key (`SHA256(file):SHA256(params)`) and the resulting output variants. The processed image files themselves are preserved in `dist/assets/images/` across builds — the build cleans HTML, theme assets, and vendor files from `dist/` but leaves the images directory intact.
+
+On a cache hit, the system verifies that the output files actually exist on disk before skipping processing. If files are missing (e.g. after a manual partial clean), it falls back to re-processing.
+
+## Clean Build Escape Hatch
+
+When caching produces inconsistent results, a full clean build can be triggered with:
+
+```bash
+npm run build:clean   # or: npm run build -- --clean
+npm run dev:clean     # or: npm run dev -- --clean
+```
+
+This wipes both `dist/` and `.cache/` entirely, forcing all images to be re-processed from scratch.
 
 ## Consequences
 
-- Incremental builds only process new or modified photos — typical rebuild time drops from minutes to seconds
+- Incremental builds only process new or modified photos — typical rebuild time drops from ~13s to ~200ms (for 31 photos)
 - The cache is invalidated automatically when processing parameters change (e.g. adding a breakpoint or changing WebP quality)
-- The cache lives in `dist/`, so a clean build (`rm -rf dist/`) reprocesses everything — this is the expected escape hatch
+- The cache manifest lives in `.cache/` (outside `dist/`) so it survives normal builds; use `--clean` to force a full rebuild
 - No external cache service or database — just a JSON file
-- Adds modest complexity to the image pipeline (hash computation, cache lookup, cache write) but the DX improvement is significant
+- Adds modest complexity to the image pipeline (hash computation, cache lookup, output file verification, cache write) but the DX improvement is significant
