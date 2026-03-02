@@ -948,26 +948,40 @@ a.tag:hover {
    -------------------------------------------------------------------------- */
 
 .homepage-intro {
-  max-width: var(--content-narrow);
-  margin: 0 auto var(--space-3xl);
-  padding: var(--space-2xl) 0;
+  max-width: var(--content-width);
+  margin: 0 auto var(--space-xl);
+  padding: var(--space-xl) 0;
+  border-top: 1px solid var(--color-border);
   font-family: var(--font-display);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   line-height: 1.55;
   color: var(--color-text);
-  text-align: center;
+  text-align: left;
   letter-spacing: var(--letter-spacing-tight);
 }
 
 @media (min-width: 48em) {
   .homepage-intro {
-    font-size: var(--font-size-2xl);
-    line-height: 1.45;
+    column-count: 2;
+    column-gap: var(--space-2xl);
+    font-size: 1.3125rem;
+    line-height: 1.5;
   }
+}
+
+.homepage-intro h1 {
+  column-span: all;
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--space-lg);
 }
 
 .homepage-intro p {
   margin-bottom: var(--space-lg);
+  break-inside: avoid;
 }
 
 .homepage-intro p:last-child {
