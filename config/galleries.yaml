@@ -4,6 +4,11 @@ galleries:
     description: A small collection of street and landscape photographs to get you started.
     listed: true
 
+  - slug: collateral
+    title: Collateral Damage
+    description: Everything that doesn't fit elsewhere!
+    listed: true
+
   - slug: post-assets
     title: Post Assets
     listed: false
