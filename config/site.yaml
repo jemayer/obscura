@@ -1,5 +1,5 @@
 base_url: https://coma.photography
-title: "Obscura - A Static Site Generator for Photographers"
+title: "Obscura - A Static Site Generator for Photographers only."
 theme: editorial
 recent_shots_count: 10
 images:
