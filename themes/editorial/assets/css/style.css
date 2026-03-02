@@ -40,6 +40,8 @@
   --color-link-hover: #5c5850;
   --color-overlay: rgba(28, 27, 25, 0.75);
   --color-overlay-light: rgba(28, 27, 25, 0.03);
+  --color-highlight: #c45d3e;
+  --color-highlight-muted: rgba(196, 93, 62, 0.25);
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -947,15 +949,60 @@ a.tag:hover {
 
 .homepage-intro {
   max-width: var(--content-narrow);
-  margin: 0 auto var(--space-xl);
-  font-size: var(--font-size-lg);
-  line-height: 1.6;
-  color: var(--color-text-secondary);
+  margin: 0 auto var(--space-3xl);
+  padding: var(--space-2xl) 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  line-height: 1.55;
+  color: var(--color-text);
   text-align: center;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+@media (min-width: 48em) {
+  .homepage-intro {
+    font-size: var(--font-size-2xl);
+    line-height: 1.45;
+  }
+}
+
+.homepage-intro p {
+  margin-bottom: var(--space-lg);
 }
 
 .homepage-intro p:last-child {
   margin-bottom: 0;
+}
+
+/* Prose highlight underlines — used via <u> in Markdown content */
+.prose u {
+  text-decoration: none;
+  background-image:
+    linear-gradient(var(--color-highlight), var(--color-highlight)),
+    linear-gradient(var(--color-highlight-muted), var(--color-highlight-muted));
+  background-size: 0% 2px, 100% 2px;
+  background-repeat: no-repeat;
+  background-position: bottom left, bottom left;
+  padding-bottom: 2px;
+  animation: underline-draw 0.8s var(--ease-out) forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes underline-draw {
+  to {
+    background-size: 100% 2px, 100% 2px;
+  }
+}
+
+/* Also enable prose styling on page bodies */
+.page-body u,
+.post-body u {
+  text-decoration: none;
+  background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  padding-bottom: 2px;
 }
 
 .recent-shots__header {
@@ -1072,6 +1119,8 @@ a.tag:hover {
     --color-link-hover: #908b82;
     --color-overlay: rgba(18, 18, 17, 0.85);
     --color-overlay-light: rgba(229, 227, 222, 0.04);
+    --color-highlight: #d4745a;
+    --color-highlight-muted: rgba(212, 116, 90, 0.3);
   }
 }
 
@@ -1090,6 +1139,8 @@ a.tag:hover {
   --color-link: #e5e3de;
   --color-link-hover: #908b82;
   --color-overlay: rgba(18, 18, 17, 0.85);
+  --color-highlight: #d4745a;
+  --color-highlight-muted: rgba(212, 116, 90, 0.3);
   --color-overlay-light: rgba(229, 227, 222, 0.04);
 }
 
