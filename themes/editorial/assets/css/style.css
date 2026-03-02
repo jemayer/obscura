@@ -477,7 +477,7 @@ a:hover {
 .photo-detail__body {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-xl);
+  gap: var(--space-md);
   max-width: var(--content-narrow);
 }
 
@@ -519,7 +519,6 @@ a:hover {
   font-size: var(--font-size-xl);
   font-weight: 700;
   line-height: var(--line-height-tight);
-  margin-bottom: var(--space-md);
 }
 
 .photo-detail__caption {
