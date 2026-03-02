@@ -1,11 +1,12 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import type { ImageConfig, ImageVariant } from './types.js';
 import { processPhoto } from './image-processing.js';
 import type { ProcessPhotoResult } from './image-processing.js';
 
-const CACHE_FILENAME = '.image-cache.json';
+const CACHE_DIR = '.cache';
+const CACHE_FILENAME = 'image-cache.json';
 
 interface CacheEntry {
   readonly hash: string;
@@ -21,8 +22,10 @@ function emptyCacheManifest(): CacheManifest {
   return { entries: {} };
 }
 
-async function loadCacheManifest(distDir: string): Promise<CacheManifest> {
-  const cachePath = resolve(distDir, CACHE_FILENAME);
+async function loadCacheManifest(
+  projectDir: string,
+): Promise<CacheManifest> {
+  const cachePath = resolve(projectDir, CACHE_DIR, CACHE_FILENAME);
   try {
     const content = await readFile(cachePath, 'utf-8');
     const parsed: unknown = JSON.parse(content);
@@ -40,10 +43,12 @@ async function loadCacheManifest(distDir: string): Promise<CacheManifest> {
 }
 
 async function saveCacheManifest(
-  distDir: string,
+  projectDir: string,
   manifest: CacheManifest,
 ): Promise<void> {
-  const cachePath = resolve(distDir, CACHE_FILENAME);
+  const cacheDir = resolve(projectDir, CACHE_DIR);
+  await mkdir(cacheDir, { recursive: true });
+  const cachePath = resolve(cacheDir, CACHE_FILENAME);
   await writeFile(cachePath, JSON.stringify(manifest, null, 2), 'utf-8');
 }
 
@@ -108,10 +113,11 @@ export async function processAllPhotosWithCache(
     readonly gallerySlug: string;
     readonly sourcePath: string;
   }[],
+  projectDir: string,
   distDir: string,
   config: ImageConfig,
 ): Promise<Map<string, ProcessPhotoResult>> {
-  const manifest = await loadCacheManifest(distDir);
+  const manifest = await loadCacheManifest(projectDir);
   const results = new Map<string, ProcessPhotoResult>();
   const newEntries: Record<string, CacheEntry> = { ...manifest.entries };
   let cacheHits = 0;
@@ -142,7 +148,7 @@ export async function processAllPhotosWithCache(
   }
 
   const newManifest: CacheManifest = { entries: newEntries };
-  await saveCacheManifest(distDir, newManifest);
+  await saveCacheManifest(projectDir, newManifest);
 
   if (cacheHits > 0) {
     const total = photos.length;

@@ -4,6 +4,9 @@ node_modules/
 # Site output
 dist/
 
+# Build cache
+.cache/
+
 # Compiled TypeScript
 dist-build/
 

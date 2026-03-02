@@ -89,6 +89,7 @@ export async function build(projectDir: string): Promise<BuildResult> {
   );
   const imageResults = await processAllPhotosWithCache(
     allPhotos,
+    projectDir,
     distDir,
     siteConfig.images,
   );
