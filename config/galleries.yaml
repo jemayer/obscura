@@ -1,14 +1,10 @@
 galleries:
   - slug: sample
     title: Sample Gallery
-    description: A small collection of street and landscape photographs to get you started.
-    listed: true
-
-  - slug: collateral
-    title: Collateral Damage
-    description: Everything that doesn't fit elsewhere!
+    description: A sample gallery to demonstrate the structure of the galleries configuration. Adjiust the content as needed!
     listed: true
 
   - slug: post-assets
     title: Post Assets
+    description: A gallery for post assets, which is not listed on the homepage.
     listed: false

@@ -1,27 +1,21 @@
 ---
 title: Welcome to Obscura
-date: 2024-09-01
+date: 2026-02-28
 tags:
   - obscura
   - getting started
 summary: Your photography portfolio is ready. Here's how to make it yours.
 ---
 
-Welcome to **Obscura** — a static site generator built for photographers.
-
-This is a sample blog post to show you how everything works. You're looking at rendered Markdown with a photo shortcode embedded below.
+Welcome to **Obscura** — a static site generator built for photographers. This is a sample blog post to show you how everything works. You're looking at rendered Markdown with a photo shortcode embedded below.
 
 ## Photo Shortcodes
 
-You can reference any photo from your galleries inside a blog post. Here's the red umbrella shot from the sample gallery:
+You can reference any photo from your galleries inside a blog post.
 
-{{< photo "coma-photography-poly-00061" >}}
+{{< photo "sample-01" >}}
 
-The shortcode pulls in the photo as a styled card with its metadata. You can use either the bare filename slug (like above) or the full `gallery/photo` form:
-
-```
-{{< photo "sample/coma-photography-poly-00061" >}}
-```
+The shortcode pulls in the photo as a styled card with its metadata. You can use either the bare filename slug (like above) or the full `gallery/photo` form.
 
 ## What's Next
 

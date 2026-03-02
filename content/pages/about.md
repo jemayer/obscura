@@ -13,4 +13,5 @@ Replace this page with your own content by editing `content/pages/about.md`. You
 - **Photos** live in `content/photos/`, organised into galleries
 - **Blog posts** are Markdown files in `content/posts/`
 - **Pages** like this one are in `content/pages/`
-- Run `npm run build` to generate the site, or `npm run dev` to preview with live reload
+- Run `npm run build` to generate the site
+- Run `npm run dev` to preview with live reload
