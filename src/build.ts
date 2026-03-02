@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import { mkdir, rm } from 'node:fs/promises';
+import { mkdir, readdir, rm } from 'node:fs/promises';
 import { loadSiteConfig, loadGalleryConfig } from './config.js';
 import { generateAllSidecars } from './sidecar.js';
 import { validateAllGalleryFormats } from './image-validation.js';
@@ -46,9 +46,25 @@ export async function build(projectDir: string): Promise<BuildResult> {
   const themesDir = resolve(projectDir, 'themes');
   const distDir = resolve(projectDir, 'dist');
 
-  // -- 3. Clean and prepare dist --
-  await rm(distDir, { recursive: true, force: true });
-  await mkdir(distDir, { recursive: true });
+  // -- 3. Clean dist, preserving cached image output --
+  const imagesDir = resolve(distDir, 'assets', 'images');
+  try {
+    const entries = await readdir(distDir);
+    for (const entry of entries) {
+      if (entry === 'assets') continue;
+      await rm(resolve(distDir, entry), { recursive: true, force: true });
+    }
+    // Clean non-image assets (theme, vendor) but keep images/
+    const assetsDir = resolve(distDir, 'assets');
+    const assetEntries = await readdir(assetsDir);
+    for (const entry of assetEntries) {
+      if (entry === 'images') continue;
+      await rm(resolve(assetsDir, entry), { recursive: true, force: true });
+    }
+  } catch {
+    // dist/ doesn't exist yet — that's fine
+  }
+  await mkdir(imagesDir, { recursive: true });
 
   // -- 4. Validate image formats (hard error on unsupported) --
   const gallerySlugs = galleryConfig.galleries.map((g) => g.slug);

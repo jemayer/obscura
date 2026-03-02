@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import type { ImageConfig, ImageVariant } from './types.js';
@@ -69,6 +69,21 @@ function computeCacheKey(fileHash: string, paramsHash: string): string {
   return `${fileHash}:${paramsHash}`;
 }
 
+async function outputFilesExist(
+  distDir: string,
+  entry: CacheEntry,
+): Promise<boolean> {
+  try {
+    for (const variant of entry.variants) {
+      await access(resolve(distDir, variant.path.replace(/^\//, '')));
+    }
+    await access(resolve(distDir, entry.thumbnailPath.replace(/^\//, '')));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export interface CachedProcessResult {
   readonly result: ProcessPhotoResult;
   readonly fromCache: boolean;
@@ -87,7 +102,11 @@ export async function processPhotoWithCache(
   const cacheKey = computeCacheKey(fileHash, paramsHash);
 
   const cached = manifest.entries[photoSlug];
-  if (cached && cached.hash === cacheKey) {
+  if (
+    cached &&
+    cached.hash === cacheKey &&
+    (await outputFilesExist(distDir, cached))
+  ) {
     return {
       result: {
         variants: cached.variants,
