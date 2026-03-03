@@ -9,3 +9,5 @@ A purpose-built static site generator for photography portfolio websites. It tak
 
 - **[Product Requirements Document](docs/product/PRD.md)** — full spec and design decisions
 - **[Getting Started](docs/getting-started.md)** — install, first build, adding your first photo *(coming soon)*
+
+![Screenshot of CLI sidecar editor](/docs/assets/sidecar.png)
