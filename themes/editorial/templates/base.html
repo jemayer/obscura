@@ -51,8 +51,8 @@
   </footer>
 
   <script type="module">
-    import('{{ base_path }}/assets/vendor/photoswipe/photoswipe.esm.min.js')
-      .then(function(m) { window.PhotoSwipe = m.default; });
+    import PhotoSwipe from '{{ '/assets/vendor/photoswipe/photoswipe.esm.min.js' | url }}';
+    window.PhotoSwipe = PhotoSwipe;
   </script>
   <script src="{{ '/assets/theme/js/lightbox.js' | url }}" defer></script>
   <script>

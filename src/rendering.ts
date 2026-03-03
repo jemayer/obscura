@@ -46,7 +46,6 @@ export function createRenderingEngine(
 
   // -- Global variables --
   env.addGlobal('site', siteConfig);
-  env.addGlobal('base_path', siteConfig.base_path);
   env.addGlobal('current_year', new Date().getFullYear());
 
   // -- Filters --
