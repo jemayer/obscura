@@ -16,6 +16,7 @@ const DEFAULT_IMAGE_CONFIG: ImageConfig = {
 
 const DEFAULT_SITE_CONFIG: SiteConfig = {
   base_url: 'http://localhost:3000',
+  base_path: '',
   title: 'My Photography',
   theme: 'editorial',
   recent_shots_count: 12,
@@ -49,6 +50,19 @@ interface RawGalleryConfig {
   galleries?: RawGalleryEntry[];
 }
 
+/**
+ * Extract the pathname from a base URL, stripping trailing slashes.
+ * Returns "" for root URLs, "/portfolio" for "https://example.com/portfolio/", etc.
+ */
+export function extractBasePath(baseUrl: string): string {
+  try {
+    const pathname = new URL(baseUrl).pathname;
+    return pathname.replace(/\/+$/, '');
+  } catch {
+    return '';
+  }
+}
+
 async function loadYamlFile(filePath: string): Promise<unknown> {
   const content = await readFile(filePath, 'utf-8');
   return parseYaml(content) as unknown;
@@ -80,8 +94,11 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     return DEFAULT_SITE_CONFIG;
   }
 
+  const baseUrl = raw.base_url ?? DEFAULT_SITE_CONFIG.base_url;
+
   return {
-    base_url: raw.base_url ?? DEFAULT_SITE_CONFIG.base_url,
+    base_url: baseUrl,
+    base_path: extractBasePath(baseUrl),
     title: raw.title ?? DEFAULT_SITE_CONFIG.title,
     theme: raw.theme ?? DEFAULT_SITE_CONFIG.theme,
     recent_shots_count:

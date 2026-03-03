@@ -12,7 +12,7 @@ import type {
   BuildContext,
   CrossReferenceGraph,
 } from './types.js';
-import { srcset, sizes, bestVariant, responsiveImg } from './responsive.js';
+import { prefixedSrcset, sizes, bestVariant, responsiveImg } from './responsive.js';
 import { slugifyTag, slugifyLocation } from './slugs.js';
 
 // ---------------------------------------------------------------------------
@@ -46,6 +46,7 @@ export function createRenderingEngine(
 
   // -- Global variables --
   env.addGlobal('site', siteConfig);
+  env.addGlobal('base_path', siteConfig.base_path);
   env.addGlobal('current_year', new Date().getFullYear());
 
   // -- Filters --
@@ -82,7 +83,7 @@ export function createRenderingEngine(
   // Srcset from photo variants: {{ photo.variants | srcset }}
   env.addFilter('srcset', (variants: unknown) => {
     if (!Array.isArray(variants)) return '';
-    return srcset(variants as Photo['variants']);
+    return prefixedSrcset(variants as Photo['variants'], siteConfig.base_path);
   });
 
   // Sizes attribute: {{ photo | sizes }}
@@ -100,7 +101,7 @@ export function createRenderingEngine(
   env.addFilter('responsiveimg', (photo: unknown, cssClass?: string) => {
     if (!photo || typeof photo !== 'object') return '';
     return new nunjucks.runtime.SafeString(
-      responsiveImg(photo as Photo, cssClass),
+      responsiveImg(photo as Photo, siteConfig.base_path, cssClass),
     );
   });
 
@@ -122,10 +123,11 @@ export function createRenderingEngine(
     return slugifyLocation(location);
   });
 
-  // URL builder: {{ "/photography/" | url }} → root-relative path
+  // URL builder: {{ "/photography/" | url }} → base-path-relative path
   env.addFilter('url', (path: unknown) => {
     if (typeof path !== 'string') return '';
-    return path.startsWith('/') ? path : `/${path}`;
+    const clean = path.startsWith('/') ? path : `/${path}`;
+    return `${siteConfig.base_path}${clean}`;
   });
 
   // Absolute URL (same as url, but explicit name for RSS/sitemap)
@@ -282,7 +284,7 @@ export async function renderBlogPost(
 ): Promise<void> {
   // Replace shortcodes in rendered content with photo cards
   const photoIndex = buildPhotoIndex(galleries);
-  const content = replaceShortcodes(post.renderedContent, photoIndex);
+  const content = replaceShortcodes(post.renderedContent, photoIndex, engine.siteConfig.base_path);
   const postWithCards = { ...post, renderedContent: content };
   await renderToFile(engine, 'blog-post.html', { post: postWithCards }, distDir, `blog/${post.slug}/index.html`);
 }
@@ -492,6 +494,7 @@ function buildPhotoIndex(
 function replaceShortcodes(
   html: string,
   photoIndex: Map<string, { photo: Photo; gallery: Gallery }>,
+  basePath: string,
 ): string {
   // Split on <pre>/<code> blocks to avoid replacing shortcodes inside them
   const parts = html.split(/(<pre[\s>][\s\S]*?<\/pre>|<code[\s>][\s\S]*?<\/code>)/g);
@@ -503,7 +506,7 @@ function replaceShortcodes(
     return part.replace(shortcodeRe, (_match, slug: string) => {
       const entry = photoIndex.get(slug);
       if (!entry) return `<!-- photo not found: ${slug} -->`;
-      return renderPhotoCard(entry.photo, entry.gallery);
+      return renderPhotoCard(entry.photo, entry.gallery, basePath);
     });
   });
 
@@ -513,12 +516,12 @@ function replaceShortcodes(
 /**
  * Render a photo card for use inside blog post content.
  */
-function renderPhotoCard(photo: Photo, gallery: Gallery): string {
+function renderPhotoCard(photo: Photo, gallery: Gallery, basePath: string): string {
   const best = bestVariant(photo.variants, 800);
   if (!best) return '';
 
   const alt = escapeAttr(photo.metadata.title || bareSlug(photo.slug));
-  const href = `/photography/${gallery.slug}/${bareSlug(photo.slug)}/`;
+  const href = `${basePath}/photography/${gallery.slug}/${bareSlug(photo.slug)}/`;
   const title = photo.metadata.title;
   const meta: string[] = [];
   if (photo.metadata.location) meta.push(escapeAttr(photo.metadata.location));
@@ -528,7 +531,7 @@ function renderPhotoCard(photo: Photo, gallery: Gallery): string {
     '<div class="photo-card">',
     `  <a href="${href}">`,
     '    <div class="photo-card__image">',
-    `      <img src="${best.path}" srcset="${srcset(photo.variants)}" sizes="(max-width: 42rem) 100vw, 42rem" alt="${alt}" loading="lazy" decoding="async">`,
+    `      <img src="${basePath}${best.path}" srcset="${prefixedSrcset(photo.variants, basePath)}" sizes="(max-width: 42rem) 100vw, 42rem" alt="${alt}" loading="lazy" decoding="async">`,
     '    </div>',
     '    <div class="photo-card__info">',
     title ? `      <span class="photo-card__title">${escapeAttr(title)}</span>` : '',

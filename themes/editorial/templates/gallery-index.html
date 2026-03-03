@@ -14,7 +14,7 @@
     {% for gallery in galleries %}
     <a class="gallery-card" href="{{ ('/photography/' + gallery.slug + '/') | url }}">
       {% if gallery.photos.length %}
-      <img src="{{ (gallery.photos[0].variants | bestvariant(800)).path }}"
+      <img src="{{ (gallery.photos[0].variants | bestvariant(800)).path | url }}"
            srcset="{{ gallery.photos[0].variants | srcset }}"
            sizes="(max-width: 600px) 100vw, 50vw"
            alt="{{ gallery.title }}"

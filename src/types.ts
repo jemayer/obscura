@@ -9,6 +9,7 @@ export interface ImageConfig {
 
 export interface SiteConfig {
   readonly base_url: string;
+  readonly base_path: string;
   readonly title: string;
   readonly theme: string;
   readonly recent_shots_count: number;

@@ -4,6 +4,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname } from 'node:path';
 import chokidar from 'chokidar';
 import { build } from './build.js';
+import { loadSiteConfig } from './config.js';
 
 const MIME_TYPES: Record<string, string> = {
   '.html': 'text/html',
@@ -24,6 +25,10 @@ async function main(): Promise<void> {
   const distDir = resolve(projectDir, 'dist');
   const port = 3000;
   const clean = process.argv.includes('--clean');
+
+  // Load config to get base_path for URL stripping
+  const siteConfig = await loadSiteConfig(projectDir);
+  const basePath = siteConfig.base_path;
 
   // Initial build
   console.log(
@@ -79,7 +84,11 @@ async function main(): Promise<void> {
 
   // Static file server
   const server = createServer((req, res) => {
-    const url = req.url ?? '/';
+    let url = req.url ?? '/';
+    // Strip base_path prefix so files resolve against dist/
+    if (basePath && url.startsWith(basePath)) {
+      url = url.slice(basePath.length) || '/';
+    }
     let filePath = resolve(distDir, url === '/' ? 'index.html' : `.${url}`);
 
     // Try index.html for directory paths

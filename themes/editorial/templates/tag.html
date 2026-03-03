@@ -17,7 +17,7 @@
     {% for item in tag_page.photos %}
     <a class="gallery-item"
        href="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}"
-       data-pswp-src="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).path }}{% endif %}"
+       data-pswp-src="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).path | url }}{% endif %}"
        data-pswp-width="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).width }}{% endif %}"
        data-pswp-height="{% if item.photo.variants.length %}{{ (item.photo.variants | bestvariant(2400)).height }}{% endif %}"
        data-pswp-title="{{ item.photo.metadata.title }}"
@@ -26,7 +26,7 @@
        data-pswp-date="{% if item.photo.metadata.date %}{{ item.photo.metadata.date | dateformat }}{% endif %}"
        data-pswp-permalink="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}">
       {% if item.photo.variants.length %}
-      <img src="{{ (item.photo.variants | bestvariant(800)).path }}"
+      <img src="{{ (item.photo.variants | bestvariant(800)).path | url }}"
            srcset="{{ item.photo.variants | srcset }}"
            sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
            alt="{{ item.photo.metadata.title or (item.photo.slug | bareslug) }}"

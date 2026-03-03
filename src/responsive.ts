@@ -11,6 +11,15 @@ export function srcset(variants: readonly ImageVariant[]): string {
 }
 
 /**
+ * Generate a srcset with a base path prefix on each variant path.
+ */
+export function prefixedSrcset(variants: readonly ImageVariant[], basePath: string): string {
+  return variants
+    .map((v) => `${basePath}${v.path} ${String(v.width)}w`)
+    .join(', ');
+}
+
+/**
  * Generate a sizes attribute value for responsive images.
  * Uses a simple breakpoint-based strategy.
  */
@@ -35,6 +44,7 @@ export function bestVariant(
  */
 export function responsiveImg(
   photo: Photo,
+  basePath: string,
   cssClass?: string,
 ): string {
   if (photo.variants.length === 0) {
@@ -49,8 +59,8 @@ export function responsiveImg(
 
   return [
     `<img`,
-    `  src="${fallback.path}"`,
-    `  srcset="${srcset(photo.variants)}"`,
+    `  src="${basePath}${fallback.path}"`,
+    `  srcset="${prefixedSrcset(photo.variants, basePath)}"`,
     `  sizes="${sizes()}"`,
     `  alt="${escapeHtml(alt)}"`,
     `  loading="lazy"`,

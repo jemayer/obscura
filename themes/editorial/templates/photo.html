@@ -22,7 +22,7 @@
   <div class="photo-detail">
     <div class="photo-detail__image">
       {% if photo.variants.length %}
-      <img src="{{ (photo.variants | bestvariant(2400)).path }}"
+      <img src="{{ (photo.variants | bestvariant(2400)).path | url }}"
            srcset="{{ photo.variants | srcset }}"
            sizes="(max-width: 1200px) 100vw, 1200px"
            alt="{{ photo.metadata.title or (photo.slug | bareslug) }}">
