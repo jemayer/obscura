@@ -79,9 +79,9 @@ my-portfolio/
 └── .cache/                # Build cache (gitignored)
 ```
 
-**What's yours:** `config/`, `content/`, and any CSS tweaks in `themes/`. These directories are created by `npm run init` and are yours to edit day-to-day. They're not tracked in the upstream repo, so pulling updates will never cause merge conflicts on your content.
+**What's yours:** `config/` and `content/`. These directories are created by `npm run init` and are yours to edit day-to-day. They're not tracked in the upstream repo, so pulling updates will never cause merge conflicts on your content.
 
-**What's Obscura's:** `src/`, `examples/`, `package.json`, `docs/`. These are updated when you pull from upstream.
+**What's Obscura's:** `src/`, `examples/`, `themes/`, `package.json`, `docs/`. These are updated when you pull from upstream.
 
 ### A Note on Photos and Git
 
