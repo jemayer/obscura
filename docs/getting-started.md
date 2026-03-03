@@ -13,7 +13,19 @@ A step-by-step guide to setting up your photography portfolio with Obscura.
 
 ### 1. Fork the Repository
 
-Fork [Obscura on GitHub](https://github.com/jemayer/obscura) to create your own copy, then clone your fork:
+Create your own copy of Obscura on GitHub:
+
+1. Go to [github.com/jemayer/obscura](https://github.com/jemayer/obscura)
+2. Click the **Fork** button (top-right corner)
+3. On the "Create a new fork" page, choose your GitHub account as the owner
+4. Optionally rename the repository (e.g. `my-portfolio`) — this will be part of your GitHub URL
+5. Click **Create fork**
+
+GitHub will create a copy at `https://github.com/YOUR-USERNAME/obscura` (or whatever you named it).
+
+### 2. Clone Your Fork
+
+Clone the fork to your machine and install dependencies:
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/obscura.git my-portfolio
@@ -21,7 +33,9 @@ cd my-portfolio
 npm install
 ```
 
-### 2. Initialise Example Content
+At this point, `origin` points to your fork on GitHub. You can push your content and config changes there freely.
+
+### 3. Initialise Example Content
 
 A fresh clone doesn't include `config/` or `content/` — the demo site lives in `examples/` to avoid merge conflicts when you pull engine updates. Run the init script to get started:
 
@@ -31,17 +45,19 @@ npm run init
 
 This copies the example site (config files, sample gallery, pages, and a blog post) into `config/` and `content/`. You can skip this step if you prefer to create your config and content from scratch.
 
-### 3. Add the Upstream Remote (Optional)
+### 4. Add the Upstream Remote (Optional)
 
-This lets you pull code updates from the original Obscura repository later:
+If you want to pull future Obscura engine updates into your fork, add the original repo as a second remote:
 
 ```bash
 git remote add upstream https://github.com/jemayer/obscura.git
 ```
 
 You now have two remotes:
-- **origin** — your fork (your content, your site)
-- **upstream** — the Obscura source (engine updates, theme improvements)
+- **origin** — your fork on GitHub (your content, your site)
+- **upstream** — the original Obscura repo (engine updates, theme improvements)
+
+You can verify with `git remote -v`.
 
 ## Project Structure
 
