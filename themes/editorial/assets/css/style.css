@@ -42,6 +42,7 @@
   --color-overlay-light: rgba(28, 27, 25, 0.03);
   --color-highlight: #c45d3e;
   --color-highlight-muted: rgba(196, 93, 62, 0.25);
+  --color-code-bg: var(--color-bg-subtle);
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -795,7 +796,7 @@ a:hover {
 }
 
 .post-body pre {
-  background: var(--color-bg-subtle);
+  background: var(--color-code-bg);
   padding: var(--space-md);
   overflow-x: auto;
   font-family: var(--font-mono);
@@ -807,7 +808,7 @@ a:hover {
 .post-body code {
   font-family: var(--font-mono);
   font-size: 0.875em;
-  background: var(--color-bg-subtle);
+  background: var(--color-code-bg);
   padding: 0.125rem 0.375rem;
 }
 
@@ -817,7 +818,7 @@ a:hover {
 }
 
 .post-body a {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-text-tertiary);
   transition: border-color var(--duration-fast) var(--ease-out);
 }
 
@@ -872,8 +873,40 @@ a:hover {
   line-height: var(--line-height-base);
 }
 
+.page-body ul,
+.page-body ol {
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-lg);
+}
+
+.page-body li {
+  margin-bottom: var(--space-sm);
+}
+
+.page-body pre {
+  background: var(--color-code-bg);
+  padding: var(--space-md);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  margin: var(--space-lg) 0;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.page-body code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-code-bg);
+  padding: 0.125rem 0.375rem;
+}
+
+.page-body pre code {
+  background: none;
+  padding: 0;
+}
+
 .page-body a {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-text-tertiary);
 }
 
 .page-body a:hover {
@@ -1135,6 +1168,7 @@ a.tag:hover {
     --color-overlay-light: rgba(229, 227, 222, 0.04);
     --color-highlight: #d4745a;
     --color-highlight-muted: rgba(212, 116, 90, 0.3);
+    --color-code-bg: #262622;
   }
 }
 
@@ -1156,6 +1190,7 @@ a.tag:hover {
   --color-highlight: #d4745a;
   --color-highlight-muted: rgba(212, 116, 90, 0.3);
   --color-overlay-light: rgba(229, 227, 222, 0.04);
+  --color-code-bg: #262622;
 }
 
 /* Theme toggle button */
