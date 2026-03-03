@@ -1,6 +1,7 @@
 # Obscura
 
 *Less webpack, more f‑stop!*
+*You can see the live demo here: https://jemayer.github.io/obscura/*
 
 ![Screenshot of an example Obscura site](/docs/assets/demo-site-01.png)
 
