@@ -1,6 +1,6 @@
 # Obscura
 
-*Less webpack, more f‑stop.*
+*Less webpack, more f‑stop!*
 
 ![Screenshot of an example Obscura site](/docs/assets/demo-site-01.png)
 
