@@ -25,4 +25,4 @@ The shortcode pulls in the photo as a styled card with its metadata. You can use
 4. Write blog posts in `content/posts/`
 5. Run `npm run build` and deploy
 
-Check out the [Getting Started guide](/about/) for more details. Happy shooting.
+Check out the [Getting Started guide](https://github.com/jemayer/obscura/blob/main/docs/getting-started.md) for more details. Happy shooting.
