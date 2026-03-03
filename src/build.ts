@@ -101,11 +101,11 @@ export async function build(
   }
 
   // -- 7. Load blog posts (with shortcode resolution) --
-  const posts = await loadAllBlogPosts(postsDir, slugIndex);
+  const posts = await loadAllBlogPosts(postsDir, slugIndex, siteConfig.base_path);
 
   // -- 8. Load pages and optional homepage content --
-  const pages = await loadAllPages(pagesDir);
-  const homepageContent = await loadHomepageContent(pagesDir);
+  const pages = await loadAllPages(pagesDir, siteConfig.base_path);
+  const homepageContent = await loadHomepageContent(pagesDir, siteConfig.base_path);
 
   // -- 9. Build cross-reference graph --
   const crossReferences = buildCrossReferenceGraph(posts);

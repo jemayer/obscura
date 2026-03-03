@@ -6,6 +6,8 @@ import remarkFrontmatter from 'remark-frontmatter';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import { parse as parseYaml } from 'yaml';
+import type { Root, Element } from 'hast';
+import { visit } from 'unist-util-visit';
 import type { BlogPost, BlogPostFrontmatter, Page, PageFrontmatter } from './types.js';
 import type { SlugIndex } from './slugs.js';
 
@@ -114,14 +116,35 @@ function parsePageFrontmatter(
 // Markdown rendering
 // ---------------------------------------------------------------------------
 
-const markdownProcessor = unified()
-  .use(remarkParse)
-  .use(remarkFrontmatter, ['yaml'])
-  .use(remarkRehype, { allowDangerousHtml: true })
-  .use(rehypeStringify, { allowDangerousHtml: true });
+/**
+ * Rehype plugin that prepends basePath to root-relative href and src attributes.
+ */
+function rehypeBasePath(basePath: string) {
+  return () => (tree: Root) => {
+    if (!basePath) return;
+    visit(tree, 'element', (node: Element) => {
+      for (const attr of ['href', 'src'] as const) {
+        const val = node.properties[attr];
+        if (typeof val === 'string' && val.startsWith('/')) {
+          node.properties[attr] = `${basePath}${val}`;
+        }
+      }
+    });
+  };
+}
 
-async function renderMarkdown(content: string): Promise<string> {
-  const result = await markdownProcessor.process(content);
+function createMarkdownProcessor(basePath: string) {
+  return unified()
+    .use(remarkParse)
+    .use(remarkFrontmatter, ['yaml'])
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeBasePath(basePath))
+    .use(rehypeStringify, { allowDangerousHtml: true });
+}
+
+async function renderMarkdown(content: string, basePath: string): Promise<string> {
+  const processor = createMarkdownProcessor(basePath);
+  const result = await processor.process(content);
   return String(result);
 }
 
@@ -143,6 +166,7 @@ function extractFrontmatterRaw(content: string): {
 export async function loadBlogPost(
   filePath: string,
   slugIndex: SlugIndex,
+  basePath: string,
 ): Promise<BlogPost> {
   const raw = await readFile(filePath, 'utf-8');
   const { frontmatterRaw, body } = extractFrontmatterRaw(raw);
@@ -151,7 +175,7 @@ export async function loadBlogPost(
   const slug = basename(filePath, extname(filePath));
   const rawSlugs = extractShortcodes(body);
   const referencedPhotos = resolveShortcodes(rawSlugs, slugIndex, filePath);
-  const renderedContent = await renderMarkdown(raw);
+  const renderedContent = await renderMarkdown(raw, basePath);
 
   return {
     slug,
@@ -165,6 +189,7 @@ export async function loadBlogPost(
 export async function loadAllBlogPosts(
   postsDir: string,
   slugIndex: SlugIndex,
+  basePath: string,
 ): Promise<BlogPost[]> {
   let entries: string[];
   try {
@@ -179,7 +204,7 @@ export async function loadAllBlogPosts(
   const posts: BlogPost[] = [];
   for (const entry of entries) {
     const filePath = resolve(postsDir, entry);
-    const post = await loadBlogPost(filePath, slugIndex);
+    const post = await loadBlogPost(filePath, slugIndex, basePath);
     posts.push(post);
   }
 
@@ -195,12 +220,12 @@ export async function loadAllBlogPosts(
 // Page loading
 // ---------------------------------------------------------------------------
 
-export async function loadPage(filePath: string): Promise<Page> {
+export async function loadPage(filePath: string, basePath: string): Promise<Page> {
   const raw = await readFile(filePath, 'utf-8');
   const { frontmatterRaw, body } = extractFrontmatterRaw(raw);
   const frontmatter = parsePageFrontmatter(frontmatterRaw, filePath);
   const slug = basename(filePath, extname(filePath));
-  const renderedContent = await renderMarkdown(raw);
+  const renderedContent = await renderMarkdown(raw, basePath);
 
   return {
     slug,
@@ -210,7 +235,7 @@ export async function loadPage(filePath: string): Promise<Page> {
   };
 }
 
-export async function loadAllPages(pagesDir: string): Promise<Page[]> {
+export async function loadAllPages(pagesDir: string, basePath: string): Promise<Page[]> {
   let entries: string[];
   try {
     const dirEntries = await readdir(pagesDir);
@@ -226,7 +251,7 @@ export async function loadAllPages(pagesDir: string): Promise<Page[]> {
   const pages: Page[] = [];
   for (const entry of entries) {
     const filePath = resolve(pagesDir, entry);
-    const page = await loadPage(filePath);
+    const page = await loadPage(filePath, basePath);
     pages.push(page);
   }
 
@@ -237,11 +262,11 @@ export async function loadAllPages(pagesDir: string): Promise<Page[]> {
  * Load optional homepage content from content/pages/index.md.
  * Returns the rendered HTML string, or undefined if the file doesn't exist.
  */
-export async function loadHomepageContent(pagesDir: string): Promise<string | undefined> {
+export async function loadHomepageContent(pagesDir: string, basePath: string): Promise<string | undefined> {
   const filePath = resolve(pagesDir, 'index.md');
   try {
     const raw = await readFile(filePath, 'utf-8');
-    return await renderMarkdown(raw);
+    return await renderMarkdown(raw, basePath);
   } catch {
     return undefined;
   }

@@ -1,6 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterAll } from 'vitest';
 import { extractBasePath } from '../src/config.js';
 import { prefixedSrcset } from '../src/responsive.js';
+import { loadPage } from '../src/markdown.js';
+import { writeFile, mkdir, rm } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { tmpdir } from 'node:os';
 import type { ImageVariant } from '../src/types.js';
 
 describe('extractBasePath', () => {
@@ -59,5 +63,49 @@ describe('prefixedSrcset', () => {
 
   it('returns empty string for no variants', () => {
     expect(prefixedSrcset([], '/portfolio')).toBe('');
+  });
+});
+
+describe('Markdown base_path rewriting', () => {
+  const tmpDir = resolve(tmpdir(), `obscura-test-${Date.now()}`);
+
+  afterAll(async () => {
+    await rm(tmpDir, { recursive: true, force: true });
+  });
+
+  it('prepends base_path to root-relative links in Markdown', async () => {
+    await mkdir(tmpDir, { recursive: true });
+    const mdFile = resolve(tmpDir, 'test.md');
+    await writeFile(mdFile, '---\ntitle: Test\n---\n\n[About](/about/)\n', 'utf-8');
+
+    const page = await loadPage(mdFile, '/portfolio');
+    expect(page.renderedContent).toContain('href="/portfolio/about/"');
+  });
+
+  it('does not modify external URLs', async () => {
+    await mkdir(tmpDir, { recursive: true });
+    const mdFile = resolve(tmpDir, 'external.md');
+    await writeFile(mdFile, '---\ntitle: Ext\n---\n\n[Google](https://google.com)\n', 'utf-8');
+
+    const page = await loadPage(mdFile, '/portfolio');
+    expect(page.renderedContent).toContain('href="https://google.com"');
+  });
+
+  it('does not modify relative URLs', async () => {
+    await mkdir(tmpDir, { recursive: true });
+    const mdFile = resolve(tmpDir, 'relative.md');
+    await writeFile(mdFile, '---\ntitle: Rel\n---\n\n[Sibling](sibling/)\n', 'utf-8');
+
+    const page = await loadPage(mdFile, '/portfolio');
+    expect(page.renderedContent).toContain('href="sibling/"');
+  });
+
+  it('is a no-op when base_path is empty', async () => {
+    await mkdir(tmpDir, { recursive: true });
+    const mdFile = resolve(tmpDir, 'noop.md');
+    await writeFile(mdFile, '---\ntitle: Noop\n---\n\n[About](/about/)\n', 'utf-8');
+
+    const page = await loadPage(mdFile, '');
+    expect(page.renderedContent).toContain('href="/about/"');
   });
 });

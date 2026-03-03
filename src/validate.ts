@@ -91,7 +91,7 @@ async function main(): Promise<void> {
   try {
     // We need slugIndex for shortcode validation — re-load if galleries succeeded
     const { slugIndex } = await loadGalleries(photosDir, galleryConfig.galleries);
-    const posts = await loadAllBlogPosts(postsDir, slugIndex);
+    const posts = await loadAllBlogPosts(postsDir, slugIndex, '');
     console.log(`  ✓ blog posts (${String(posts.length)})`);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'unknown error';
@@ -102,7 +102,7 @@ async function main(): Promise<void> {
   // -- 6. Pages --
   const pagesDir = resolve(projectDir, 'content', 'pages');
   try {
-    const pages = await loadAllPages(pagesDir);
+    const pages = await loadAllPages(pagesDir, '');
     console.log(`  ✓ pages (${String(pages.length)})`);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'unknown error';
