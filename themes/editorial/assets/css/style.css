@@ -1017,6 +1017,10 @@ a.tag:hover {
   break-inside: avoid;
 }
 
+.homepage-intro p:first-of-type {
+  break-after: column;
+}
+
 .homepage-intro p:last-child {
   margin-bottom: 0;
 }
