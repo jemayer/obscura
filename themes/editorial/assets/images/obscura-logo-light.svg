@@ -15,7 +15,7 @@
     <clipPath id="clip"><rect width="700" height="320"/></clipPath>
   </defs>
 
-  <rect width="700" height="320" fill="#f5f5f3"/>
+  <rect width="700" height="320" fill="none"/>
 
   <polygon points="350,72 195,258 505,258" fill="url(#coneGrad)" clip-path="url(#clip)"/>
   <line x1="350" y1="72" x2="195" y2="258" stroke="#0a0a0a" stroke-width="0.4" opacity="0.10"/>

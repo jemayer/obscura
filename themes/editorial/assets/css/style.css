@@ -1009,25 +1009,24 @@ a.tag:hover {
 }
 
 .homepage-logo img {
-  display: inline-block;
-  max-width: 28rem;
+  max-width: 36rem;
   width: 100%;
   height: auto;
 }
 
 /* Light mode: show light logo, hide dark */
-.homepage-logo__dark { display: none; }
-.homepage-logo__light { display: inline-block; }
+.homepage-logo .homepage-logo__dark { display: none; }
+.homepage-logo .homepage-logo__light { display: inline-block; }
 
 /* Dark mode (system preference) */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .homepage-logo__light { display: none; }
-  :root:not([data-theme="light"]) .homepage-logo__dark { display: inline-block; }
+  :root:not([data-theme="light"]) .homepage-logo .homepage-logo__light { display: none; }
+  :root:not([data-theme="light"]) .homepage-logo .homepage-logo__dark { display: inline-block; }
 }
 
 /* Dark mode (manual toggle) */
-:root[data-theme="dark"] .homepage-logo__light { display: none; }
-:root[data-theme="dark"] .homepage-logo__dark { display: inline-block; }
+:root[data-theme="dark"] .homepage-logo .homepage-logo__light { display: none; }
+:root[data-theme="dark"] .homepage-logo .homepage-logo__dark { display: inline-block; }
 
 .homepage-intro h1 {
   column-span: all;
