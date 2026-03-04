@@ -6,6 +6,10 @@
 <div class="content content--full">
   {% if homepage_content %}
   <div class="homepage-intro prose">
+    <div class="homepage-logo">
+      <img class="homepage-logo__light" src="{{ '/assets/theme/images/obscura-logo-light.svg' | url }}" alt="{{ site.title }}">
+      <img class="homepage-logo__dark" src="{{ '/assets/theme/images/obscura-logo-dark.svg' | url }}" alt="{{ site.title }}">
+    </div>
     {{ homepage_content | safe_html }}
   </div>
   {% endif %}
