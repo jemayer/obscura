@@ -6,10 +6,16 @@
 <div class="content content--full">
   {% if homepage_content %}
   <div class="homepage-intro prose">
+    {% if has_logo_light or has_logo_dark %}
     <div class="homepage-logo">
-      <img class="homepage-logo__light" src="{{ '/assets/theme/images/obscura-logo-light.svg' | url }}" alt="{{ site.title }}">
-      <img class="homepage-logo__dark" src="{{ '/assets/theme/images/obscura-logo-dark.svg' | url }}" alt="{{ site.title }}">
+      {% if has_logo_light %}
+      <img class="homepage-logo__light" src="{{ '/assets/images/logo-light.svg' | url }}" alt="{{ site.title }}">
+      {% endif %}
+      {% if has_logo_dark %}
+      <img class="homepage-logo__dark" src="{{ '/assets/images/logo-dark.svg' | url }}" alt="{{ site.title }}">
+      {% endif %}
     </div>
+    {% endif %}
     {{ homepage_content | safe_html }}
   </div>
   {% endif %}

@@ -48,6 +48,20 @@ export function createRenderingEngine(
   env.addGlobal('site', siteConfig);
   env.addGlobal('current_year', new Date().getFullYear());
 
+  // Build timestamp: "YYYYMMDD-HH:mm:ss"
+  const now = new Date();
+  const ts =
+    String(now.getFullYear()) +
+    String(now.getMonth() + 1).padStart(2, '0') +
+    String(now.getDate()).padStart(2, '0') +
+    '-' +
+    String(now.getHours()).padStart(2, '0') +
+    ':' +
+    String(now.getMinutes()).padStart(2, '0') +
+    ':' +
+    String(now.getSeconds()).padStart(2, '0');
+  env.addGlobal('build_timestamp', ts);
+
   // -- Filters --
 
   // Date formatting: {{ date | dateformat("YYYY-MM-DD") }}

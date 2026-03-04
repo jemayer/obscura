@@ -1,5 +1,6 @@
+import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { mkdir, readdir, rm } from 'node:fs/promises';
+import { cp, mkdir, readdir, rm } from 'node:fs/promises';
 import { loadSiteConfig, loadGalleryConfig } from './config.js';
 import { generateAllSidecars } from './sidecar.js';
 import { validateAllGalleryFormats } from './image-validation.js';
@@ -146,8 +147,26 @@ export async function build(
   await copyThemeAssets(theme, distDir);
   await copyPhotoSwipeAssets(distDir);
 
+  // -- 12b. Copy user logo files if present --
+  const contentImagesDir = resolve(projectDir, 'content', 'images');
+  const logoLightSrc = resolve(contentImagesDir, 'logo-light.svg');
+  const logoDarkSrc = resolve(contentImagesDir, 'logo-dark.svg');
+  const hasLogo = existsSync(logoLightSrc) || existsSync(logoDarkSrc);
+  if (hasLogo) {
+    const logoDestDir = resolve(distDir, 'assets', 'images');
+    await mkdir(logoDestDir, { recursive: true });
+    if (existsSync(logoLightSrc)) {
+      await cp(logoLightSrc, resolve(logoDestDir, 'logo-light.svg'));
+    }
+    if (existsSync(logoDarkSrc)) {
+      await cp(logoDarkSrc, resolve(logoDestDir, 'logo-dark.svg'));
+    }
+  }
+
   // -- 13. Render all pages --
   const engine = createRenderingEngine(theme.templatesDir, siteConfig);
+  engine.env.addGlobal('has_logo_light', existsSync(logoLightSrc));
+  engine.env.addGlobal('has_logo_dark', existsSync(logoDarkSrc));
 
   // -- Build tag pages --
   const tagPages = buildTagPages(galleriesWithImages);
