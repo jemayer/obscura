@@ -842,12 +842,15 @@ a:hover {
 }
 
 /* Photo cards inside post body break out of narrow width */
-.post-body .photo-card {
+.post-body .photo-card,
+.page-body .photo-card {
   max-width: 56rem;
 }
 
 .post-body .photo-card a,
-.post-body .photo-card a:hover {
+.post-body .photo-card a:hover,
+.page-body .photo-card a,
+.page-body .photo-card a:hover {
   border-bottom: none;
 }
 
