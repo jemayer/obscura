@@ -33,6 +33,9 @@ function buildContextLine(target: SidecarEditTarget): string {
   if (target.currentValues.lens) {
     parts.push(target.currentValues.lens);
   }
+  if (target.currentValues.focal_length !== undefined) {
+    parts.push(`${String(target.currentValues.focal_length)}mm`);
+  }
   if (target.currentValues.iso !== undefined) {
     parts.push(`ISO ${String(target.currentValues.iso)}`);
   }

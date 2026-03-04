@@ -21,6 +21,7 @@ interface SidecarTemplate {
   date: string | null;
   camera: string | null;
   lens: string | null;
+  focal_length: number | null;
   iso: number | null;
   aperture: number | null;
   shutter_speed: string | null;
@@ -41,6 +42,7 @@ function buildSidecarTemplate(exif: ExifData): SidecarTemplate {
     date: exif.date ? formatDate(exif.date) : null,
     camera: exif.camera ?? null,
     lens: exif.lens ?? null,
+    focal_length: exif.focal_length ?? null,
     iso: exif.iso ?? null,
     aperture: exif.aperture ?? null,
     shutter_speed: exif.shutter_speed ?? null,

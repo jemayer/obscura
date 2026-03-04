@@ -57,22 +57,15 @@
           <span class="photo-meta__value">{{ photo.metadata.lens }}</span>
         </li>
         {% endif %}
-        {% if photo.metadata.iso %}
+        {% set settings_parts = [] %}
+        {% if photo.metadata.focal_length %}{% set _ = settings_parts.push(photo.metadata.focal_length + "mm") %}{% endif %}
+        {% if photo.metadata.aperture %}{% set _ = settings_parts.push("f/" + photo.metadata.aperture) %}{% endif %}
+        {% if photo.metadata.iso %}{% set _ = settings_parts.push("ISO " + photo.metadata.iso) %}{% endif %}
+        {% if photo.metadata.shutter_speed %}{% set _ = settings_parts.push(photo.metadata.shutter_speed + "s") %}{% endif %}
+        {% if settings_parts.length %}
         <li>
-          <span class="photo-meta__label">ISO</span>
-          <span class="photo-meta__value">{{ photo.metadata.iso }}</span>
-        </li>
-        {% endif %}
-        {% if photo.metadata.aperture %}
-        <li>
-          <span class="photo-meta__label">Aperture</span>
-          <span class="photo-meta__value">f/{{ photo.metadata.aperture }}</span>
-        </li>
-        {% endif %}
-        {% if photo.metadata.shutter_speed %}
-        <li>
-          <span class="photo-meta__label">Shutter Speed</span>
-          <span class="photo-meta__value">{{ photo.metadata.shutter_speed }}s</span>
+          <span class="photo-meta__label">Settings</span>
+          <span class="photo-meta__value">{{ settings_parts | join(" · ") }}</span>
         </li>
         {% endif %}
         {% if photo.metadata.location %}

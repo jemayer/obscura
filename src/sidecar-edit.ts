@@ -18,6 +18,7 @@ export interface SidecarSnapshot {
   readonly camera?: string;
   readonly date?: Date;
   readonly lens?: string;
+  readonly focal_length?: number;
   readonly iso?: number;
   readonly aperture?: number;
   readonly shutter_speed?: string;
@@ -74,6 +75,8 @@ export function loadSidecarSnapshot(content: string): SidecarSnapshot {
     tags: asStringArray(data['tags']),
   };
 
+  const focal_length =
+    typeof data['focal_length'] === 'number' ? data['focal_length'] : undefined;
   const iso = typeof data['iso'] === 'number' ? data['iso'] : undefined;
   const aperture =
     typeof data['aperture'] === 'number' ? data['aperture'] : undefined;
@@ -84,6 +87,7 @@ export function loadSidecarSnapshot(content: string): SidecarSnapshot {
     ...(camera ? { camera } : {}),
     ...(lens ? { lens } : {}),
     ...(date !== undefined ? { date } : {}),
+    ...(focal_length !== undefined ? { focal_length } : {}),
     ...(iso !== undefined ? { iso } : {}),
     ...(aperture !== undefined ? { aperture } : {}),
     ...(shutter_speed ? { shutter_speed } : {}),

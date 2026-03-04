@@ -8,6 +8,7 @@ interface RawSidecar {
   date?: string | Date;
   camera?: string;
   lens?: string;
+  focal_length?: number;
   iso?: number;
   aperture?: number;
   shutter_speed?: string;
@@ -70,6 +71,7 @@ export function mergeMetadata(
     date?: Date;
     camera?: string;
     lens?: string;
+    focal_length?: number;
     iso?: number;
     aperture?: number;
     shutter_speed?: string;
@@ -90,6 +92,7 @@ export function mergeMetadata(
   const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = sidecarCamera ?? exif.camera;
   const lens = sidecarLens ?? exif.lens;
+  const focal_length = sidecar?.focal_length ?? exif.focal_length;
   const iso = sidecar?.iso ?? exif.iso;
   const aperture = sidecar?.aperture ?? exif.aperture;
   const shutter_speed = nonEmpty(sidecar?.shutter_speed) ?? exif.shutter_speed;
@@ -99,6 +102,7 @@ export function mergeMetadata(
   if (date !== undefined) result.date = date;
   if (camera !== undefined) result.camera = camera;
   if (lens !== undefined) result.lens = lens;
+  if (focal_length !== undefined) result.focal_length = focal_length;
   if (iso !== undefined) result.iso = iso;
   if (aperture !== undefined) result.aperture = aperture;
   if (shutter_speed !== undefined) result.shutter_speed = shutter_speed;

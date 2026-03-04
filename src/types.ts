@@ -40,6 +40,7 @@ export interface ExifData {
   readonly date?: Date;
   readonly camera?: string;
   readonly lens?: string;
+  readonly focal_length?: number;
   readonly iso?: number;
   readonly aperture?: number;
   readonly shutter_speed?: string;
@@ -52,6 +53,7 @@ export interface PhotoMetadata {
   readonly date?: Date;
   readonly camera?: string;
   readonly lens?: string;
+  readonly focal_length?: number;
   readonly iso?: number;
   readonly aperture?: number;
   readonly shutter_speed?: string;

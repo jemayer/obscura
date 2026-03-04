@@ -118,31 +118,36 @@ describe('mergeMetadata', () => {
     expect(result.date).toEqual(new Date('1970-06-15'));
   });
 
-  it('passes through ISO, aperture, and shutter_speed from EXIF', () => {
+  it('passes through focal_length, ISO, aperture, and shutter_speed from EXIF', () => {
     const exif: ExifData = {
+      focal_length: 50,
       iso: 400,
       aperture: 2.8,
       shutter_speed: '1/250',
     };
     const result = mergeMetadata(exif, undefined);
+    expect(result.focal_length).toBe(50);
     expect(result.iso).toBe(400);
     expect(result.aperture).toBe(2.8);
     expect(result.shutter_speed).toBe('1/250');
   });
 
-  it('sidecar overrides ISO, aperture, and shutter_speed', () => {
+  it('sidecar overrides focal_length, ISO, aperture, and shutter_speed', () => {
     const exif: ExifData = {
+      focal_length: 50,
       iso: 400,
       aperture: 2.8,
       shutter_speed: '1/250',
     };
     const sidecar = {
       title: 'Photo',
+      focal_length: 85,
       iso: 800,
       aperture: 4,
       shutter_speed: '1/500',
     };
     const result = mergeMetadata(exif, sidecar);
+    expect(result.focal_length).toBe(85);
     expect(result.iso).toBe(800);
     expect(result.aperture).toBe(4);
     expect(result.shutter_speed).toBe('1/500');

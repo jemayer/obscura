@@ -27,6 +27,7 @@ interface ExifrOutput {
   LensMake?: string;
   ISO?: number;
   FNumber?: number;
+  FocalLength?: number;
   ExposureTime?: number;
   latitude?: number;
   longitude?: number;
@@ -41,6 +42,7 @@ const EXIF_PICK_FIELDS = [
   'LensMake',
   'ISO',
   'FNumber',
+  'FocalLength',
   'ExposureTime',
   'latitude',
   'longitude',
@@ -76,6 +78,7 @@ function buildExifData(parsed: ExifrOutput): ExifData {
   const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
+  const focal_length = parsed.FocalLength;
   const iso = parsed.ISO;
   const aperture = parsed.FNumber;
   const shutter_speed =
@@ -89,6 +92,7 @@ function buildExifData(parsed: ExifrOutput): ExifData {
     date?: Date;
     camera?: string;
     lens?: string;
+    focal_length?: number;
     iso?: number;
     aperture?: number;
     shutter_speed?: string;
@@ -99,6 +103,7 @@ function buildExifData(parsed: ExifrOutput): ExifData {
   if (date !== undefined) result.date = date;
   if (camera !== undefined) result.camera = camera;
   if (lens !== undefined) result.lens = lens;
+  if (focal_length !== undefined) result.focal_length = focal_length;
   if (iso !== undefined) result.iso = iso;
   if (aperture !== undefined) result.aperture = aperture;
   if (shutter_speed !== undefined) result.shutter_speed = shutter_speed;
