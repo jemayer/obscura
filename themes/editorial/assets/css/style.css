@@ -786,7 +786,8 @@ a:hover {
   line-height: var(--line-height-base);
 }
 
-.post-body blockquote {
+.post-body blockquote,
+.page-body blockquote {
   border-left: 2px solid var(--color-text);
   padding-left: var(--space-lg);
   margin: var(--space-xl) 0;
