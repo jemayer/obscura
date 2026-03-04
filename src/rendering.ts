@@ -222,10 +222,14 @@ export async function renderHomepage(
     })
     .slice(0, engine.siteConfig.recent_shots_count);
 
+  const processedContent = homepageContent
+    ? replaceShortcodes(homepageContent, buildPhotoIndex(galleries), engine.siteConfig.base_path)
+    : undefined;
+
   await renderToFile(
     engine,
     'homepage.html',
-    { recent_photos: allPhotos, homepage_content: homepageContent },
+    { recent_photos: allPhotos, homepage_content: processedContent },
     distDir,
     'index.html',
   );
@@ -306,9 +310,13 @@ export async function renderBlogPost(
 export async function renderPage(
   engine: RenderingEngine,
   page: Page,
+  galleries: readonly Gallery[],
   distDir: string,
 ): Promise<void> {
-  await renderToFile(engine, 'page.html', { page }, distDir, `${page.slug}/index.html`);
+  const photoIndex = buildPhotoIndex(galleries);
+  const content = replaceShortcodes(page.renderedContent, photoIndex, engine.siteConfig.base_path);
+  const pageWithCards = { ...page, renderedContent: content };
+  await renderToFile(engine, 'page.html', { page: pageWithCards }, distDir, `${page.slug}/index.html`);
 }
 
 /** Render the tag index (/tags/) */
@@ -433,7 +441,7 @@ export async function renderAll(
 
   // Pages
   for (const page of pages) {
-    await renderPage(engine, page, distDir);
+    await renderPage(engine, page, galleries, distDir);
   }
 
   // Tags
