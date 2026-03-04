@@ -199,8 +199,8 @@ async function main(): Promise<void> {
     return;
   }
 
-  const listedGalleries = galleryConfig.galleries.filter((g) => g.listed);
-  if (listedGalleries.length === 0) {
+  const allGalleries = galleryConfig.galleries;
+  if (allGalleries.length === 0) {
     p.cancel('No galleries found in config/galleries.yaml.');
     process.exitCode = 1;
     return;
@@ -211,7 +211,7 @@ async function main(): Promise<void> {
   // Scan all galleries to count photos and collect global tags/locations
   const galleryCounts = new Map<string, number>();
   let globalTargets: SidecarEditTarget[] = [];
-  for (const gallery of listedGalleries) {
+  for (const gallery of allGalleries) {
     const galleryDir = resolve(photosDir, gallery.slug);
     const targets = await scanGallery(galleryDir, gallery.slug);
     galleryCounts.set(gallery.slug, targets.length);
@@ -222,13 +222,13 @@ async function main(): Promise<void> {
 
   // Gallery selection — use slug strings as values, with 'all' as a special key
   const galleryOptions: { value: string; label: string; hint?: string }[] =
-    listedGalleries.map((g) => ({
+    allGalleries.map((g) => ({
       value: g.slug,
       label: g.title,
       hint: `${String(galleryCounts.get(g.slug) ?? 0)} photos`,
     }));
 
-  if (listedGalleries.length > 1) {
+  if (allGalleries.length > 1) {
     const totalPhotos = [...galleryCounts.values()].reduce((a, b) => a + b, 0);
     galleryOptions.push({
       value: 'all',
@@ -249,8 +249,8 @@ async function main(): Promise<void> {
   // Determine which galleries to work on
   const selectedGalleries: readonly GalleryEntry[] =
     selectedSlug === 'all'
-      ? listedGalleries
-      : listedGalleries.filter((g) => g.slug === selectedSlug);
+      ? allGalleries
+      : allGalleries.filter((g) => g.slug === selectedSlug);
 
   // Generate sidecars first
   const spin = p.spinner();
