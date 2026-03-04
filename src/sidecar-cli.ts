@@ -42,8 +42,9 @@ async function showPreview(photoPath: string): Promise<void> {
       height: '50%',
     });
     console.log(image);
-  } catch {
-    p.log.warn('Could not display image preview.');
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    p.log.warn(`Could not display image preview: ${msg}`);
   }
 }
 
