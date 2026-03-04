@@ -21,6 +21,9 @@ interface SidecarTemplate {
   date: string | null;
   camera: string | null;
   lens: string | null;
+  iso: number | null;
+  aperture: number | null;
+  shutter_speed: string | null;
   gps_lat: number | null;
   gps_lon: number | null;
   location: string;
@@ -38,6 +41,9 @@ function buildSidecarTemplate(exif: ExifData): SidecarTemplate {
     date: exif.date ? formatDate(exif.date) : null,
     camera: exif.camera ?? null,
     lens: exif.lens ?? null,
+    iso: exif.iso ?? null,
+    aperture: exif.aperture ?? null,
+    shutter_speed: exif.shutter_speed ?? null,
     gps_lat: exif.gps_lat ?? null,
     gps_lon: exif.gps_lon ?? null,
     location: '',

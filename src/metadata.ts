@@ -8,6 +8,9 @@ interface RawSidecar {
   date?: string | Date;
   camera?: string;
   lens?: string;
+  iso?: number;
+  aperture?: number;
+  shutter_speed?: string;
   gps_lat?: number;
   gps_lon?: number;
   location?: string;
@@ -67,6 +70,9 @@ export function mergeMetadata(
     date?: Date;
     camera?: string;
     lens?: string;
+    iso?: number;
+    aperture?: number;
+    shutter_speed?: string;
     gps_lat?: number;
     gps_lon?: number;
     location: string;
@@ -84,12 +90,18 @@ export function mergeMetadata(
   const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = sidecarCamera ?? exif.camera;
   const lens = sidecarLens ?? exif.lens;
+  const iso = sidecar?.iso ?? exif.iso;
+  const aperture = sidecar?.aperture ?? exif.aperture;
+  const shutter_speed = nonEmpty(sidecar?.shutter_speed) ?? exif.shutter_speed;
   const gps_lat = sidecar?.gps_lat ?? exif.gps_lat;
   const gps_lon = sidecar?.gps_lon ?? exif.gps_lon;
 
   if (date !== undefined) result.date = date;
   if (camera !== undefined) result.camera = camera;
   if (lens !== undefined) result.lens = lens;
+  if (iso !== undefined) result.iso = iso;
+  if (aperture !== undefined) result.aperture = aperture;
+  if (shutter_speed !== undefined) result.shutter_speed = shutter_speed;
   if (gps_lat !== undefined) result.gps_lat = gps_lat;
   if (gps_lon !== undefined) result.gps_lon = gps_lon;
 

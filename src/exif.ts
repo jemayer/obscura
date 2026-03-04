@@ -25,6 +25,9 @@ interface ExifrOutput {
   Model?: string;
   LensModel?: string;
   LensMake?: string;
+  ISO?: number;
+  FNumber?: number;
+  ExposureTime?: number;
   latitude?: number;
   longitude?: number;
 }
@@ -36,6 +39,9 @@ const EXIF_PICK_FIELDS = [
   'Model',
   'LensModel',
   'LensMake',
+  'ISO',
+  'FNumber',
+  'ExposureTime',
   'latitude',
   'longitude',
 ];
@@ -52,6 +58,14 @@ function buildCameraString(
   return model;
 }
 
+export function formatShutterSpeed(seconds: number): string {
+  if (seconds >= 1) {
+    return `${String(seconds)}s`;
+  }
+  const denominator = Math.round(1 / seconds);
+  return `1/${String(denominator)}`;
+}
+
 /** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a EXIF default, not a real date. */
 function isEpochDate(date: Date): boolean {
   return date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1;
@@ -62,6 +76,12 @@ function buildExifData(parsed: ExifrOutput): ExifData {
   const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
+  const iso = parsed.ISO;
+  const aperture = parsed.FNumber;
+  const shutter_speed =
+    parsed.ExposureTime !== undefined
+      ? formatShutterSpeed(parsed.ExposureTime)
+      : undefined;
   const gps_lat = parsed.latitude;
   const gps_lon = parsed.longitude;
 
@@ -69,6 +89,9 @@ function buildExifData(parsed: ExifrOutput): ExifData {
     date?: Date;
     camera?: string;
     lens?: string;
+    iso?: number;
+    aperture?: number;
+    shutter_speed?: string;
     gps_lat?: number;
     gps_lon?: number;
   } = {};
@@ -76,6 +99,9 @@ function buildExifData(parsed: ExifrOutput): ExifData {
   if (date !== undefined) result.date = date;
   if (camera !== undefined) result.camera = camera;
   if (lens !== undefined) result.lens = lens;
+  if (iso !== undefined) result.iso = iso;
+  if (aperture !== undefined) result.aperture = aperture;
+  if (shutter_speed !== undefined) result.shutter_speed = shutter_speed;
   if (gps_lat !== undefined) result.gps_lat = gps_lat;
   if (gps_lon !== undefined) result.gps_lon = gps_lon;
 

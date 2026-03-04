@@ -18,6 +18,9 @@ export interface SidecarSnapshot {
   readonly camera?: string;
   readonly date?: Date;
   readonly lens?: string;
+  readonly iso?: number;
+  readonly aperture?: number;
+  readonly shutter_speed?: string;
 }
 
 export interface SidecarEditTarget {
@@ -71,11 +74,19 @@ export function loadSidecarSnapshot(content: string): SidecarSnapshot {
     tags: asStringArray(data['tags']),
   };
 
+  const iso = typeof data['iso'] === 'number' ? data['iso'] : undefined;
+  const aperture =
+    typeof data['aperture'] === 'number' ? data['aperture'] : undefined;
+  const shutter_speed = asString(data['shutter_speed']);
+
   return {
     ...base,
     ...(camera ? { camera } : {}),
     ...(lens ? { lens } : {}),
     ...(date !== undefined ? { date } : {}),
+    ...(iso !== undefined ? { iso } : {}),
+    ...(aperture !== undefined ? { aperture } : {}),
+    ...(shutter_speed ? { shutter_speed } : {}),
   };
 }
 

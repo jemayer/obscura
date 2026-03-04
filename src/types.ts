@@ -40,6 +40,9 @@ export interface ExifData {
   readonly date?: Date;
   readonly camera?: string;
   readonly lens?: string;
+  readonly iso?: number;
+  readonly aperture?: number;
+  readonly shutter_speed?: string;
   readonly gps_lat?: number;
   readonly gps_lon?: number;
 }
@@ -49,6 +52,9 @@ export interface PhotoMetadata {
   readonly date?: Date;
   readonly camera?: string;
   readonly lens?: string;
+  readonly iso?: number;
+  readonly aperture?: number;
+  readonly shutter_speed?: string;
   readonly gps_lat?: number;
   readonly gps_lon?: number;
   readonly location: string;

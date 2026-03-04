@@ -33,6 +33,15 @@ function buildContextLine(target: SidecarEditTarget): string {
   if (target.currentValues.lens) {
     parts.push(target.currentValues.lens);
   }
+  if (target.currentValues.iso !== undefined) {
+    parts.push(`ISO ${String(target.currentValues.iso)}`);
+  }
+  if (target.currentValues.aperture !== undefined) {
+    parts.push(`f/${String(target.currentValues.aperture)}`);
+  }
+  if (target.currentValues.shutter_speed) {
+    parts.push(`${target.currentValues.shutter_speed}s`);
+  }
   return parts.length > 0 ? parts.join(' · ') : 'No EXIF data';
 }
 
