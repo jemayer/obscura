@@ -3,6 +3,10 @@ title: "Fehmarn"
 date: 2019-12-20
 camera: FUJIFILM X-T3
 lens: XF35mmF1.4 R
+focal_length: 35
+iso: 160
+aperture: 2.5
+shutter_speed: 1/1400
 gps_lat:
 gps_lon:
 location: "Fehmarn, Germany"
@@ -13,5 +17,5 @@ caption: "When the tourism boom of the 1960s reached Fehmarn, the municipality
   significant architects and designers of the 20th century."
 tags:
   - architecture
-  - monochromatic
   - baltic sea
+  - monochrome

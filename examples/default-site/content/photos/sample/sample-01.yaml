@@ -3,13 +3,18 @@ title: "The BRXTN Photographer"
 date: 2017-07-02
 camera: Canon AE-1
 lens: Canon FD 50mm 1:1.8
+focal_length: 50
+iso: 100
+aperture:
+shutter_speed: 1/200
 gps_lat:
 gps_lon:
 location: "Hamburg, Germany"
-caption: "The creator of Obscura, caught in the act of finishing a roll. Film
+caption: The creator of Obscura, caught in the act of finishing a roll. Film
   photography teaches patience - right up until frame 34, when it absolutely
-  does not."
+  does not.
 tags:
-  - film-photography
-  - monochromatic
+  - monochrome
+  - people
   - self-portrait
+  - cameras

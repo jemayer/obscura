@@ -3,6 +3,10 @@ title: "Spiral"
 date: 2021-04-17
 camera: RICOH IMAGING COMPANY, LTD. RICOH GR III
 lens:
+focal_length: 18.3
+iso: 800
+aperture: 5.6
+shutter_speed: 1/250
 gps_lat:
 gps_lon:
 location: "Hamburg, Germany"
@@ -12,5 +16,6 @@ caption: "Post-war parking garages were architecture's love letter to the
   one of the finest examples still standing, and a quiet favourite among
   photographers who know where to look."
 tags:
+  - monochrome
   - architecture
-  - monochromatic
+  - abstract
