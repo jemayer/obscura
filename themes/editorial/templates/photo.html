@@ -88,9 +88,11 @@
       </div>
       {% endif %}
 
+      {% if gallery.listed %}
       <div class="photo-detail__back">
         <a href="{{ ('/photography/' + gallery.slug + '/') | url }}">&larr; Back to {{ gallery.title }}</a>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>
