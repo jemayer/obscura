@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import * as p from '@clack/prompts';
+import sharp from 'sharp';
 import terminalImage from 'terminal-image';
 import { loadGalleryConfig } from './config.js';
 import { generateSidecars } from './sidecar.js';
@@ -37,7 +38,9 @@ function buildContextLine(target: SidecarEditTarget): string {
 
 async function showPreview(photoPath: string): Promise<void> {
   try {
-    const image = await terminalImage.file(photoPath, {
+    // Convert through sharp to handle format mismatches (e.g. WebP with .jpg extension)
+    const buffer = await sharp(photoPath).png().toBuffer();
+    const image = await terminalImage.buffer(buffer, {
       width: '50%',
       height: '50%',
     });
