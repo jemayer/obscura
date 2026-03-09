@@ -30,6 +30,10 @@
     }
 
     grids.forEach(function (grid) {
+      // Read display-field config from data attribute (default: show all)
+      var fieldsAttr = grid.getAttribute('data-lightbox-fields') || '';
+      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['exif', 'location', 'tags', 'license'];
+
       grid.addEventListener('click', function (e) {
         var item = e.target.closest('.gallery-item');
         if (!item) return;
@@ -55,12 +59,12 @@
           };
         });
 
-        openLightbox(slides, index);
+        openLightbox(slides, index, displayFields);
       });
     });
   }
 
-  function openLightbox(slides, index) {
+  function openLightbox(slides, index, displayFields) {
     var pswpOptions = {
       dataSource: slides,
       index: index,
@@ -103,10 +107,14 @@
               );
             }
 
+            var showExif = displayFields.indexOf('exif') !== -1;
+            var showLocation = displayFields.indexOf('location') !== -1;
+            var showLicense = displayFields.indexOf('license') !== -1;
+
             var meta = [];
-            if (data.location) meta.push(escapeHtml(data.location));
-            if (data.camera) meta.push(escapeHtml(data.camera));
-            if (data.date) meta.push(escapeHtml(data.date));
+            if (showLocation && data.location) meta.push(escapeHtml(data.location));
+            if (showExif && data.camera) meta.push(escapeHtml(data.camera));
+            if (showExif && data.date) meta.push(escapeHtml(data.date));
 
             if (meta.length) {
               parts.push(
@@ -116,7 +124,7 @@
               );
             }
 
-            if (data.license) {
+            if (showLicense && data.license) {
               var licenseLabels = {
                 'all-rights-reserved': '\u00A9 All Rights Reserved',
                 'CC-BY-4.0': 'CC BY 4.0',

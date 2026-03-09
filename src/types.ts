@@ -7,6 +7,22 @@ export interface ImageConfig {
   readonly webp_quality: number;
 }
 
+/**
+ * Valid display-field names for photo pages and lightbox overlays.
+ * - exif: date, camera, lens, settings (focal length, aperture, ISO, shutter speed)
+ * - location: location name
+ * - tags: tag list (photo page only)
+ * - license: license badge
+ */
+export type DisplayField = 'exif' | 'location' | 'tags' | 'license';
+
+export const ALL_DISPLAY_FIELDS: readonly DisplayField[] = [
+  'exif',
+  'location',
+  'tags',
+  'license',
+] as const;
+
 export interface SiteConfig {
   readonly base_url: string;
   readonly base_path: string;
@@ -15,6 +31,8 @@ export interface SiteConfig {
   readonly recent_shots_count: number;
   readonly images: ImageConfig;
   readonly license: string;
+  readonly photo_display_fields: readonly DisplayField[];
+  readonly lightbox_display_fields: readonly DisplayField[];
 }
 
 // ---------------------------------------------------------------------------

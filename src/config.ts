@@ -7,7 +7,9 @@ import type {
   GalleryConfig,
   GalleryEntry,
   ImageConfig,
+  DisplayField,
 } from './types.js';
+import { ALL_DISPLAY_FIELDS } from './types.js';
 
 const DEFAULT_IMAGE_CONFIG: ImageConfig = {
   breakpoints: [400, 800, 1200, 2400],
@@ -24,6 +26,8 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
   recent_shots_count: 12,
   images: DEFAULT_IMAGE_CONFIG,
   license: DEFAULT_LICENSE,
+  photo_display_fields: ALL_DISPLAY_FIELDS,
+  lightbox_display_fields: ALL_DISPLAY_FIELDS,
 };
 
 const DEFAULT_GALLERY_CONFIG: GalleryConfig = {
@@ -36,6 +40,8 @@ interface RawSiteConfig {
   theme?: string;
   recent_shots_count?: number;
   license?: string;
+  photo_display_fields?: string[];
+  lightbox_display_fields?: string[];
   images?: {
     breakpoints?: number[];
     webp_quality?: number;
@@ -65,6 +71,20 @@ export function extractBasePath(baseUrl: string): string {
   } catch {
     return '';
   }
+}
+
+/**
+ * Parse and validate a display-fields array from config.
+ * Returns only recognised field names; falls back to all fields if omitted.
+ */
+export function parseDisplayFields(
+  raw: string[] | undefined,
+): readonly DisplayField[] {
+  if (!raw || !Array.isArray(raw)) return ALL_DISPLAY_FIELDS;
+  const valid = raw.filter((f): f is DisplayField =>
+    (ALL_DISPLAY_FIELDS as readonly string[]).includes(f),
+  );
+  return valid.length > 0 ? valid : ALL_DISPLAY_FIELDS;
 }
 
 async function loadYamlFile(filePath: string): Promise<unknown> {
@@ -108,6 +128,8 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     recent_shots_count:
       raw.recent_shots_count ?? DEFAULT_SITE_CONFIG.recent_shots_count,
     license: raw.license ?? DEFAULT_LICENSE,
+    photo_display_fields: parseDisplayFields(raw.photo_display_fields),
+    lightbox_display_fields: parseDisplayFields(raw.lightbox_display_fields),
     images: {
       breakpoints: raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
       webp_quality:

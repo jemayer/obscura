@@ -57,6 +57,7 @@
       {% endif %}
 
       <ul class="photo-meta">
+        {% if "exif" in site.photo_display_fields %}
         {% if photo.metadata.date %}
         <li>
           <span class="photo-meta__label">Date</span>
@@ -88,12 +89,16 @@
           <span class="photo-meta__value">{{ settings_parts | join(" · ") }}</span>
         </li>
         {% endif %}
+        {% endif %}
+        {% if "location" in site.photo_display_fields %}
         {% if photo.metadata.location %}
         <li>
           <span class="photo-meta__label">Location</span>
           <span class="photo-meta__value"><a href="{{ ('/locations/' + (photo.metadata.location | slugifylocation) + '/') | url }}">{{ photo.metadata.location }}</a></span>
         </li>
         {% endif %}
+        {% endif %}
+        {% if "tags" in site.photo_display_fields %}
         {% if photo.metadata.tags.length %}
         <li class="photo-meta__tags-row">
           <span class="photo-meta__label">Tags</span>
@@ -104,6 +109,8 @@
           </span>
         </li>
         {% endif %}
+        {% endif %}
+        {% if "license" in site.photo_display_fields %}
         {% if photo.metadata.license %}
         <li>
           <span class="photo-meta__label">License</span>
@@ -115,6 +122,7 @@
             {% endif %}
           </span>
         </li>
+        {% endif %}
         {% endif %}
       </ul>
 

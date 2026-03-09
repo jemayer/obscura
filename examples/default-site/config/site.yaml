@@ -7,6 +7,16 @@ recent_shots_count: 10
 #          CC-BY-NC-SA-4.0, CC-BY-ND-4.0, CC-BY-NC-ND-4.0, CC0-1.0,
 #          or any custom text.
 license: all-rights-reserved
+# Which metadata fields to show on photo detail pages.
+# Options: exif (date/camera/lens/settings), location, tags, license
+# Default: all fields shown.
+# photo_display_fields: [exif, location, tags, license]
+
+# Which metadata fields to show in the lightbox overlay.
+# Options: exif (camera/date), location, license
+# Default: all fields shown.
+# lightbox_display_fields: [exif, location, license]
+
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85
