@@ -93,7 +93,7 @@ Individual galleries can override this in `galleries.yaml` via the `layout` fiel
 
 ## Site Configuration — Social Links
 
-Add social media links in `config/site.yaml`. These are displayed as monochromatic icons on the contact page, adapting to light and dark mode automatically.
+Add social media links in `config/site.yaml`. These are displayed as monochromatic icons in the site footer, adapting to light and dark mode automatically.
 
 ```yaml
 social_links:

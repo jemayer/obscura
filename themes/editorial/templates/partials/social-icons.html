@@ -1,6 +1,5 @@
 {% if site.social_links.length %}
-<h2 class="social-links__heading">Social Media</h2>
-<ul class="social-links">
+<ul class="social-links" role="list">
   {% for link in site.social_links %}
   <li>
     <a href="{{ link.url }}" class="social-links__link" rel="me noopener" target="_blank" aria-label="{{ link.platform }}">

@@ -1138,10 +1138,18 @@ a.tag:hover {
   max-width: var(--content-width);
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  gap: var(--space-lg);
   font-size: var(--font-size-xs);
   color: var(--color-text-tertiary);
+}
+
+.site-footer__credits {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .site-footer a {
@@ -1486,27 +1494,19 @@ a.tag:hover {
    Social Links
    -------------------------------------------------------------------------- */
 
-.social-links__heading {
-  font-family: var(--font-display);
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  margin-top: var(--space-2xl);
-  margin-bottom: var(--space-md);
-}
-
 .social-links {
   display: flex;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   list-style: none;
   padding: 0;
-  margin: var(--space-xl) 0 0;
+  margin: 0;
 }
 
 .social-links__link {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   transition: color var(--duration-fast) var(--ease-out);
 }
 
@@ -1515,8 +1515,8 @@ a.tag:hover {
 }
 
 .social-links__icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 /* --------------------------------------------------------------------------
