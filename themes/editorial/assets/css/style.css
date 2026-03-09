@@ -1260,6 +1260,204 @@ a.tag:hover {
 }
 
 /* --------------------------------------------------------------------------
+   Mobile Navigation — The Dark Curtain
+   -------------------------------------------------------------------------- */
+
+.nav-toggle {
+  display: none;
+}
+
+@media (max-width: 47.999em) {
+  /* Hamburger button */
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 2rem;
+    height: var(--header-height);
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 201;
+    padding: 0;
+  }
+
+  .nav-toggle__line {
+    display: block;
+    width: 1.25rem;
+    height: 1.5px;
+    background: var(--color-text);
+    transition: transform var(--duration-base) var(--ease-out),
+                opacity var(--duration-fast) var(--ease-out);
+    transform-origin: center;
+  }
+
+  /* X state */
+  .nav-toggle[aria-expanded="true"] .nav-toggle__line:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle__line:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  /* Overlay nav */
+  .site-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xl);
+    background: var(--color-text);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--duration-slow) var(--ease-out),
+                visibility 0s linear var(--duration-slow);
+  }
+
+  .site-nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--duration-slow) var(--ease-out),
+                visibility 0s linear 0s;
+  }
+
+  /* Nav links — larger, serif, cinematic */
+  .site-nav a {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xl);
+    text-transform: none;
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-bg);
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out),
+                color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-nav.is-open a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered entrance */
+  .site-nav.is-open a:nth-child(1) { transition-delay: 150ms; }
+  .site-nav.is-open a:nth-child(2) { transition-delay: 200ms; }
+  .site-nav.is-open a:nth-child(3) { transition-delay: 250ms; }
+  .site-nav.is-open a:nth-child(4) { transition-delay: 300ms; }
+
+  .site-nav a:hover,
+  .site-nav a:focus-visible {
+    color: var(--color-bg-subtle);
+  }
+
+  .site-nav a::after {
+    display: none;
+  }
+
+  .site-nav a[aria-current="page"] {
+    color: var(--color-bg);
+    opacity: 1;
+  }
+
+  .site-nav a[aria-current="page"]::before {
+    content: '';
+    position: absolute;
+    left: -1.25rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 1.5px;
+    background: var(--color-bg);
+    transform: translateY(-50%);
+  }
+
+  /* Theme toggle repositioned inside overlay */
+  .site-nav .theme-toggle {
+    margin-top: var(--space-lg);
+    color: var(--color-bg);
+    opacity: 0;
+    transform: translateY(1rem);
+    transition: opacity var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out),
+                color var(--duration-fast) var(--ease-out);
+  }
+
+  .site-nav.is-open .theme-toggle {
+    opacity: 0.6;
+    transform: translateY(0);
+    transition-delay: 350ms;
+  }
+
+  .site-nav.is-open .theme-toggle:hover {
+    opacity: 1;
+  }
+
+  /* Dark mode: invert the curtain to light */
+  :root[data-theme="dark"] .site-nav {
+    background: var(--color-bg);
+  }
+
+  :root[data-theme="dark"] .site-nav a {
+    color: var(--color-text);
+  }
+
+  :root[data-theme="dark"] .site-nav a:hover,
+  :root[data-theme="dark"] .site-nav a:focus-visible {
+    color: var(--color-text-secondary);
+  }
+
+  :root[data-theme="dark"] .site-nav a[aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  :root[data-theme="dark"] .site-nav a[aria-current="page"]::before {
+    background: var(--color-text);
+  }
+
+  :root[data-theme="dark"] .site-nav .theme-toggle {
+    color: var(--color-text);
+  }
+
+  /* System dark when no explicit theme */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .site-nav {
+      background: var(--color-bg);
+    }
+
+    :root:not([data-theme="light"]) .site-nav a {
+      color: var(--color-text);
+    }
+
+    :root:not([data-theme="light"]) .site-nav a:hover,
+    :root:not([data-theme="light"]) .site-nav a:focus-visible {
+      color: var(--color-text-secondary);
+    }
+
+    :root:not([data-theme="light"]) .site-nav a[aria-current="page"] {
+      color: var(--color-text);
+    }
+
+    :root:not([data-theme="light"]) .site-nav a[aria-current="page"]::before {
+      background: var(--color-text);
+    }
+
+    :root:not([data-theme="light"]) .site-nav .theme-toggle {
+      color: var(--color-text);
+    }
+  }
+
+  /* Prevent body scroll when menu is open */
+  html.nav-open {
+    overflow: hidden;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Utilities
    -------------------------------------------------------------------------- */
 

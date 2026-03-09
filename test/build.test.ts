@@ -140,4 +140,12 @@ describe('full build pipeline', () => {
     const html = await readFile(path, 'utf-8');
     expect(html).toContain('data-pswp-license="all-rights-reserved"');
   });
+
+  it('renders mobile nav toggle button', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('class="nav-toggle"');
+    expect(html).toContain('aria-controls="site-nav"');
+    expect(html).toContain('id="site-nav"');
+  });
 });

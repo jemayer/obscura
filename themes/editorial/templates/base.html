@@ -30,16 +30,20 @@
     <div class="site-title">
       <a href="{{ '/' | url }}">{{ site.title }}</a>
     </div>
-    <nav class="site-nav">
+    <nav class="site-nav" id="site-nav">
       <a href="{{ '/photography/' | url }}"{% if nav_current == 'photography' %} aria-current="page"{% endif %}>Photography</a>
       <a href="{{ '/blog/' | url }}"{% if nav_current == 'blog' %} aria-current="page"{% endif %}>Blog</a>
       <a href="{{ '/about/' | url }}"{% if nav_current == 'about' %} aria-current="page"{% endif %}>About</a>
-        <a href="{{ '/contact/' | url }}"{% if nav_current == 'contact' %} aria-current="page"{% endif %}>Contact</a>
+      <a href="{{ '/contact/' | url }}"{% if nav_current == 'contact' %} aria-current="page"{% endif %}>Contact</a>
       <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
     </nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <span class="nav-toggle__line"></span>
+      <span class="nav-toggle__line"></span>
+    </button>
   </header>
 
   <main>
@@ -178,6 +182,59 @@
         applyLayout(layout);
         localStorage.setItem(STORAGE_KEY, layout);
         updateButtons(layout);
+      });
+    })();
+  </script>
+  <script>
+    // Mobile nav toggle
+    (function() {
+      var toggle = document.querySelector('.nav-toggle');
+      var nav = document.querySelector('#site-nav');
+      if (!toggle || !nav) return;
+
+      var focusableEls = nav.querySelectorAll('a, button');
+      var firstFocusable = focusableEls[0];
+      var lastFocusable = focusableEls[focusableEls.length - 1];
+
+      function openNav() {
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close menu');
+        nav.classList.add('is-open');
+        document.documentElement.classList.add('nav-open');
+        firstFocusable.focus();
+      }
+
+      function closeNav() {
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+        nav.classList.remove('is-open');
+        document.documentElement.classList.remove('nav-open');
+        toggle.focus();
+      }
+
+      function isOpen() {
+        return toggle.getAttribute('aria-expanded') === 'true';
+      }
+
+      toggle.addEventListener('click', function() {
+        isOpen() ? closeNav() : openNav();
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isOpen()) closeNav();
+      });
+
+      // Trap focus within open nav
+      nav.addEventListener('keydown', function(e) {
+        if (e.key !== 'Tab' || !isOpen()) return;
+        if (e.shiftKey && document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
       });
     })();
   </script>
