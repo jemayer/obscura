@@ -86,7 +86,7 @@ The editorial theme includes automatic dark mode via `@media (prefers-color-sche
 
 All templates have access to:
 
-- `site` — the site configuration object (title, base_url, etc.)
+- `site` — the site configuration object (title, base_url, photo_display_fields, lightbox_display_fields, etc.)
 - `current_year` — the current year (for copyright notices)
 
 ### Template Filters
@@ -105,6 +105,18 @@ All templates have access to:
 | `absurl` | Build absolute URL | `{{ "/blog/" \| absurl }}` |
 | `truncatewords` | Truncate to N words | `{{ text \| truncatewords(50) }}` |
 | `safe_html` | Mark as safe (no escaping) | `{{ html \| safe_html }}` |
+
+### Display Fields
+
+Templates can check `site.photo_display_fields` and `site.lightbox_display_fields` to conditionally show metadata. These are arrays of field names (`date`, `camera`, `lens`, `settings`, `location`, `tags`, `license`):
+
+```nunjucks
+{% if "date" in site.photo_display_fields %}
+  {# render date #}
+{% endif %}
+```
+
+The lightbox reads its field list from the `data-lightbox-fields` attribute on the gallery grid element (a comma-separated string of the same field names).
 
 ### Page-Specific Variables
 

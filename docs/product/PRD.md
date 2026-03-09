@@ -201,6 +201,15 @@ base_url: https://coma.photography
 title: "coma.photography"
 theme: editorial
 recent_shots_count: 12
+license: all-rights-reserved
+
+# Display fields for photo detail pages and lightbox overlay.
+# Options: date, camera, lens, settings, location, tags, license
+# "exif" is a shorthand alias for date + camera + lens + settings.
+# Defaults to all fields when omitted.
+# photo_display_fields: [date, camera, lens, settings, location, tags, license]
+# lightbox_display_fields: [date, camera, location, license]
+
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85

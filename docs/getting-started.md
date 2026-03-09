@@ -101,6 +101,14 @@ base_url: https://your-domain.com
 title: "Your Name — Photography"
 theme: editorial
 recent_shots_count: 12
+license: all-rights-reserved
+
+# Control which metadata shows on photo pages and lightbox.
+# Available fields: date, camera, lens, settings, location, tags, license
+# Use "exif" as shorthand for date + camera + lens + settings.
+# photo_display_fields: [date, camera, lens, settings, location, tags, license]
+# lightbox_display_fields: [date, camera, location, license]
+
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85

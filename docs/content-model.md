@@ -32,6 +32,32 @@ JPEG (`.jpg`, `.jpeg`), PNG (`.png`), TIFF (`.tif`, `.tiff`), WebP (`.webp`).
 
 Any other format in a gallery folder causes a build error.
 
+## Site Configuration — Display Fields
+
+You can control which metadata fields appear on photo detail pages and in the lightbox overlay via `config/site.yaml`:
+
+```yaml
+# Which fields to show on the photo detail page
+photo_display_fields: [date, camera, lens, settings, location, tags, license]
+
+# Which fields to show in the lightbox overlay
+lightbox_display_fields: [date, camera, location, license]
+```
+
+| Field      | What it controls                                         |
+|-----------|----------------------------------------------------------|
+| `date`     | Capture date                                             |
+| `camera`   | Camera model                                             |
+| `lens`     | Lens model                                               |
+| `settings` | Focal length, aperture, ISO, shutter speed               |
+| `location` | Location name                                            |
+| `tags`     | Tag list (photo detail page only)                        |
+| `license`  | License badge                                            |
+
+The shorthand `exif` expands to `date`, `camera`, `lens`, and `settings` — useful if you want all EXIF fields without listing them individually.
+
+Both fields default to showing everything when omitted.
+
 ## Gallery Configuration
 
 Defined in `config/galleries.yaml`:
