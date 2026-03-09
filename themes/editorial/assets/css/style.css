@@ -1140,16 +1140,10 @@ a.tag:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-sm);
   font-size: var(--font-size-xs);
   color: var(--color-text-tertiary);
-}
-
-.site-footer__credits {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  text-align: center;
 }
 
 .site-footer a {
@@ -1499,7 +1493,7 @@ a.tag:hover {
   gap: var(--space-md);
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 var(--space-xs);
 }
 
 .social-links__link {
