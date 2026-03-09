@@ -10,6 +10,18 @@ license: all-rights-reserved
 # Default gallery layout: "masonry" (variable-height tiles) or "grid" (uniform cells).
 # Individual galleries can override this in galleries.yaml.
 # gallery_default_layout: masonry
+
+# Social media links — shown on the contact page with monochromatic icons.
+# Supported platforms: bluesky, mastodon, flickr, pixelfed
+# social_links:
+#   - platform: bluesky
+#     url: https://bsky.app/profile/yourhandle
+#   - platform: mastodon
+#     url: https://mastodon.social/@yourhandle
+#   - platform: flickr
+#     url: https://www.flickr.com/photos/yourhandle
+#   - platform: pixelfed
+#     url: https://pixelfed.social/yourhandle
 # Which metadata fields to show on photo detail pages.
 # Options: date, camera, lens, settings, location, tags, license
 # Use "exif" as shorthand for date + camera + lens + settings.

@@ -91,6 +91,24 @@ gallery_default_layout: masonry
 
 Individual galleries can override this in `galleries.yaml` via the `layout` field.
 
+## Site Configuration — Social Links
+
+Add social media links in `config/site.yaml`. These are displayed as monochromatic icons on the contact page, adapting to light and dark mode automatically.
+
+```yaml
+social_links:
+  - platform: bluesky
+    url: https://bsky.app/profile/yourhandle
+  - platform: mastodon
+    url: https://mastodon.social/@yourhandle
+  - platform: flickr
+    url: https://www.flickr.com/photos/yourhandle
+  - platform: pixelfed
+    url: https://pixelfed.social/yourhandle
+```
+
+Supported platforms: `bluesky`, `mastodon`, `flickr`, `pixelfed`. Entries with unrecognised platforms or missing URLs are silently ignored.
+
 ## Gallery Configuration
 
 Defined in `config/galleries.yaml`:

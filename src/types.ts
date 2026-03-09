@@ -49,6 +49,13 @@ export const ALL_DISPLAY_FIELDS: readonly DisplayField[] = [
 
 export type GalleryLayout = 'grid' | 'masonry';
 
+export type SocialPlatform = 'bluesky' | 'mastodon' | 'flickr' | 'pixelfed';
+
+export interface SocialLink {
+  readonly platform: SocialPlatform;
+  readonly url: string;
+}
+
 export interface SiteConfig {
   readonly base_url: string;
   readonly base_path: string;
@@ -58,6 +65,7 @@ export interface SiteConfig {
   readonly images: ImageConfig;
   readonly license: string;
   readonly gallery_default_layout: GalleryLayout;
+  readonly social_links: readonly SocialLink[];
   readonly photo_display_fields: readonly DisplayField[];
   readonly lightbox_display_fields: readonly DisplayField[];
 }

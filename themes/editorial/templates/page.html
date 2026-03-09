@@ -10,5 +10,8 @@
   <div class="page-body">
     {{ page.renderedContent | safe_html }}
   </div>
+  {% if page.slug == 'contact' %}
+  {% include "partials/social-icons.html" %}
+  {% endif %}
 </div>
 {% endblock %}

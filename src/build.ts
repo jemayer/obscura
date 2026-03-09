@@ -165,20 +165,22 @@ export async function build(
   );
 
   // -- 11. Attach image variants back to photos --
-  const galleriesWithImages: Gallery[] = galleriesWithContent.map((gallery) => ({
-    ...gallery,
-    photos: gallery.photos.map((photo): Photo => {
-      const result = imageResults.get(photo.slug);
-      if (result) {
-        return {
-          ...photo,
-          variants: result.variants,
-          thumbnailPath: result.thumbnailPath,
-        };
-      }
-      return photo;
+  const galleriesWithImages: Gallery[] = galleriesWithContent.map(
+    (gallery) => ({
+      ...gallery,
+      photos: gallery.photos.map((photo): Photo => {
+        const result = imageResults.get(photo.slug);
+        if (result) {
+          return {
+            ...photo,
+            variants: result.variants,
+            thumbnailPath: result.thumbnailPath,
+          };
+        }
+        return photo;
+      }),
     }),
-  }));
+  );
 
   // -- 12. Load theme and copy assets --
   const theme = await loadTheme(themesDir, siteConfig.theme);

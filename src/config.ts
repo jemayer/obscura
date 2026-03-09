@@ -9,6 +9,8 @@ import type {
   GalleryLayout,
   ImageConfig,
   DisplayField,
+  SocialLink,
+  SocialPlatform,
 } from './types.js';
 import { ALL_DISPLAY_FIELDS, EXIF_SUB_FIELDS } from './types.js';
 
@@ -21,6 +23,13 @@ const DEFAULT_LICENSE = 'all-rights-reserved';
 
 const DEFAULT_GALLERY_LAYOUT: GalleryLayout = 'masonry';
 
+const VALID_SOCIAL_PLATFORMS: readonly string[] = [
+  'bluesky',
+  'mastodon',
+  'flickr',
+  'pixelfed',
+];
+
 const DEFAULT_SITE_CONFIG: SiteConfig = {
   base_url: 'http://localhost:3000',
   base_path: '',
@@ -30,6 +39,7 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
   images: DEFAULT_IMAGE_CONFIG,
   license: DEFAULT_LICENSE,
   gallery_default_layout: DEFAULT_GALLERY_LAYOUT,
+  social_links: [],
   photo_display_fields: ALL_DISPLAY_FIELDS,
   lightbox_display_fields: ALL_DISPLAY_FIELDS,
 };
@@ -38,6 +48,11 @@ const DEFAULT_GALLERY_CONFIG: GalleryConfig = {
   galleries: [{ slug: 'post-assets', title: 'Post Assets', listed: false }],
 };
 
+interface RawSocialLink {
+  platform?: string;
+  url?: string;
+}
+
 interface RawSiteConfig {
   base_url?: string;
   title?: string;
@@ -45,6 +60,7 @@ interface RawSiteConfig {
   recent_shots_count?: number;
   license?: string;
   gallery_default_layout?: string;
+  social_links?: RawSocialLink[];
   photo_display_fields?: string[];
   lightbox_display_fields?: string[];
   images?: {
@@ -76,6 +92,31 @@ export function extractBasePath(baseUrl: string): string {
   } catch {
     return '';
   }
+}
+
+/**
+ * Parse and validate social links from config.
+ * Silently drops entries with unrecognised platforms or missing URLs.
+ */
+export function parseSocialLinks(
+  raw: RawSocialLink[] | undefined,
+): readonly SocialLink[] {
+  if (!raw || !Array.isArray(raw)) return [];
+  const result: SocialLink[] = [];
+  for (const entry of raw) {
+    if (
+      typeof entry.platform === 'string' &&
+      VALID_SOCIAL_PLATFORMS.includes(entry.platform) &&
+      typeof entry.url === 'string' &&
+      entry.url.length > 0
+    ) {
+      result.push({
+        platform: entry.platform as SocialPlatform,
+        url: entry.url,
+      });
+    }
+  }
+  return result;
 }
 
 /**
@@ -144,9 +185,11 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
       raw.recent_shots_count ?? DEFAULT_SITE_CONFIG.recent_shots_count,
     license: raw.license ?? DEFAULT_LICENSE,
     gallery_default_layout:
-      raw.gallery_default_layout === 'grid' || raw.gallery_default_layout === 'masonry'
+      raw.gallery_default_layout === 'grid' ||
+      raw.gallery_default_layout === 'masonry'
         ? raw.gallery_default_layout
         : DEFAULT_GALLERY_LAYOUT,
+    social_links: parseSocialLinks(raw.social_links),
     photo_display_fields: parseDisplayFields(raw.photo_display_fields),
     lightbox_display_fields: parseDisplayFields(raw.lightbox_display_fields),
     images: {
