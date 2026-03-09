@@ -111,10 +111,11 @@
             var showCamera = displayFields.indexOf('camera') !== -1;
             var showLocation = displayFields.indexOf('location') !== -1;
             var showLicense = displayFields.indexOf('license') !== -1;
+            var isMobile = window.matchMedia('(max-width: 48em)').matches;
 
             var meta = [];
             if (showLocation && data.location) meta.push(escapeHtml(data.location));
-            if (showCamera && data.camera) meta.push(escapeHtml(data.camera));
+            if (showCamera && !isMobile && data.camera) meta.push(escapeHtml(data.camera));
             if (showDate && data.date) meta.push(escapeHtml(data.date));
 
             if (meta.length) {
