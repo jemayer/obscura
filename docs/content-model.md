@@ -33,7 +33,10 @@ Use `npm run sidecar` to fill in missing fields interactively with terminal imag
 
 ### Gallery Content (Optional)
 
-You can add a markdown file at `content/photos/<gallery>/index.md` to include formatted text on the gallery page, displayed between the title/description and the photo grid. No frontmatter is needed — the gallery title and metadata come from `galleries.yaml`.
+You can add a markdown file to include formatted text on gallery pages. No frontmatter is needed — titles and metadata come from `galleries.yaml`.
+
+- **`content/photos/index.md`** — displayed on the gallery index page (`/photography/`), below the heading and above the gallery cards.
+- **`content/photos/<gallery>/index.md`** — displayed on an individual gallery page, between the title/description and the photo grid.
 
 ```
 content/photos/street/

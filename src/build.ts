@@ -126,6 +126,12 @@ export async function build(
     }
   }
 
+  // -- 6c. Load optional gallery index markdown content --
+  const galleryIndexContent = await loadGalleryContent(
+    photosDir,
+    siteConfig.base_path,
+  );
+
   // -- 7. Load blog posts (with shortcode resolution) --
   const posts = await loadAllBlogPosts(
     postsDir,
@@ -215,6 +221,7 @@ export async function build(
     tagPages,
     locationPages,
     homepageContent,
+    galleryIndexContent,
   };
 
   await renderAll(engine, buildContext, distDir);

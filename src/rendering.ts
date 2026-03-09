@@ -268,13 +268,14 @@ export async function renderHomepage(
 export async function renderGalleryIndex(
   engine: RenderingEngine,
   galleries: readonly Gallery[],
+  galleryIndexContent: string | undefined,
   distDir: string,
 ): Promise<void> {
   const listed = galleries.filter((g) => g.listed);
   await renderToFile(
     engine,
     'gallery-index.html',
-    { galleries: listed },
+    { galleries: listed, gallery_index_content: galleryIndexContent },
     distDir,
     'photography/index.html',
   );
@@ -493,13 +494,14 @@ export async function renderAll(
     tagPages,
     locationPages,
     homepageContent,
+    galleryIndexContent,
   } = context;
 
   // Homepage
   await renderHomepage(engine, galleries, homepageContent, distDir);
 
   // Gallery index
-  await renderGalleryIndex(engine, galleries, distDir);
+  await renderGalleryIndex(engine, galleries, galleryIndexContent, distDir);
 
   // Individual galleries and photos
   for (const gallery of galleries) {

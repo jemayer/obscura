@@ -264,4 +264,6 @@ export interface BuildContext {
   readonly locationPages: readonly LocationPage[];
   /** Rendered HTML from content/pages/index.md, if present */
   readonly homepageContent?: string | undefined;
+  /** Rendered HTML from content/photos/index.md, if present */
+  readonly galleryIndexContent?: string | undefined;
 }

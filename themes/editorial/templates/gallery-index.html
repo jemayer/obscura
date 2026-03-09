@@ -8,6 +8,11 @@
 {% block content %}
 <div class="content">
   <h1 class="page-title">Photography</h1>
+  {% if gallery_index_content %}
+  <div class="gallery-index-content prose">
+    {{ gallery_index_content | safe_html }}
+  </div>
+  {% endif %}
 
   {% if galleries.length %}
   <div class="gallery-list">
