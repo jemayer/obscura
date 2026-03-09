@@ -9,15 +9,39 @@ export interface ImageConfig {
 
 /**
  * Valid display-field names for photo pages and lightbox overlays.
- * - exif: date, camera, lens, settings (focal length, aperture, ISO, shutter speed)
+ * - date: capture date
+ * - camera: camera model
+ * - lens: lens model
+ * - settings: focal length, aperture, ISO, shutter speed
  * - location: location name
  * - tags: tag list (photo page only)
  * - license: license badge
+ *
+ * In config YAML, "exif" is accepted as a shorthand alias that expands to
+ * date + camera + lens + settings.
  */
-export type DisplayField = 'exif' | 'location' | 'tags' | 'license';
+export type DisplayField =
+  | 'date'
+  | 'camera'
+  | 'lens'
+  | 'settings'
+  | 'location'
+  | 'tags'
+  | 'license';
+
+/** The sub-fields that the "exif" alias expands to. */
+export const EXIF_SUB_FIELDS: readonly DisplayField[] = [
+  'date',
+  'camera',
+  'lens',
+  'settings',
+] as const;
 
 export const ALL_DISPLAY_FIELDS: readonly DisplayField[] = [
-  'exif',
+  'date',
+  'camera',
+  'lens',
+  'settings',
   'location',
   'tags',
   'license',

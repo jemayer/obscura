@@ -9,7 +9,7 @@ import type {
   ImageConfig,
   DisplayField,
 } from './types.js';
-import { ALL_DISPLAY_FIELDS } from './types.js';
+import { ALL_DISPLAY_FIELDS, EXIF_SUB_FIELDS } from './types.js';
 
 const DEFAULT_IMAGE_CONFIG: ImageConfig = {
   breakpoints: [400, 800, 1200, 2400],
@@ -76,15 +76,25 @@ export function extractBasePath(baseUrl: string): string {
 /**
  * Parse and validate a display-fields array from config.
  * Returns only recognised field names; falls back to all fields if omitted.
+ * The alias "exif" expands to date, camera, lens, settings.
  */
 export function parseDisplayFields(
   raw: string[] | undefined,
 ): readonly DisplayField[] {
   if (!raw || !Array.isArray(raw)) return ALL_DISPLAY_FIELDS;
-  const valid = raw.filter((f): f is DisplayField =>
-    (ALL_DISPLAY_FIELDS as readonly string[]).includes(f),
-  );
-  return valid.length > 0 ? valid : ALL_DISPLAY_FIELDS;
+  const allFieldNames = ALL_DISPLAY_FIELDS as readonly string[];
+  const expanded: DisplayField[] = [];
+  for (const f of raw) {
+    if (f === 'exif') {
+      for (const sub of EXIF_SUB_FIELDS) {
+        if (!expanded.includes(sub)) expanded.push(sub);
+      }
+    } else if (allFieldNames.includes(f)) {
+      const field = f as DisplayField;
+      if (!expanded.includes(field)) expanded.push(field);
+    }
+  }
+  return expanded.length > 0 ? expanded : ALL_DISPLAY_FIELDS;
 }
 
 async function loadYamlFile(filePath: string): Promise<unknown> {

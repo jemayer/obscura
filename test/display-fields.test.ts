@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseDisplayFields } from '../src/config.js';
-import { ALL_DISPLAY_FIELDS } from '../src/types.js';
+import { ALL_DISPLAY_FIELDS, EXIF_SUB_FIELDS } from '../src/types.js';
 
 describe('parseDisplayFields', () => {
   it('returns all fields when undefined', () => {
@@ -12,15 +12,15 @@ describe('parseDisplayFields', () => {
   });
 
   it('returns only recognised fields', () => {
-    expect(parseDisplayFields(['exif', 'license'])).toEqual([
-      'exif',
+    expect(parseDisplayFields(['date', 'license'])).toEqual([
+      'date',
       'license',
     ]);
   });
 
   it('filters out unknown field names', () => {
-    expect(parseDisplayFields(['exif', 'bogus', 'tags'])).toEqual([
-      'exif',
+    expect(parseDisplayFields(['camera', 'bogus', 'tags'])).toEqual([
+      'camera',
       'tags',
     ]);
   });
@@ -35,7 +35,41 @@ describe('parseDisplayFields', () => {
 
   it('accepts all valid fields', () => {
     expect(
-      parseDisplayFields(['exif', 'location', 'tags', 'license']),
-    ).toEqual(['exif', 'location', 'tags', 'license']);
+      parseDisplayFields(['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license']),
+    ).toEqual(['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license']);
+  });
+
+  it('expands "exif" alias to date, camera, lens, settings', () => {
+    expect(parseDisplayFields(['exif'])).toEqual([...EXIF_SUB_FIELDS]);
+  });
+
+  it('expands "exif" alongside other fields', () => {
+    expect(parseDisplayFields(['exif', 'location'])).toEqual([
+      'date',
+      'camera',
+      'lens',
+      'settings',
+      'location',
+    ]);
+  });
+
+  it('deduplicates when exif alias overlaps with explicit sub-fields', () => {
+    expect(parseDisplayFields(['date', 'exif', 'location'])).toEqual([
+      'date',
+      'camera',
+      'lens',
+      'settings',
+      'location',
+    ]);
+  });
+
+  it('preserves order: explicit fields before exif expansion', () => {
+    expect(parseDisplayFields(['location', 'exif'])).toEqual([
+      'location',
+      'date',
+      'camera',
+      'lens',
+      'settings',
+    ]);
   });
 });

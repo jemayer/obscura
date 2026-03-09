@@ -57,7 +57,7 @@
       {% endif %}
 
       <ul class="photo-meta">
-        {% if "exif" in site.photo_display_fields %}
+        {% if "date" in site.photo_display_fields %}
         {% if photo.metadata.date %}
         <li>
           <span class="photo-meta__label">Date</span>
@@ -66,18 +66,24 @@
           </span>
         </li>
         {% endif %}
+        {% endif %}
+        {% if "camera" in site.photo_display_fields %}
         {% if photo.metadata.camera %}
         <li>
           <span class="photo-meta__label">Camera</span>
           <span class="photo-meta__value">{{ photo.metadata.camera }}</span>
         </li>
         {% endif %}
+        {% endif %}
+        {% if "lens" in site.photo_display_fields %}
         {% if photo.metadata.lens %}
         <li>
           <span class="photo-meta__label">Lens</span>
           <span class="photo-meta__value">{{ photo.metadata.lens }}</span>
         </li>
         {% endif %}
+        {% endif %}
+        {% if "settings" in site.photo_display_fields %}
         {% set settings_parts = [] %}
         {% if photo.metadata.focal_length %}{% set _ = settings_parts.push(photo.metadata.focal_length + "mm") %}{% endif %}
         {% if photo.metadata.aperture %}{% set _ = settings_parts.push("f/" + photo.metadata.aperture) %}{% endif %}

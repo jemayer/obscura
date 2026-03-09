@@ -8,14 +8,16 @@ recent_shots_count: 10
 #          or any custom text.
 license: all-rights-reserved
 # Which metadata fields to show on photo detail pages.
-# Options: exif (date/camera/lens/settings), location, tags, license
+# Options: date, camera, lens, settings, location, tags, license
+# Use "exif" as shorthand for date + camera + lens + settings.
 # Default: all fields shown.
-# photo_display_fields: [exif, location, tags, license]
+# photo_display_fields: [date, camera, lens, settings, location, tags, license]
 
 # Which metadata fields to show in the lightbox overlay.
-# Options: exif (camera/date), location, license
+# Options: date, camera, lens, settings, location, tags, license
+# Use "exif" as shorthand for date + camera + lens + settings.
 # Default: all fields shown.
-# lightbox_display_fields: [exif, location, license]
+# lightbox_display_fields: [date, camera, location, license]
 
 images:
   breakpoints: [400, 800, 1200, 2400]
