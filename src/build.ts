@@ -9,6 +9,7 @@ import {
   loadAllBlogPosts,
   loadAllPages,
   loadHomepageContent,
+  loadGalleryContent,
 } from './markdown.js';
 import { buildCrossReferenceGraph } from './crossref.js';
 import { buildTagPages } from './tags.js';
@@ -110,6 +111,21 @@ export async function build(
     warnings.push(formatExifWarnings(galleryWarnings));
   }
 
+  // -- 6b. Load optional gallery markdown content --
+  const galleriesWithContent: Gallery[] = [];
+  for (const gallery of galleries) {
+    const galleryDir = resolve(photosDir, gallery.slug);
+    const renderedContent = await loadGalleryContent(
+      galleryDir,
+      siteConfig.base_path,
+    );
+    if (renderedContent !== undefined) {
+      galleriesWithContent.push({ ...gallery, renderedContent });
+    } else {
+      galleriesWithContent.push(gallery);
+    }
+  }
+
   // -- 7. Load blog posts (with shortcode resolution) --
   const posts = await loadAllBlogPosts(
     postsDir,
@@ -128,7 +144,7 @@ export async function build(
   const crossReferences = buildCrossReferenceGraph(posts);
 
   // -- 10. Process images (resize, WebP, thumbnails, with cache) --
-  const allPhotos = galleries.flatMap((g) =>
+  const allPhotos = galleriesWithContent.flatMap((g) =>
     g.photos.map((p) => ({
       slug: p.slug,
       gallerySlug: p.gallerySlug,
@@ -143,7 +159,7 @@ export async function build(
   );
 
   // -- 11. Attach image variants back to photos --
-  const galleriesWithImages: Gallery[] = galleries.map((gallery) => ({
+  const galleriesWithImages: Gallery[] = galleriesWithContent.map((gallery) => ({
     ...gallery,
     photos: gallery.photos.map((photo): Photo => {
       const result = imageResults.get(photo.slug);

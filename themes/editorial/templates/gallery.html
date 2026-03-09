@@ -11,6 +11,11 @@
   {% if gallery.description %}
   <p class="page-subtitle">{{ gallery.description }}</p>
   {% endif %}
+  {% if gallery.renderedContent %}
+  <div class="gallery-content prose">
+    {{ gallery.renderedContent | safe_html }}
+  </div>
+  {% endif %}
 
   {% if gallery.photos.length %}
   <div class="gallery-grid__toolbar">

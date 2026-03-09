@@ -1,5 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { extractShortcodes, resolveShortcodes } from '../src/markdown.js';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { mkdtemp, writeFile, rm, mkdir } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { extractShortcodes, resolveShortcodes, loadGalleryContent } from '../src/markdown.js';
 import { SlugIndex } from '../src/slugs.js';
 
 describe('extractShortcodes', () => {
@@ -46,5 +49,40 @@ describe('resolveShortcodes', () => {
     index.register('color', 'sunset.jpg', '/photos/color/sunset.jpg');
 
     expect(() => resolveShortcodes(['sunset'], index, 'test.md')).toThrow('Ambiguous');
+  });
+});
+
+describe('loadGalleryContent', () => {
+  let tempDir: string;
+
+  beforeEach(async () => {
+    tempDir = await mkdtemp(join(tmpdir(), 'obscura-gallery-md-'));
+  });
+
+  afterEach(async () => {
+    await rm(tempDir, { recursive: true, force: true });
+  });
+
+  it('returns rendered HTML when index.md exists', async () => {
+    await writeFile(join(tempDir, 'index.md'), '# Hello\n\nSome **bold** text.', 'utf-8');
+    const result = await loadGalleryContent(tempDir, '');
+    expect(result).toContain('<h1>Hello</h1>');
+    expect(result).toContain('<strong>bold</strong>');
+  });
+
+  it('returns undefined when index.md does not exist', async () => {
+    const result = await loadGalleryContent(tempDir, '');
+    expect(result).toBeUndefined();
+  });
+
+  it('returns undefined when gallery dir does not exist', async () => {
+    const result = await loadGalleryContent(join(tempDir, 'nonexistent'), '');
+    expect(result).toBeUndefined();
+  });
+
+  it('applies base path to links', async () => {
+    await writeFile(join(tempDir, 'index.md'), '[About](/about/)', 'utf-8');
+    const result = await loadGalleryContent(tempDir, '/portfolio');
+    expect(result).toContain('href="/portfolio/about/"');
   });
 });

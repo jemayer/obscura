@@ -175,6 +175,8 @@ export interface Gallery {
   readonly listed: boolean;
   readonly layout?: 'grid' | 'masonry' | undefined;
   readonly photos: readonly Photo[];
+  /** Rendered HTML from an optional index.md in the gallery folder. */
+  readonly renderedContent?: string | undefined;
 }
 
 // ---------------------------------------------------------------------------

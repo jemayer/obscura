@@ -283,3 +283,20 @@ export async function loadHomepageContent(
     return undefined;
   }
 }
+
+/**
+ * Load optional gallery content from content/photos/<slug>/index.md.
+ * Returns the rendered HTML string, or undefined if the file doesn't exist.
+ */
+export async function loadGalleryContent(
+  galleryDir: string,
+  basePath: string,
+): Promise<string | undefined> {
+  const filePath = resolve(galleryDir, 'index.md');
+  try {
+    const raw = await readFile(filePath, 'utf-8');
+    return await renderMarkdown(raw, basePath);
+  } catch {
+    return undefined;
+  }
+}

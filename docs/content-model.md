@@ -31,6 +31,20 @@ When you run `npm run build`, Obscura creates sidecar files for any photo that d
 
 Use `npm run sidecar` to fill in missing fields interactively with terminal image previews, or edit the YAML files by hand. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
 
+### Gallery Content (Optional)
+
+You can add a markdown file at `content/photos/<gallery>/index.md` to include formatted text on the gallery page, displayed between the title/description and the photo grid. No frontmatter is needed — the gallery title and metadata come from `galleries.yaml`.
+
+```
+content/photos/street/
+├── index.md              ← optional gallery content
+├── morning-light.jpg
+├── morning-light.yaml
+└── ...
+```
+
+This is useful for longer introductions, photographer's notes, or contextual information that doesn't fit in the plain-text `description` field.
+
 ### Supported Image Formats
 
 JPEG (`.jpg`, `.jpeg`), PNG (`.png`), TIFF (`.tif`, `.tiff`), WebP (`.webp`).
