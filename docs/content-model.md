@@ -6,23 +6,28 @@ Each photo in a gallery can have a companion YAML sidecar file with the same nam
 
 ### Sidecar Fields
 
-| Field      | Type     | Description                           |
-|-----------|----------|---------------------------------------|
-| `title`    | string   | Display title for the photo           |
-| `date`     | date     | Date the photo was taken (overrides EXIF) |
-| `camera`   | string   | Camera used (overrides EXIF)          |
-| `lens`     | string   | Lens used (overrides EXIF)            |
-| `location` | string   | Where the photo was taken             |
-| `caption`  | string   | Description or story behind the photo |
-| `gps_lat`  | number   | GPS latitude (overrides EXIF)         |
-| `gps_lon`  | number   | GPS longitude (overrides EXIF)        |
-| `tags`     | string[] | Tags for categorisation               |
+| Field           | Type     | Description                                          |
+|----------------|----------|------------------------------------------------------|
+| `title`         | string   | Display title for the photo                          |
+| `date`          | date     | Date the photo was taken (overrides EXIF)            |
+| `camera`        | string   | Camera used (overrides EXIF)                         |
+| `lens`          | string   | Lens used (overrides EXIF)                           |
+| `focal_length`  | number   | Focal length in mm (overrides EXIF)                  |
+| `iso`           | number   | ISO sensitivity (overrides EXIF)                     |
+| `aperture`      | number   | Aperture f-number (overrides EXIF)                   |
+| `shutter_speed` | string   | Shutter speed, e.g. `"1/250"` (overrides EXIF)      |
+| `location`      | string   | Where the photo was taken                            |
+| `caption`       | string   | Description or story behind the photo                |
+| `gps_lat`       | number   | GPS latitude (overrides EXIF)                        |
+| `gps_lon`       | number   | GPS longitude (overrides EXIF)                       |
+| `tags`          | string[] | Tags for categorisation                              |
+| `license`       | string   | License for this photo (overrides site-wide default) |
 
 Sidecar values always win over EXIF data when both are present. Empty sidecar fields do not override EXIF values.
 
 ### Auto-Generated Sidecars
 
-When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens) so you only need to add titles, locations, and captions.
+When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens, focal length, ISO, aperture, shutter speed) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
 
 Use `npm run sidecar` to fill in missing fields interactively with terminal image previews, or edit the YAML files by hand. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
 
@@ -68,6 +73,7 @@ galleries:
     title: Street Photography
     description: Moments from the city   # optional
     listed: true                          # show on gallery index
+    layout: masonry                       # "grid" (default) or "masonry"
 
   - slug: post-assets
     title: Post Assets
@@ -76,6 +82,7 @@ galleries:
 
 - **slug**: URL-safe identifier, must match the folder name under `content/photos/`
 - **listed**: Set to `false` for galleries that should not appear on the gallery index (useful for photos used only in blog posts)
+- **layout**: Display layout — `grid` (uniform cells, default) or `masonry` (variable-height tiles). Optional.
 
 ## Blog Posts
 
