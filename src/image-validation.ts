@@ -29,6 +29,7 @@ function isImageLikeFile(filename: string): boolean {
     filename.startsWith('.') ||
     ext === '.yaml' ||
     ext === '.yml' ||
+    ext === '.md' ||
     ext === ''
   ) {
     return false;
