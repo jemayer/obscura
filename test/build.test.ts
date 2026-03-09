@@ -120,4 +120,24 @@ describe('full build pipeline', () => {
     const imgDir = resolve(WORK_DIR, 'dist', 'assets', 'images', 'test-gallery');
     await expect(access(imgDir)).resolves.toBeUndefined();
   });
+
+  it('photo page displays default license', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'photography', 'test-gallery', 'test-photo', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('License');
+    expect(html).toContain('All Rights Reserved');
+  });
+
+  it('photo page includes schema.org structured data with license', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'photography', 'test-gallery', 'test-photo', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('"@type": "ImageObject"');
+    expect(html).toContain('"copyrightNotice"');
+  });
+
+  it('gallery page includes data-pswp-license attribute', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'photography', 'test-gallery', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('data-pswp-license="all-rights-reserved"');
+  });
 });

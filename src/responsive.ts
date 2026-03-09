@@ -5,15 +5,16 @@ import type { ImageVariant, Photo } from './types.js';
  * Example output: "/assets/images/mono/rain-400w.webp 400w, /assets/images/mono/rain-800w.webp 800w"
  */
 export function srcset(variants: readonly ImageVariant[]): string {
-  return variants
-    .map((v) => `${v.path} ${String(v.width)}w`)
-    .join(', ');
+  return variants.map((v) => `${v.path} ${String(v.width)}w`).join(', ');
 }
 
 /**
  * Generate a srcset with a base path prefix on each variant path.
  */
-export function prefixedSrcset(variants: readonly ImageVariant[], basePath: string): string {
+export function prefixedSrcset(
+  variants: readonly ImageVariant[],
+  basePath: string,
+): string {
   return variants
     .map((v) => `${basePath}${v.path} ${String(v.width)}w`)
     .join(', ');
@@ -36,7 +37,9 @@ export function bestVariant(
   targetWidth: number,
 ): ImageVariant | undefined {
   const sorted = [...variants].sort((a, b) => a.width - b.width);
-  return sorted.find((v) => v.width >= targetWidth) ?? sorted[sorted.length - 1];
+  return (
+    sorted.find((v) => v.width >= targetWidth) ?? sorted[sorted.length - 1]
+  );
 }
 
 /**

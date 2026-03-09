@@ -14,6 +14,7 @@ export interface SiteConfig {
   readonly theme: string;
   readonly recent_shots_count: number;
   readonly images: ImageConfig;
+  readonly license: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -31,6 +32,46 @@ export interface GalleryEntry {
 export interface GalleryConfig {
   readonly galleries: readonly GalleryEntry[];
 }
+
+// ---------------------------------------------------------------------------
+// Licensing
+// ---------------------------------------------------------------------------
+
+export const KNOWN_LICENSE_TYPES = [
+  'all-rights-reserved',
+  'CC-BY-4.0',
+  'CC-BY-SA-4.0',
+  'CC-BY-NC-4.0',
+  'CC-BY-NC-SA-4.0',
+  'CC-BY-ND-4.0',
+  'CC-BY-NC-ND-4.0',
+  'CC0-1.0',
+] as const;
+
+export type KnownLicenseType = (typeof KNOWN_LICENSE_TYPES)[number];
+
+/** Maps known CC license types to their deed URLs. */
+export const LICENSE_URLS: Readonly<Record<string, string>> = {
+  'CC-BY-4.0': 'https://creativecommons.org/licenses/by/4.0/',
+  'CC-BY-SA-4.0': 'https://creativecommons.org/licenses/by-sa/4.0/',
+  'CC-BY-NC-4.0': 'https://creativecommons.org/licenses/by-nc/4.0/',
+  'CC-BY-NC-SA-4.0': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  'CC-BY-ND-4.0': 'https://creativecommons.org/licenses/by-nd/4.0/',
+  'CC-BY-NC-ND-4.0': 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+  'CC0-1.0': 'https://creativecommons.org/publicdomain/zero/1.0/',
+};
+
+/** Maps known license type identifiers to human-readable short labels. */
+export const LICENSE_LABELS: Readonly<Record<string, string>> = {
+  'all-rights-reserved': '\u00A9 All Rights Reserved',
+  'CC-BY-4.0': 'CC BY 4.0',
+  'CC-BY-SA-4.0': 'CC BY-SA 4.0',
+  'CC-BY-NC-4.0': 'CC BY-NC 4.0',
+  'CC-BY-NC-SA-4.0': 'CC BY-NC-SA 4.0',
+  'CC-BY-ND-4.0': 'CC BY-ND 4.0',
+  'CC-BY-NC-ND-4.0': 'CC BY-NC-ND 4.0',
+  'CC0-1.0': 'CC0 1.0',
+};
 
 // ---------------------------------------------------------------------------
 // Photo
@@ -62,6 +103,7 @@ export interface PhotoMetadata {
   readonly location: string;
   readonly caption: string;
   readonly tags: readonly string[];
+  readonly license: string;
 }
 
 export interface ImageVariant {
@@ -134,7 +176,10 @@ export interface Page {
 export interface TagPage {
   readonly tag: string;
   readonly slug: string;
-  readonly photos: readonly { readonly photo: Photo; readonly gallery: Gallery }[];
+  readonly photos: readonly {
+    readonly photo: Photo;
+    readonly gallery: Gallery;
+  }[];
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +189,10 @@ export interface TagPage {
 export interface LocationPage {
   readonly location: string;
   readonly slug: string;
-  readonly photos: readonly { readonly photo: Photo; readonly gallery: Gallery }[];
+  readonly photos: readonly {
+    readonly photo: Photo;
+    readonly gallery: Gallery;
+  }[];
 }
 
 // ---------------------------------------------------------------------------

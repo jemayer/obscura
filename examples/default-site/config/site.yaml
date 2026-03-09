@@ -2,6 +2,11 @@ base_url: https://example.com
 title: "Obscura - A Static Site Generator for Photographers only"
 theme: editorial
 recent_shots_count: 10
+# Default license for all photos (can be overridden per-photo in sidecar YAML).
+# Options: all-rights-reserved, CC-BY-4.0, CC-BY-SA-4.0, CC-BY-NC-4.0,
+#          CC-BY-NC-SA-4.0, CC-BY-ND-4.0, CC-BY-NC-ND-4.0, CC0-1.0,
+#          or any custom text.
+license: all-rights-reserved
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85

@@ -38,7 +38,7 @@ export async function processPhoto(
 
   const image = sharp(sourcePath);
   const metadata = await image.metadata();
-  const sourceWidth: number = metadata.width as number | undefined ?? 0;
+  const sourceWidth: number = (metadata.width as number | undefined) ?? 0;
 
   const variants: ImageVariant[] = [];
 

@@ -50,6 +50,7 @@
             location: el.getAttribute('data-pswp-location') || '',
             camera: el.getAttribute('data-pswp-camera') || '',
             date: el.getAttribute('data-pswp-date') || '',
+            license: el.getAttribute('data-pswp-license') || '',
             permalink: el.getAttribute('data-pswp-permalink') || '',
           };
         });
@@ -113,6 +114,45 @@
                   meta.join(' &middot; ') +
                   '</span>',
               );
+            }
+
+            if (data.license) {
+              var licenseLabels = {
+                'all-rights-reserved': '\u00A9 All Rights Reserved',
+                'CC-BY-4.0': 'CC BY 4.0',
+                'CC-BY-SA-4.0': 'CC BY-SA 4.0',
+                'CC-BY-NC-4.0': 'CC BY-NC 4.0',
+                'CC-BY-NC-SA-4.0': 'CC BY-NC-SA 4.0',
+                'CC-BY-ND-4.0': 'CC BY-ND 4.0',
+                'CC-BY-NC-ND-4.0': 'CC BY-NC-ND 4.0',
+                'CC0-1.0': 'CC0 1.0',
+              };
+              var licenseUrls = {
+                'CC-BY-4.0': 'https://creativecommons.org/licenses/by/4.0/',
+                'CC-BY-SA-4.0': 'https://creativecommons.org/licenses/by-sa/4.0/',
+                'CC-BY-NC-4.0': 'https://creativecommons.org/licenses/by-nc/4.0/',
+                'CC-BY-NC-SA-4.0': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+                'CC-BY-ND-4.0': 'https://creativecommons.org/licenses/by-nd/4.0/',
+                'CC-BY-NC-ND-4.0': 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+                'CC0-1.0': 'https://creativecommons.org/publicdomain/zero/1.0/',
+              };
+              var licenseLabel = licenseLabels[data.license] || data.license;
+              var licenseUrl = licenseUrls[data.license];
+              if (licenseUrl) {
+                parts.push(
+                  '<a class="pswp-caption__license" href="' +
+                    escapeHtml(licenseUrl) +
+                    '" target="_blank" rel="noopener noreferrer">' +
+                    escapeHtml(licenseLabel) +
+                    '</a>',
+                );
+              } else {
+                parts.push(
+                  '<span class="pswp-caption__license">' +
+                    escapeHtml(licenseLabel) +
+                    '</span>',
+                );
+              }
             }
 
             if (data.permalink) {

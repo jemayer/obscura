@@ -164,4 +164,40 @@ describe('mergeMetadata', () => {
     const result = mergeMetadata(exif, sidecar);
     expect(result.shutter_speed).toBe('1/250');
   });
+
+  // -- License merging --
+
+  it('defaults to all-rights-reserved when no sidecar and no explicit default', () => {
+    const result = mergeMetadata(baseExif, undefined);
+    expect(result.license).toBe('all-rights-reserved');
+  });
+
+  it('uses the provided default license when no sidecar license', () => {
+    const result = mergeMetadata(baseExif, undefined, 'CC-BY-4.0');
+    expect(result.license).toBe('CC-BY-4.0');
+  });
+
+  it('uses the provided default license when sidecar has no license field', () => {
+    const sidecar = { title: 'Photo' };
+    const result = mergeMetadata(baseExif, sidecar, 'CC-BY-SA-4.0');
+    expect(result.license).toBe('CC-BY-SA-4.0');
+  });
+
+  it('sidecar license overrides default license', () => {
+    const sidecar = { title: 'Photo', license: 'CC0-1.0' };
+    const result = mergeMetadata(baseExif, sidecar, 'all-rights-reserved');
+    expect(result.license).toBe('CC0-1.0');
+  });
+
+  it('empty sidecar license does not override default', () => {
+    const sidecar = { title: 'Photo', license: '' };
+    const result = mergeMetadata(baseExif, sidecar, 'CC-BY-4.0');
+    expect(result.license).toBe('CC-BY-4.0');
+  });
+
+  it('supports custom freeform license text in sidecar', () => {
+    const sidecar = { title: 'Photo', license: 'Licensed under my special terms' };
+    const result = mergeMetadata(baseExif, sidecar);
+    expect(result.license).toBe('Licensed under my special terms');
+  });
 });

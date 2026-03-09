@@ -5,8 +5,13 @@ import type { Gallery, LocationPage } from './types.js';
  * Collect all unique locations across all galleries and build a LocationPage for each.
  * Photos are sorted by date descending within each location.
  */
-export function buildLocationPages(galleries: readonly Gallery[]): readonly LocationPage[] {
-  const locationMap = new Map<string, { photo: typeof galleries[number]['photos'][number]; gallery: Gallery }[]>();
+export function buildLocationPages(
+  galleries: readonly Gallery[],
+): readonly LocationPage[] {
+  const locationMap = new Map<
+    string,
+    { photo: (typeof galleries)[number]['photos'][number]; gallery: Gallery }[]
+  >();
 
   for (const gallery of galleries) {
     for (const photo of gallery.photos) {

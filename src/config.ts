@@ -14,6 +14,8 @@ const DEFAULT_IMAGE_CONFIG: ImageConfig = {
   webp_quality: 85,
 };
 
+const DEFAULT_LICENSE = 'all-rights-reserved';
+
 const DEFAULT_SITE_CONFIG: SiteConfig = {
   base_url: 'http://localhost:3000',
   base_path: '',
@@ -21,6 +23,7 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
   theme: 'editorial',
   recent_shots_count: 12,
   images: DEFAULT_IMAGE_CONFIG,
+  license: DEFAULT_LICENSE,
 };
 
 const DEFAULT_GALLERY_CONFIG: GalleryConfig = {
@@ -32,6 +35,7 @@ interface RawSiteConfig {
   title?: string;
   theme?: string;
   recent_shots_count?: number;
+  license?: string;
   images?: {
     breakpoints?: number[];
     webp_quality?: number;
@@ -103,6 +107,7 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     theme: raw.theme ?? DEFAULT_SITE_CONFIG.theme,
     recent_shots_count:
       raw.recent_shots_count ?? DEFAULT_SITE_CONFIG.recent_shots_count,
+    license: raw.license ?? DEFAULT_LICENSE,
     images: {
       breakpoints: raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
       webp_quality:

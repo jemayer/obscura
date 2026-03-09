@@ -27,6 +27,7 @@
        data-pswp-location="{{ photo.metadata.location }}"
        data-pswp-camera="{{ photo.metadata.camera }}"
        data-pswp-date="{% if photo.metadata.date %}{{ photo.metadata.date | dateformat }}{% endif %}"
+       data-pswp-license="{{ photo.metadata.license }}"
        data-pswp-permalink="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | url }}">
       {% if photo.variants.length %}
       <img src="{{ (photo.variants | bestvariant(800)).path | url }}"

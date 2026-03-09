@@ -22,18 +22,12 @@ function emptyCacheManifest(): CacheManifest {
   return { entries: {} };
 }
 
-async function loadCacheManifest(
-  projectDir: string,
-): Promise<CacheManifest> {
+async function loadCacheManifest(projectDir: string): Promise<CacheManifest> {
   const cachePath = resolve(projectDir, CACHE_DIR, CACHE_FILENAME);
   try {
     const content = await readFile(cachePath, 'utf-8');
     const parsed: unknown = JSON.parse(content);
-    if (
-      typeof parsed === 'object' &&
-      parsed !== null &&
-      'entries' in parsed
-    ) {
+    if (typeof parsed === 'object' && parsed !== null && 'entries' in parsed) {
       return parsed as CacheManifest;
     }
     return emptyCacheManifest();
@@ -116,12 +110,7 @@ export async function processPhotoWithCache(
     };
   }
 
-  const result = await processPhoto(
-    sourcePath,
-    gallerySlug,
-    distDir,
-    config,
-  );
+  const result = await processPhoto(sourcePath, gallerySlug, distDir, config);
 
   return { result, fromCache: false };
 }

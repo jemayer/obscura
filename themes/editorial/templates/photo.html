@@ -15,6 +15,26 @@
 <meta property="og:image" content="{{ (photo.variants | bestvariant(1200)).path | absurl }}">
 {% endif %}
 <meta property="og:url" content="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | absurl }}">
+{% if photo.metadata.license | licenseurl %}
+<link rel="license" href="{{ photo.metadata.license | licenseurl }}">
+{% endif %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "name": {{ (photo.metadata.title or (photo.slug | bareslug)) | dump | safe }},
+  "contentUrl": "{% if photo.variants.length %}{{ (photo.variants | bestvariant(2400)).path | absurl }}{% endif %}"
+  {%- if photo.metadata.caption %},
+  "description": {{ photo.metadata.caption | dump | safe }}
+  {%- endif %}
+  {%- if photo.metadata.license | licenseurl %},
+  "license": "{{ photo.metadata.license | licenseurl }}"
+  {%- endif %}
+  {%- if photo.metadata.license %},
+  "copyrightNotice": {{ (photo.metadata.license | licenselabel) | dump | safe }}
+  {%- endif %}
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -81,6 +101,18 @@
             {% for tag in photo.metadata.tags %}
             <a class="tag" href="{{ ('/tags/' + (tag | slugifytag) + '/') | url }}">{{ tag }}</a>
             {% endfor %}
+          </span>
+        </li>
+        {% endif %}
+        {% if photo.metadata.license %}
+        <li>
+          <span class="photo-meta__label">License</span>
+          <span class="photo-meta__value">
+            {% if photo.metadata.license | licenseurl %}
+            <a href="{{ photo.metadata.license | licenseurl }}" rel="license">{{ photo.metadata.license | licenselabel }}</a>
+            {% else %}
+            {{ photo.metadata.license | licenselabel }}
+            {% endif %}
           </span>
         </li>
         {% endif %}

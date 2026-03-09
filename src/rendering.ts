@@ -12,7 +12,13 @@ import type {
   BuildContext,
   CrossReferenceGraph,
 } from './types.js';
-import { prefixedSrcset, sizes, bestVariant, responsiveImg } from './responsive.js';
+import { LICENSE_LABELS, LICENSE_URLS } from './types.js';
+import {
+  prefixedSrcset,
+  sizes,
+  bestVariant,
+  responsiveImg,
+} from './responsive.js';
 import { slugifyTag, slugifyLocation } from './slugs.js';
 
 // ---------------------------------------------------------------------------
@@ -71,18 +77,25 @@ export function createRenderingEngine(
     const y = String(date.getFullYear());
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
-    return format
-      .replace('YYYY', y)
-      .replace('MM', m)
-      .replace('DD', d);
+    return format.replace('YYYY', y).replace('MM', m).replace('DD', d);
   });
 
   // Human-readable date: {{ date | datereadable }}  → "15 November 2024"
   env.addFilter('datereadable', (date: unknown) => {
     if (!(date instanceof Date)) return '';
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return `${String(date.getDate())} ${months[date.getMonth()] ?? ''} ${String(date.getFullYear())}`;
   });
@@ -165,6 +178,18 @@ export function createRenderingEngine(
     return new nunjucks.runtime.SafeString(str);
   });
 
+  // License label: {{ "CC-BY-4.0" | licenselabel }} → "CC BY 4.0"
+  env.addFilter('licenselabel', (license: unknown) => {
+    if (typeof license !== 'string') return '';
+    return LICENSE_LABELS[license] ?? license;
+  });
+
+  // License URL: {{ "CC-BY-4.0" | licenseurl }} → "https://creativecommons.org/licenses/by/4.0/"
+  env.addFilter('licenseurl', (license: unknown) => {
+    if (typeof license !== 'string') return '';
+    return LICENSE_URLS[license] ?? '';
+  });
+
   return { env, siteConfig };
 }
 
@@ -223,7 +248,11 @@ export async function renderHomepage(
     .slice(0, engine.siteConfig.recent_shots_count);
 
   const processedContent = homepageContent
-    ? replaceShortcodes(homepageContent, buildPhotoIndex(galleries), engine.siteConfig.base_path)
+    ? replaceShortcodes(
+        homepageContent,
+        buildPhotoIndex(galleries),
+        engine.siteConfig.base_path,
+      )
     : undefined;
 
   await renderToFile(
@@ -289,7 +318,13 @@ export async function renderBlogIndex(
   posts: readonly BlogPost[],
   distDir: string,
 ): Promise<void> {
-  await renderToFile(engine, 'blog-index.html', { posts }, distDir, 'blog/index.html');
+  await renderToFile(
+    engine,
+    'blog-index.html',
+    { posts },
+    distDir,
+    'blog/index.html',
+  );
 }
 
 /** Render a single blog post (/blog/<slug>/) */
@@ -301,9 +336,19 @@ export async function renderBlogPost(
 ): Promise<void> {
   // Replace shortcodes in rendered content with photo cards
   const photoIndex = buildPhotoIndex(galleries);
-  const content = replaceShortcodes(post.renderedContent, photoIndex, engine.siteConfig.base_path);
+  const content = replaceShortcodes(
+    post.renderedContent,
+    photoIndex,
+    engine.siteConfig.base_path,
+  );
   const postWithCards = { ...post, renderedContent: content };
-  await renderToFile(engine, 'blog-post.html', { post: postWithCards }, distDir, `blog/${post.slug}/index.html`);
+  await renderToFile(
+    engine,
+    'blog-post.html',
+    { post: postWithCards },
+    distDir,
+    `blog/${post.slug}/index.html`,
+  );
 }
 
 /** Render a simple page (/<slug>/) */
@@ -314,9 +359,19 @@ export async function renderPage(
   distDir: string,
 ): Promise<void> {
   const photoIndex = buildPhotoIndex(galleries);
-  const content = replaceShortcodes(page.renderedContent, photoIndex, engine.siteConfig.base_path);
+  const content = replaceShortcodes(
+    page.renderedContent,
+    photoIndex,
+    engine.siteConfig.base_path,
+  );
   const pageWithCards = { ...page, renderedContent: content };
-  await renderToFile(engine, 'page.html', { page: pageWithCards }, distDir, `${page.slug}/index.html`);
+  await renderToFile(
+    engine,
+    'page.html',
+    { page: pageWithCards },
+    distDir,
+    `${page.slug}/index.html`,
+  );
 }
 
 /** Render the tag index (/tags/) */
@@ -325,7 +380,13 @@ export async function renderTagIndex(
   tagPages: readonly TagPage[],
   distDir: string,
 ): Promise<void> {
-  await renderToFile(engine, 'tag-index.html', { tag_pages: tagPages }, distDir, 'tags/index.html');
+  await renderToFile(
+    engine,
+    'tag-index.html',
+    { tag_pages: tagPages },
+    distDir,
+    'tags/index.html',
+  );
 }
 
 /** Render a single tag page (/tags/<slug>/) */
@@ -349,7 +410,13 @@ export async function renderLocationIndex(
   locationPages: readonly LocationPage[],
   distDir: string,
 ): Promise<void> {
-  await renderToFile(engine, 'location-index.html', { location_pages: locationPages }, distDir, 'locations/index.html');
+  await renderToFile(
+    engine,
+    'location-index.html',
+    { location_pages: locationPages },
+    distDir,
+    'locations/index.html',
+  );
 }
 
 /** Render a single location page (/locations/<slug>/) */
@@ -394,7 +461,13 @@ export async function renderSitemap(
   await renderToFile(
     engine,
     'sitemap.xml',
-    { galleries, posts, pages, tag_pages: tagPages, location_pages: locationPages },
+    {
+      galleries,
+      posts,
+      pages,
+      tag_pages: tagPages,
+      location_pages: locationPages,
+    },
     distDir,
     'sitemap.xml',
   );
@@ -412,7 +485,15 @@ export async function renderAll(
   context: BuildContext,
   distDir: string,
 ): Promise<void> {
-  const { galleries, posts, pages, crossReferences, tagPages, locationPages, homepageContent } = context;
+  const {
+    galleries,
+    posts,
+    pages,
+    crossReferences,
+    tagPages,
+    locationPages,
+    homepageContent,
+  } = context;
 
   // Homepage
   await renderHomepage(engine, galleries, homepageContent, distDir);
@@ -518,8 +599,11 @@ function replaceShortcodes(
   basePath: string,
 ): string {
   // Split on <pre>/<code> blocks to avoid replacing shortcodes inside them
-  const parts = html.split(/(<pre[\s>][\s\S]*?<\/pre>|<code[\s>][\s\S]*?<\/code>)/g);
-  const shortcodeRe = /(?:<p>)?\{\{(?:&lt;|&#x3C;)\s*photo\s+(?:&quot;|&#x22;|")([^"&]+)(?:&quot;|&#x22;|")\s*(?:&gt;|&#x3E;|>)\}\}(?:<\/p>)?/g;
+  const parts = html.split(
+    /(<pre[\s>][\s\S]*?<\/pre>|<code[\s>][\s\S]*?<\/code>)/g,
+  );
+  const shortcodeRe =
+    /(?:<p>)?\{\{(?:&lt;|&#x3C;)\s*photo\s+(?:&quot;|&#x22;|")([^"&]+)(?:&quot;|&#x22;|")\s*(?:&gt;|&#x3E;|>)\}\}(?:<\/p>)?/g;
 
   const result = parts.map((part, i) => {
     // Odd-indexed parts are <pre>/<code> blocks — leave them alone
@@ -537,7 +621,11 @@ function replaceShortcodes(
 /**
  * Render a photo card for use inside blog post content.
  */
-function renderPhotoCard(photo: Photo, gallery: Gallery, basePath: string): string {
+function renderPhotoCard(
+  photo: Photo,
+  gallery: Gallery,
+  basePath: string,
+): string {
   const best = bestVariant(photo.variants, 800);
   if (!best) return '';
 
@@ -555,12 +643,18 @@ function renderPhotoCard(photo: Photo, gallery: Gallery, basePath: string): stri
     `      <img src="${basePath}${best.path}" srcset="${prefixedSrcset(photo.variants, basePath)}" sizes="(max-width: 42rem) 100vw, 42rem" alt="${alt}" loading="lazy" decoding="async">`,
     '    </div>',
     '    <div class="photo-card__info">',
-    title ? `      <span class="photo-card__title">${escapeAttr(title)}</span>` : '',
-    meta.length ? `      <span class="photo-card__meta">${meta.join(' · ')}</span>` : '',
+    title
+      ? `      <span class="photo-card__title">${escapeAttr(title)}</span>`
+      : '',
+    meta.length
+      ? `      <span class="photo-card__meta">${meta.join(' · ')}</span>`
+      : '',
     '    </div>',
     '  </a>',
     '</div>',
-  ].filter(Boolean).join('\n');
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
 
 function escapeAttr(str: string): string {

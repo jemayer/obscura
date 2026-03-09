@@ -17,15 +17,14 @@ interface RawSidecar {
   location?: string;
   caption?: string;
   tags?: string[];
+  license?: string;
 }
 
 function isSidecar(value: unknown): value is RawSidecar {
   return typeof value === 'object' && value !== null;
 }
 
-async function loadSidecar(
-  photoPath: string,
-): Promise<RawSidecar | undefined> {
+async function loadSidecar(photoPath: string): Promise<RawSidecar | undefined> {
   const sidecarPath = sidecarPathForPhoto(photoPath);
   try {
     const content = await readFile(sidecarPath, 'utf-8');
@@ -41,7 +40,9 @@ async function loadSidecar(
 
 /** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a default, not a real date. */
 function isEpochDate(date: Date): boolean {
-  return date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1;
+  return (
+    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
+  );
 }
 
 function parseDate(value: string | Date | undefined): Date | undefined {
@@ -61,6 +62,7 @@ function nonEmpty(value: string | undefined): string | undefined {
 export function mergeMetadata(
   exif: ExifData,
   sidecar: RawSidecar | undefined,
+  defaultLicense: string = 'all-rights-reserved',
 ): PhotoMetadata {
   const sidecarDate = sidecar ? parseDate(sidecar.date) : undefined;
   const sidecarCamera = sidecar ? nonEmpty(sidecar.camera) : undefined;
@@ -80,16 +82,19 @@ export function mergeMetadata(
     location: string;
     caption: string;
     tags: readonly string[];
+    license: string;
   } = {
     title: sidecar?.title ?? '',
     location: sidecar?.location ?? '',
     caption: sidecar?.caption ?? '',
     tags: sidecar?.tags ?? [],
+    license: nonEmpty(sidecar?.license) ?? defaultLicense,
   };
 
   // Sidecar wins on conflict; filter out epoch dates from EXIF too
   const rawDate = sidecarDate ?? exif.date;
-  const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
+  const date =
+    rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = sidecarCamera ?? exif.camera;
   const lens = sidecarLens ?? exif.lens;
   const focal_length = sidecar?.focal_length ?? exif.focal_length;
@@ -115,7 +120,8 @@ export function mergeMetadata(
 export async function loadAndMergeMetadata(
   photoPath: string,
   exif: ExifData,
+  defaultLicense: string = 'all-rights-reserved',
 ): Promise<PhotoMetadata> {
   const sidecar = await loadSidecar(photoPath);
-  return mergeMetadata(exif, sidecar);
+  return mergeMetadata(exif, sidecar, defaultLicense);
 }

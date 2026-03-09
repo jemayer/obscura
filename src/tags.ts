@@ -5,8 +5,13 @@ import type { Gallery, TagPage } from './types.js';
  * Collect all unique tags across all galleries and build a TagPage for each.
  * Photos are sorted by date descending within each tag.
  */
-export function buildTagPages(galleries: readonly Gallery[]): readonly TagPage[] {
-  const tagMap = new Map<string, { photo: typeof galleries[number]['photos'][number]; gallery: Gallery }[]>();
+export function buildTagPages(
+  galleries: readonly Gallery[],
+): readonly TagPage[] {
+  const tagMap = new Map<
+    string,
+    { photo: (typeof galleries)[number]['photos'][number]; gallery: Gallery }[]
+  >();
 
   for (const gallery of galleries) {
     for (const photo of gallery.photos) {

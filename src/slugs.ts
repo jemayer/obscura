@@ -42,10 +42,7 @@ export function slugifyLocation(location: string): string {
 /**
  * Build a fully namespaced slug: <gallery-slug>/<photo-slug>
  */
-export function namespacedSlug(
-  gallerySlug: string,
-  filename: string,
-): string {
+export function namespacedSlug(gallerySlug: string, filename: string): string {
   return `${gallerySlug}/${slugifyFilename(filename)}`;
 }
 

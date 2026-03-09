@@ -2,9 +2,10 @@ import { resolve } from 'node:path';
 import * as p from '@clack/prompts';
 import sharp from 'sharp';
 import terminalImage from 'terminal-image';
-import { loadGalleryConfig } from './config.js';
+import { loadGalleryConfig, loadSiteConfig } from './config.js';
 import { generateSidecars } from './sidecar.js';
 import type { GalleryEntry } from './types.js';
+import { KNOWN_LICENSE_TYPES, LICENSE_LABELS } from './types.js';
 import {
   scanGallery,
   filterTargets,
@@ -67,12 +68,14 @@ async function promptForEdits(
   target: SidecarEditTarget,
   knownTags: ReadonlySet<string>,
   knownLocations: ReadonlySet<string>,
+  defaultLicense: string,
 ): Promise<SidecarEdits | 'skip' | 'quit'> {
   const edits: {
     title?: string;
     location?: string;
     caption?: string;
     tags?: readonly string[];
+    license?: string;
   } = {};
 
   const titleResult = await p.text({
@@ -91,7 +94,10 @@ async function promptForEdits(
     const KEEP_CURRENT = '__keep__';
     const locationOptions: { value: string; label: string }[] = [];
 
-    locationOptions.push({ value: KEEP_CURRENT, label: `Keep current ("${target.currentValues.location || '(empty)'}")` });
+    locationOptions.push({
+      value: KEEP_CURRENT,
+      label: `Keep current ("${target.currentValues.location || '(empty)'}")`,
+    });
     for (const loc of sortedLocations) {
       locationOptions.push({ value: loc, label: loc });
     }
@@ -100,9 +106,11 @@ async function promptForEdits(
     const locationSelect = await p.select({
       message: `Location (current: "${target.currentValues.location}")`,
       options: locationOptions,
-      initialValue: target.currentValues.location !== '' && knownLocations.has(target.currentValues.location)
-        ? target.currentValues.location
-        : KEEP_CURRENT,
+      initialValue:
+        target.currentValues.location !== '' &&
+        knownLocations.has(target.currentValues.location)
+          ? target.currentValues.location
+          : KEEP_CURRENT,
     });
     if (p.isCancel(locationSelect)) return 'quit';
 
@@ -186,12 +194,54 @@ async function promptForEdits(
     edits.tags = finalTags;
   }
 
+  // --- License editing ---
+  const currentLicense = target.currentValues.license ?? defaultLicense;
+  const KEEP_LICENSE = '__keep__';
+  const CUSTOM_LICENSE = '__custom__';
+  const licenseOptions: { value: string; label: string }[] = [
+    {
+      value: KEEP_LICENSE,
+      label: `Keep current (${LICENSE_LABELS[currentLicense] ?? currentLicense})`,
+    },
+  ];
+  for (const lt of KNOWN_LICENSE_TYPES) {
+    if (lt !== currentLicense) {
+      licenseOptions.push({ value: lt, label: LICENSE_LABELS[lt] ?? lt });
+    }
+  }
+  licenseOptions.push({ value: CUSTOM_LICENSE, label: 'Custom license text' });
+
+  const licenseSelect = await p.select({
+    message: `License (current: ${LICENSE_LABELS[currentLicense] ?? currentLicense})`,
+    options: licenseOptions,
+    initialValue: KEEP_LICENSE,
+  });
+  if (p.isCancel(licenseSelect)) return 'quit';
+
+  if (licenseSelect === CUSTOM_LICENSE) {
+    const customLicense = await p.text({
+      message: 'Enter custom license text',
+      placeholder: 'e.g. "Licensed under my terms"',
+      defaultValue: '',
+    });
+    if (p.isCancel(customLicense)) return 'quit';
+    if (customLicense !== '' && customLicense !== currentLicense) {
+      edits.license = customLicense;
+    }
+  } else if (
+    licenseSelect !== KEEP_LICENSE &&
+    licenseSelect !== currentLicense
+  ) {
+    edits.license = licenseSelect;
+  }
+
   // If no edits were made, treat as skip
   if (
     edits.title === undefined &&
     edits.location === undefined &&
     edits.caption === undefined &&
-    edits.tags === undefined
+    edits.tags === undefined &&
+    edits.license === undefined
   ) {
     return 'skip';
   }
@@ -203,6 +253,17 @@ async function main(): Promise<void> {
   const projectDir = resolve(process.cwd());
 
   p.intro('Obscura — sidecar editor');
+
+  // Load site config (for default license)
+  let siteConfig;
+  try {
+    siteConfig = await loadSiteConfig(projectDir);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'unknown error';
+    p.cancel(`Could not load site config: ${msg}`);
+    process.exitCode = 1;
+    return;
+  }
 
   // Load gallery config
   let galleryConfig;
@@ -292,7 +353,11 @@ async function main(): Promise<void> {
 
   // Filter selection
   const counts = countByFilter(allTargets);
-  const filterOptions: { value: EditableField | 'all'; label: string; hint?: string }[] = [
+  const filterOptions: {
+    value: EditableField | 'all';
+    label: string;
+    hint?: string;
+  }[] = [
     { value: 'all', label: 'All photos', hint: String(counts.all) },
     { value: 'title', label: 'Missing title', hint: String(counts.title) },
     {
@@ -335,7 +400,12 @@ async function main(): Promise<void> {
     await showPreview(target.photoPath);
     p.log.info(buildContextLine(target));
 
-    const result = await promptForEdits(target, knownTags, knownLocations);
+    const result = await promptForEdits(
+      target,
+      knownTags,
+      knownLocations,
+      siteConfig.license,
+    );
 
     if (result === 'quit') {
       p.cancel('Cancelled.');

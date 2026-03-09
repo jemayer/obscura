@@ -8,7 +8,12 @@ import rehypeStringify from 'rehype-stringify';
 import { parse as parseYaml } from 'yaml';
 import type { Root, Element } from 'hast';
 import { visit } from 'unist-util-visit';
-import type { BlogPost, BlogPostFrontmatter, Page, PageFrontmatter } from './types.js';
+import type {
+  BlogPost,
+  BlogPostFrontmatter,
+  Page,
+  PageFrontmatter,
+} from './types.js';
 import type { SlugIndex } from './slugs.js';
 
 // ---------------------------------------------------------------------------
@@ -99,15 +104,10 @@ function isRawPageFrontmatter(value: unknown): value is RawPageFrontmatter {
   return typeof value === 'object' && value !== null;
 }
 
-function parsePageFrontmatter(
-  raw: string,
-  filePath: string,
-): PageFrontmatter {
+function parsePageFrontmatter(raw: string, filePath: string): PageFrontmatter {
   const parsed: unknown = parseYaml(raw);
   if (!isRawPageFrontmatter(parsed) || !parsed.title) {
-    throw new Error(
-      `Invalid frontmatter in ${filePath}: title is required`,
-    );
+    throw new Error(`Invalid frontmatter in ${filePath}: title is required`);
   }
   return { title: parsed.title };
 }
@@ -142,7 +142,10 @@ function createMarkdownProcessor(basePath: string) {
     .use(rehypeStringify, { allowDangerousHtml: true });
 }
 
-async function renderMarkdown(content: string, basePath: string): Promise<string> {
+async function renderMarkdown(
+  content: string,
+  basePath: string,
+): Promise<string> {
   const processor = createMarkdownProcessor(basePath);
   const result = await processor.process(content);
   return String(result);
@@ -220,7 +223,10 @@ export async function loadAllBlogPosts(
 // Page loading
 // ---------------------------------------------------------------------------
 
-export async function loadPage(filePath: string, basePath: string): Promise<Page> {
+export async function loadPage(
+  filePath: string,
+  basePath: string,
+): Promise<Page> {
   const raw = await readFile(filePath, 'utf-8');
   const { frontmatterRaw, body } = extractFrontmatterRaw(raw);
   const frontmatter = parsePageFrontmatter(frontmatterRaw, filePath);
@@ -235,7 +241,10 @@ export async function loadPage(filePath: string, basePath: string): Promise<Page
   };
 }
 
-export async function loadAllPages(pagesDir: string, basePath: string): Promise<Page[]> {
+export async function loadAllPages(
+  pagesDir: string,
+  basePath: string,
+): Promise<Page[]> {
   let entries: string[];
   try {
     const dirEntries = await readdir(pagesDir);
@@ -262,7 +271,10 @@ export async function loadAllPages(pagesDir: string, basePath: string): Promise<
  * Load optional homepage content from content/pages/index.md.
  * Returns the rendered HTML string, or undefined if the file doesn't exist.
  */
-export async function loadHomepageContent(pagesDir: string, basePath: string): Promise<string | undefined> {
+export async function loadHomepageContent(
+  pagesDir: string,
+  basePath: string,
+): Promise<string | undefined> {
   const filePath = resolve(pagesDir, 'index.md');
   try {
     const raw = await readFile(filePath, 'utf-8');

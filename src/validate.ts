@@ -76,7 +76,9 @@ async function main(): Promise<void> {
       photosDir,
       galleryConfig.galleries,
     );
-    console.log(`  ✓ galleries (${String(gallerySlugs.length)} configured, ${String(slugIndex.size)} photos indexed)`);
+    console.log(
+      `  ✓ galleries (${String(gallerySlugs.length)} configured, ${String(slugIndex.size)} photos indexed)`,
+    );
     if (galleryWarnings.length > 0) {
       warnings.push(formatExifWarnings(galleryWarnings));
     }
@@ -90,7 +92,10 @@ async function main(): Promise<void> {
   const postsDir = resolve(projectDir, 'content', 'posts');
   try {
     // We need slugIndex for shortcode validation — re-load if galleries succeeded
-    const { slugIndex } = await loadGalleries(photosDir, galleryConfig.galleries);
+    const { slugIndex } = await loadGalleries(
+      photosDir,
+      galleryConfig.galleries,
+    );
     const posts = await loadAllBlogPosts(postsDir, slugIndex, '');
     console.log(`  ✓ blog posts (${String(posts.length)})`);
   } catch (error: unknown) {

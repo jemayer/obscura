@@ -70,12 +70,15 @@ export function formatShutterSpeed(seconds: number): string {
 
 /** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a EXIF default, not a real date. */
 function isEpochDate(date: Date): boolean {
-  return date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1;
+  return (
+    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
+  );
 }
 
 function buildExifData(parsed: ExifrOutput): ExifData {
   const rawDate = parsed.DateTimeOriginal ?? parsed.CreateDate;
-  const date = rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
+  const date =
+    rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
   const focal_length = parsed.FocalLength;

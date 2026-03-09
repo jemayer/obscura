@@ -18,6 +18,7 @@ async function loadPhotosForGallery(
   galleryDir: string,
   slugIndex: SlugIndex,
   warnings: ExifWarning[],
+  defaultLicense: string,
 ): Promise<Photo[]> {
   let entries: string[];
   try {
@@ -38,7 +39,11 @@ async function loadPhotosForGallery(
       warnings.push(exifResult.warning);
     }
 
-    const metadata = await loadAndMergeMetadata(sourcePath, exifResult.data);
+    const metadata = await loadAndMergeMetadata(
+      sourcePath,
+      exifResult.data,
+      defaultLicense,
+    );
 
     photos.push({
       slug,
@@ -57,6 +62,7 @@ async function loadPhotosForGallery(
 export async function loadGalleries(
   photosDir: string,
   galleryEntries: readonly GalleryEntry[],
+  defaultLicense: string = 'all-rights-reserved',
 ): Promise<LoadGalleriesResult> {
   const slugIndex = new SlugIndex();
   const warnings: ExifWarning[] = [];
@@ -69,6 +75,7 @@ export async function loadGalleries(
       galleryDir,
       slugIndex,
       warnings,
+      defaultLicense,
     );
 
     const gallery: Gallery = {

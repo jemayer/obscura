@@ -5,7 +5,11 @@ import { loadSiteConfig, loadGalleryConfig } from './config.js';
 import { generateAllSidecars } from './sidecar.js';
 import { validateAllGalleryFormats } from './image-validation.js';
 import { loadGalleries } from './gallery.js';
-import { loadAllBlogPosts, loadAllPages, loadHomepageContent } from './markdown.js';
+import {
+  loadAllBlogPosts,
+  loadAllPages,
+  loadHomepageContent,
+} from './markdown.js';
 import { buildCrossReferenceGraph } from './crossref.js';
 import { buildTagPages } from './tags.js';
 import { buildLocationPages } from './locations.js';
@@ -93,20 +97,32 @@ export async function build(
   }
 
   // -- 6. Load galleries (EXIF + sidecars → metadata, slug index) --
-  const { galleries, slugIndex, warnings: galleryWarnings } = await loadGalleries(
+  const {
+    galleries,
+    slugIndex,
+    warnings: galleryWarnings,
+  } = await loadGalleries(
     photosDir,
     galleryConfig.galleries,
+    siteConfig.license,
   );
   if (galleryWarnings.length > 0) {
     warnings.push(formatExifWarnings(galleryWarnings));
   }
 
   // -- 7. Load blog posts (with shortcode resolution) --
-  const posts = await loadAllBlogPosts(postsDir, slugIndex, siteConfig.base_path);
+  const posts = await loadAllBlogPosts(
+    postsDir,
+    slugIndex,
+    siteConfig.base_path,
+  );
 
   // -- 8. Load pages and optional homepage content --
   const pages = await loadAllPages(pagesDir, siteConfig.base_path);
-  const homepageContent = await loadHomepageContent(pagesDir, siteConfig.base_path);
+  const homepageContent = await loadHomepageContent(
+    pagesDir,
+    siteConfig.base_path,
+  );
 
   // -- 9. Build cross-reference graph --
   const crossReferences = buildCrossReferenceGraph(posts);
@@ -188,7 +204,10 @@ export async function build(
   await renderAll(engine, buildContext, distDir);
 
   // -- 14. Count output --
-  const photoCount = galleriesWithImages.reduce((sum, g) => sum + g.photos.length, 0);
+  const photoCount = galleriesWithImages.reduce(
+    (sum, g) => sum + g.photos.length,
+    0,
+  );
   // Pages: homepage + gallery index + galleries + photos + blog index + posts + pages + 404 + feed + sitemap
   const listedGalleries = galleriesWithImages.filter((g) => g.listed);
   const pageCount =

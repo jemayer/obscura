@@ -15,6 +15,7 @@ export interface SidecarSnapshot {
   readonly location: string;
   readonly caption: string;
   readonly tags: readonly string[];
+  readonly license?: string;
   readonly camera?: string;
   readonly date?: Date;
   readonly lens?: string;
@@ -37,6 +38,7 @@ export interface SidecarEdits {
   readonly location?: string;
   readonly caption?: string;
   readonly tags?: readonly string[];
+  readonly license?: string;
 }
 
 function parseDate(value: unknown): Date | undefined {
@@ -68,11 +70,13 @@ export function loadSidecarSnapshot(content: string): SidecarSnapshot {
   const lens = asString(data['lens']);
   const date = parseDate(data['date']);
 
+  const license = asString(data['license']);
   const base = {
     title: asString(data['title']),
     location: asString(data['location']),
     caption: asString(data['caption']),
     tags: asStringArray(data['tags']),
+    ...(license ? { license } : {}),
   };
 
   const focal_length =
@@ -170,6 +174,9 @@ export async function writeSidecarEdits(
   }
   if (edits.tags !== undefined) {
     doc.set('tags', [...edits.tags]);
+  }
+  if (edits.license !== undefined) {
+    doc.set('license', edits.license);
   }
 
   await writeFile(sidecarPath, doc.toString(), 'utf-8');
