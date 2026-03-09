@@ -1486,6 +1486,14 @@ a.tag:hover {
    Social Links
    -------------------------------------------------------------------------- */
 
+.social-links__heading {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+}
+
 .social-links {
   display: flex;
   gap: var(--space-lg);
