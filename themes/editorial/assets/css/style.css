@@ -1059,6 +1059,10 @@ a.tag:hover {
   break-after: column;
 }
 
+.homepage-intro p:only-of-type {
+  column-span: all;
+}
+
 .homepage-intro p:last-child {
   margin-bottom: 0;
 }
