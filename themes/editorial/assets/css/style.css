@@ -1293,13 +1293,21 @@ a.tag:hover {
     transform-origin: center;
   }
 
-  /* X state */
+  /* X state — invert color to contrast against curtain */
+  .nav-toggle[aria-expanded="true"] .nav-toggle__line {
+    background: var(--color-bg);
+  }
+
   .nav-toggle[aria-expanded="true"] .nav-toggle__line:first-child {
     transform: translateY(3.75px) rotate(45deg);
   }
 
   .nav-toggle[aria-expanded="true"] .nav-toggle__line:last-child {
     transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  :root[data-theme="dark"] .nav-toggle[aria-expanded="true"] .nav-toggle__line {
+    background: var(--color-text);
   }
 
   /* Overlay nav */
@@ -1448,6 +1456,10 @@ a.tag:hover {
 
     :root:not([data-theme="light"]) .site-nav .theme-toggle {
       color: var(--color-text);
+    }
+
+    :root:not([data-theme="light"]) .nav-toggle[aria-expanded="true"] .nav-toggle__line {
+      background: var(--color-text);
     }
   }
 
