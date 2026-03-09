@@ -1055,7 +1055,7 @@ a.tag:hover {
   break-inside: avoid;
 }
 
-.homepage-intro p:first-of-type {
+.homepage-intro p:first-of-type:not(:only-of-type) {
   break-after: column;
 }
 
