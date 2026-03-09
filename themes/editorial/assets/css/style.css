@@ -399,12 +399,12 @@ a:hover {
    Gallery Index (list of galleries)
    -------------------------------------------------------------------------- */
 
-.gallery-index-content {
+.gallery-index-content.page-body {
   margin-bottom: var(--space-xl);
   max-width: none;
 }
 
-.gallery-content {
+.gallery-content.page-body {
   max-width: none;
 }
 
