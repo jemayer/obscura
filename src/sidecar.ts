@@ -38,7 +38,7 @@ function formatDate(date: Date): string {
 
 function buildSidecarTemplate(exif: ExifData): SidecarTemplate {
   return {
-    title: '',
+    title: 'Untitled',
     date: exif.date ? formatDate(exif.date) : null,
     camera: exif.camera ?? null,
     lens: exif.lens ?? null,
