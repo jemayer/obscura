@@ -9,7 +9,7 @@
 <div class="content content--full">
   <h1 class="page-title">{{ gallery.title }}</h1>
   {% if gallery.renderedContent %}
-  <div class="gallery-content prose">
+  <div class="gallery-content page-body">
     {{ gallery.renderedContent | safe_html }}
   </div>
   {% elif gallery.description %}
