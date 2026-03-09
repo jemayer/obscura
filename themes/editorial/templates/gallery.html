@@ -20,7 +20,7 @@
   <div class="gallery-grid__toolbar">
     {% include "partials/layout-toggle.html" %}
   </div>
-  <div class="gallery-grid" data-default-layout="{{ gallery.layout or 'grid' }}" data-lightbox-fields="{{ site.lightbox_display_fields | join(',') }}">
+  <div class="gallery-grid" data-default-layout="{{ gallery.layout or site.gallery_default_layout }}" data-lightbox-fields="{{ site.lightbox_display_fields | join(',') }}">
     {% for photo in gallery.photos %}
     <a class="gallery-item"
        href="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | url }}"

@@ -47,6 +47,8 @@ export const ALL_DISPLAY_FIELDS: readonly DisplayField[] = [
   'license',
 ] as const;
 
+export type GalleryLayout = 'grid' | 'masonry';
+
 export interface SiteConfig {
   readonly base_url: string;
   readonly base_path: string;
@@ -55,6 +57,7 @@ export interface SiteConfig {
   readonly recent_shots_count: number;
   readonly images: ImageConfig;
   readonly license: string;
+  readonly gallery_default_layout: GalleryLayout;
   readonly photo_display_fields: readonly DisplayField[];
   readonly lightbox_display_fields: readonly DisplayField[];
 }
@@ -68,7 +71,7 @@ export interface GalleryEntry {
   readonly title: string;
   readonly description?: string;
   readonly listed: boolean;
-  readonly layout?: 'grid' | 'masonry' | undefined;
+  readonly layout?: GalleryLayout | undefined;
 }
 
 export interface GalleryConfig {
@@ -173,7 +176,7 @@ export interface Gallery {
   readonly title: string;
   readonly description?: string;
   readonly listed: boolean;
-  readonly layout?: 'grid' | 'masonry' | undefined;
+  readonly layout?: GalleryLayout | undefined;
   readonly photos: readonly Photo[];
   /** Rendered HTML from an optional index.md in the gallery folder. */
   readonly renderedContent?: string | undefined;

@@ -13,7 +13,7 @@
   <div class="gallery-grid__toolbar">
     {% include "partials/layout-toggle.html" %}
   </div>
-  <div class="gallery-grid" data-default-layout="grid" data-lightbox-fields="{{ site.lightbox_display_fields | join(',') }}">
+  <div class="gallery-grid" data-default-layout="{{ site.gallery_default_layout }}" data-lightbox-fields="{{ site.lightbox_display_fields | join(',') }}">
     {% for item in tag_page.photos %}
     <a class="gallery-item"
        href="{{ ('/photography/' + item.gallery.slug + '/' + (item.photo.slug | bareslug) + '/') | url }}"

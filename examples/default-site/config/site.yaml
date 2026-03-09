@@ -7,6 +7,9 @@ recent_shots_count: 10
 #          CC-BY-NC-SA-4.0, CC-BY-ND-4.0, CC-BY-NC-ND-4.0, CC0-1.0,
 #          or any custom text.
 license: all-rights-reserved
+# Default gallery layout: "masonry" (variable-height tiles) or "grid" (uniform cells).
+# Individual galleries can override this in galleries.yaml.
+# gallery_default_layout: masonry
 # Which metadata fields to show on photo detail pages.
 # Options: date, camera, lens, settings, location, tags, license
 # Use "exif" as shorthand for date + camera + lens + settings.

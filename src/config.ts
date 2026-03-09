@@ -6,6 +6,7 @@ import type {
   SiteConfig,
   GalleryConfig,
   GalleryEntry,
+  GalleryLayout,
   ImageConfig,
   DisplayField,
 } from './types.js';
@@ -18,6 +19,8 @@ const DEFAULT_IMAGE_CONFIG: ImageConfig = {
 
 const DEFAULT_LICENSE = 'all-rights-reserved';
 
+const DEFAULT_GALLERY_LAYOUT: GalleryLayout = 'masonry';
+
 const DEFAULT_SITE_CONFIG: SiteConfig = {
   base_url: 'http://localhost:3000',
   base_path: '',
@@ -26,6 +29,7 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
   recent_shots_count: 12,
   images: DEFAULT_IMAGE_CONFIG,
   license: DEFAULT_LICENSE,
+  gallery_default_layout: DEFAULT_GALLERY_LAYOUT,
   photo_display_fields: ALL_DISPLAY_FIELDS,
   lightbox_display_fields: ALL_DISPLAY_FIELDS,
 };
@@ -40,6 +44,7 @@ interface RawSiteConfig {
   theme?: string;
   recent_shots_count?: number;
   license?: string;
+  gallery_default_layout?: string;
   photo_display_fields?: string[];
   lightbox_display_fields?: string[];
   images?: {
@@ -53,7 +58,7 @@ interface RawGalleryEntry {
   title: string;
   description?: string;
   listed?: boolean;
-  layout?: 'grid' | 'masonry';
+  layout?: GalleryLayout;
 }
 
 interface RawGalleryConfig {
@@ -138,6 +143,10 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     recent_shots_count:
       raw.recent_shots_count ?? DEFAULT_SITE_CONFIG.recent_shots_count,
     license: raw.license ?? DEFAULT_LICENSE,
+    gallery_default_layout:
+      raw.gallery_default_layout === 'grid' || raw.gallery_default_layout === 'masonry'
+        ? raw.gallery_default_layout
+        : DEFAULT_GALLERY_LAYOUT,
     photo_display_fields: parseDisplayFields(raw.photo_display_fields),
     lightbox_display_fields: parseDisplayFields(raw.lightbox_display_fields),
     images: {

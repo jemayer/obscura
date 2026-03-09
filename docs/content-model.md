@@ -80,6 +80,17 @@ The shorthand `exif` expands to `date`, `camera`, `lens`, and `settings` — use
 
 Both fields default to showing everything when omitted.
 
+## Site Configuration — Gallery Layout
+
+Set the site-wide default gallery layout in `config/site.yaml`:
+
+```yaml
+# "masonry" (variable-height tiles, default) or "grid" (uniform cells)
+gallery_default_layout: masonry
+```
+
+Individual galleries can override this in `galleries.yaml` via the `layout` field.
+
 ## Gallery Configuration
 
 Defined in `config/galleries.yaml`:
@@ -90,7 +101,7 @@ galleries:
     title: Street Photography
     description: Moments from the city   # optional
     listed: true                          # show on gallery index
-    layout: masonry                       # "grid" (default) or "masonry"
+    layout: masonry                       # overrides gallery_default_layout from site.yaml
 
   - slug: post-assets
     title: Post Assets
@@ -99,7 +110,7 @@ galleries:
 
 - **slug**: URL-safe identifier, must match the folder name under `content/photos/`
 - **listed**: Set to `false` for galleries that should not appear on the gallery index (useful for photos used only in blog posts)
-- **layout**: Display layout — `grid` (uniform cells, default) or `masonry` (variable-height tiles). Optional.
+- **layout**: Display layout — `grid` (uniform cells) or `masonry` (variable-height tiles). Optional; overrides the site-wide `gallery_default_layout` setting.
 
 ## Blog Posts
 
