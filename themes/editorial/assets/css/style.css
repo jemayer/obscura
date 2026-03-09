@@ -401,6 +401,11 @@ a:hover {
 
 .gallery-index-content {
   margin-bottom: var(--space-xl);
+  max-width: none;
+}
+
+.gallery-content {
+  max-width: none;
 }
 
 .gallery-list {
