@@ -104,18 +104,6 @@
         </li>
         {% endif %}
         {% endif %}
-        {% if "tags" in site.photo_display_fields %}
-        {% if photo.metadata.tags.length %}
-        <li class="photo-meta__tags-row">
-          <span class="photo-meta__label">Tags</span>
-          <span class="photo-meta__value photo-meta__tags">
-            {% for tag in photo.metadata.tags %}
-            <a class="tag" href="{{ ('/tags/' + (tag | slugifytag) + '/') | url }}">{{ tag }}</a>
-            {% endfor %}
-          </span>
-        </li>
-        {% endif %}
-        {% endif %}
         {% if "license" in site.photo_display_fields %}
         {% if photo.metadata.license %}
         <li>
@@ -126,6 +114,18 @@
             {% else %}
             {{ photo.metadata.license | licenselabel }}
             {% endif %}
+          </span>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% if "tags" in site.photo_display_fields %}
+        {% if photo.metadata.tags.length %}
+        <li class="photo-meta__tags-row">
+          <span class="photo-meta__label">Tags</span>
+          <span class="photo-meta__value photo-meta__tags">
+            {% for tag in photo.metadata.tags %}
+            <a class="tag" href="{{ ('/tags/' + (tag | slugifytag) + '/') | url }}">{{ tag }}</a>
+            {% endfor %}
           </span>
         </li>
         {% endif %}
