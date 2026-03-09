@@ -24,9 +24,12 @@ const DEFAULT_LICENSE = 'all-rights-reserved';
 const DEFAULT_GALLERY_LAYOUT: GalleryLayout = 'masonry';
 
 const VALID_SOCIAL_PLATFORMS: readonly string[] = [
+  '500px',
   'bluesky',
-  'mastodon',
   'flickr',
+  'github',
+  'instagram',
+  'mastodon',
   'pixelfed',
 ];
 

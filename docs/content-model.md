@@ -103,11 +103,17 @@ social_links:
     url: https://mastodon.social/@yourhandle
   - platform: flickr
     url: https://www.flickr.com/photos/yourhandle
+  - platform: instagram
+    url: https://www.instagram.com/yourhandle
+  - platform: 500px
+    url: https://500px.com/p/yourhandle
   - platform: pixelfed
     url: https://pixelfed.social/yourhandle
+  - platform: github
+    url: https://github.com/yourhandle
 ```
 
-Supported platforms: `bluesky`, `mastodon`, `flickr`, `pixelfed`. Entries with unrecognised platforms or missing URLs are silently ignored.
+Supported platforms: `500px`, `bluesky`, `flickr`, `github`, `instagram`, `mastodon`, `pixelfed`. Entries with unrecognised platforms or missing URLs are silently ignored.
 
 ## Gallery Configuration
 

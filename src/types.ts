@@ -49,7 +49,14 @@ export const ALL_DISPLAY_FIELDS: readonly DisplayField[] = [
 
 export type GalleryLayout = 'grid' | 'masonry';
 
-export type SocialPlatform = 'bluesky' | 'mastodon' | 'flickr' | 'pixelfed';
+export type SocialPlatform =
+  | '500px'
+  | 'bluesky'
+  | 'flickr'
+  | 'github'
+  | 'instagram'
+  | 'mastodon'
+  | 'pixelfed';
 
 export interface SocialLink {
   readonly platform: SocialPlatform;

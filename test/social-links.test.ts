@@ -24,12 +24,15 @@ describe('parseSocialLinks', () => {
 
   it('accepts all supported platforms', () => {
     const links = parseSocialLinks([
-      { platform: 'bluesky', url: 'https://example.com/1' },
-      { platform: 'mastodon', url: 'https://example.com/2' },
+      { platform: '500px', url: 'https://example.com/1' },
+      { platform: 'bluesky', url: 'https://example.com/2' },
       { platform: 'flickr', url: 'https://example.com/3' },
-      { platform: 'pixelfed', url: 'https://example.com/4' },
+      { platform: 'github', url: 'https://example.com/4' },
+      { platform: 'instagram', url: 'https://example.com/5' },
+      { platform: 'mastodon', url: 'https://example.com/6' },
+      { platform: 'pixelfed', url: 'https://example.com/7' },
     ]);
-    expect(links).toHaveLength(4);
+    expect(links).toHaveLength(7);
   });
 
   it('drops entries with unrecognised platform', () => {

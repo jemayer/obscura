@@ -11,8 +11,8 @@ license: all-rights-reserved
 # Individual galleries can override this in galleries.yaml.
 # gallery_default_layout: masonry
 
-# Social media links — shown on the contact page with monochromatic icons.
-# Supported platforms: bluesky, mastodon, flickr, pixelfed
+# Social media links — shown in the site footer with monochromatic icons.
+# Supported platforms: 500px, bluesky, flickr, github, instagram, mastodon, pixelfed
 # social_links:
 #   - platform: bluesky
 #     url: https://bsky.app/profile/yourhandle
@@ -20,8 +20,14 @@ license: all-rights-reserved
 #     url: https://mastodon.social/@yourhandle
 #   - platform: flickr
 #     url: https://www.flickr.com/photos/yourhandle
+#   - platform: instagram
+#     url: https://www.instagram.com/yourhandle
+#   - platform: 500px
+#     url: https://500px.com/p/yourhandle
 #   - platform: pixelfed
 #     url: https://pixelfed.social/yourhandle
+#   - platform: github
+#     url: https://github.com/yourhandle
 # Which metadata fields to show on photo detail pages.
 # Options: date, camera, lens, settings, location, tags, license
 # Use "exif" as shorthand for date + camera + lens + settings.
