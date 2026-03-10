@@ -26,87 +26,65 @@
 }
 
 /* ==========================================================================
-   Arrow navigation — refined circular buttons with frosted glass
+   Arrow navigation — placed in the top bar alongside other controls
    ========================================================================== */
 
+/* Pull arrows out of the viewport-center default and into the top bar */
 .pswp__button--arrow {
-  width: 48px;
-  height: 48px;
-  margin-top: -24px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  position: absolute;
+  top: 0;
+  width: 50px;
+  height: 60px;
+  margin-top: 0;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
 }
 
-/* Show arrows when mouse is present */
 .pswp--has_mouse .pswp__button--arrow {
-  opacity: 0.6;
+  opacity: 0.85;
 }
 
 .pswp__button--arrow:hover {
-  opacity: 1 !important;
-  background: rgba(0, 0, 0, 0.4);
-  transform: scale(1.08);
+  opacity: 1;
+  background: none;
+  transform: none;
 }
 
 .pswp__button--arrow:active {
-  transform: scale(0.96);
-  transition-duration: 0.1s;
+  transform: none;
 }
 
-/* Inset from edges */
+/* Position: centered pair in the top bar */
 .pswp__button--arrow--prev {
-  left: 20px;
+  left: 50%;
+  right: auto;
+  transform: translateX(calc(-100% - 2px));
 }
 
 .pswp__button--arrow--next {
-  right: 20px;
-}
-
-/* Re-center the SVG icon via transform instead of margins */
-.pswp__button--arrow .pswp__icn {
-  width: 28px;
-  height: 28px;
-  top: 50%;
   left: 50%;
   right: auto;
+  transform: translateX(2px);
+}
+
+/* Size and center the icon to match other top-bar buttons */
+.pswp__button--arrow .pswp__icn {
+  width: 32px;
+  height: 32px;
+  top: 14px;
+  left: 9px;
+  right: auto;
   margin: 0;
-  transform: translate(-50%, -50%);
+  transform: none;
 }
 
 .pswp__button--arrow--next .pswp__icn {
-  transform: translate(-50%, -50%) scale(-1, 1);
-}
-
-/* Light mode: use dark glass so it reads against light backgrounds */
-:root:not([data-theme="dark"]) .pswp__button--arrow {
-  background: rgba(0, 0, 0, 0.12);
-}
-
-:root:not([data-theme="dark"]) .pswp__button--arrow:hover {
-  background: rgba(0, 0, 0, 0.22);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .pswp__button--arrow {
-    background: rgba(0, 0, 0, 0.25);
-  }
-  :root:not([data-theme="light"]) .pswp__button--arrow:hover {
-    background: rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* On narrow screens, tighten the inset */
-@media (max-width: 48em) {
-  .pswp__button--arrow--prev {
-    left: 8px;
-  }
-  .pswp__button--arrow--next {
-    right: 8px;
-  }
+  left: auto;
+  right: 9px;
+  transform: scale(-1, 1);
 }
 
 /* ==========================================================================
