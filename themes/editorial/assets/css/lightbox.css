@@ -57,39 +57,37 @@
   transition-duration: 0.1s;
 }
 
-/* Inset from edges — breathe with the image padding */
+/* Inset from edges */
 .pswp__button--arrow--prev {
-  left: 12px;
+  left: 20px;
 }
 
 .pswp__button--arrow--next {
-  right: 12px;
+  right: 20px;
 }
 
-/* Shrink and re-center the SVG icon inside the smaller button */
+/* Re-center the SVG icon via transform instead of margins */
 .pswp__button--arrow .pswp__icn {
   width: 28px;
   height: 28px;
   top: 50%;
   left: 50%;
-  margin-top: -14px;
-  margin-left: -14px;
+  right: auto;
+  margin: 0;
+  transform: translate(-50%, -50%);
 }
 
 .pswp__button--arrow--next .pswp__icn {
-  left: auto;
-  right: 50%;
-  margin-left: 0;
-  margin-right: -14px;
+  transform: translate(-50%, -50%) scale(-1, 1);
 }
 
-/* Light mode: invert the frosted glass */
+/* Light mode: use dark glass so it reads against light backgrounds */
 :root:not([data-theme="dark"]) .pswp__button--arrow {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.12);
 }
 
 :root:not([data-theme="dark"]) .pswp__button--arrow:hover {
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.22);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -104,10 +102,10 @@
 /* On narrow screens, tighten the inset */
 @media (max-width: 48em) {
   .pswp__button--arrow--prev {
-    left: 6px;
+    left: 8px;
   }
   .pswp__button--arrow--next {
-    right: 6px;
+    right: 8px;
   }
 }
 
