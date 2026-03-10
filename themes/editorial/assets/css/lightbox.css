@@ -25,6 +25,96 @@
   }
 }
 
+/* ==========================================================================
+   Arrow navigation — refined circular buttons with frosted glass
+   ========================================================================== */
+
+.pswp__button--arrow {
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Show arrows when mouse is present */
+.pswp--has_mouse .pswp__button--arrow {
+  opacity: 0.6;
+}
+
+.pswp__button--arrow:hover {
+  opacity: 1 !important;
+  background: rgba(0, 0, 0, 0.4);
+  transform: scale(1.08);
+}
+
+.pswp__button--arrow:active {
+  transform: scale(0.96);
+  transition-duration: 0.1s;
+}
+
+/* Inset from edges — breathe with the image padding */
+.pswp__button--arrow--prev {
+  left: 12px;
+}
+
+.pswp__button--arrow--next {
+  right: 12px;
+}
+
+/* Shrink and re-center the SVG icon inside the smaller button */
+.pswp__button--arrow .pswp__icn {
+  width: 28px;
+  height: 28px;
+  top: 50%;
+  left: 50%;
+  margin-top: -14px;
+  margin-left: -14px;
+}
+
+.pswp__button--arrow--next .pswp__icn {
+  left: auto;
+  right: 50%;
+  margin-left: 0;
+  margin-right: -14px;
+}
+
+/* Light mode: invert the frosted glass */
+:root:not([data-theme="dark"]) .pswp__button--arrow {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+:root:not([data-theme="dark"]) .pswp__button--arrow:hover {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .pswp__button--arrow {
+    background: rgba(0, 0, 0, 0.25);
+  }
+  :root:not([data-theme="light"]) .pswp__button--arrow:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* On narrow screens, tighten the inset */
+@media (max-width: 48em) {
+  .pswp__button--arrow--prev {
+    left: 6px;
+  }
+  .pswp__button--arrow--next {
+    right: 6px;
+  }
+}
+
+/* ==========================================================================
+   Caption bar
+   ========================================================================== */
+
 .pswp-caption {
   position: absolute;
   bottom: 0;

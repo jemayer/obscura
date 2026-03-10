@@ -70,7 +70,7 @@
       index: index,
       bgOpacity: 0.95,
       showHideAnimationType: 'fade',
-      padding: { top: 20, bottom: 80, left: 20, right: 20 },
+      padding: { top: 80, bottom: 80, left: 70, right: 70 },
       closeOnVerticalDrag: true,
 
       // Custom caption
