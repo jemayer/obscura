@@ -36,11 +36,13 @@
   width: 50px;
   height: 60px;
   margin-top: 0;
+  z-index: 20;
+  pointer-events: auto;
   border-radius: 0;
   background: none;
   backdrop-filter: none;
   opacity: 0.85;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease;
 }
 
 .pswp--has_mouse .pswp__button--arrow {
@@ -50,11 +52,6 @@
 .pswp__button--arrow:hover {
   opacity: 1;
   background: none;
-  transform: none;
-}
-
-.pswp__button--arrow:active {
-  transform: none;
 }
 
 /* Position: centered pair in the top bar */
@@ -79,12 +76,34 @@
   right: auto;
   margin: 0;
   transform: none;
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .pswp__button--arrow--next .pswp__icn {
   left: auto;
   right: 9px;
   transform: scale(-1, 1);
+}
+
+/* Hover: nudge arrow in its travel direction */
+.pswp__button--arrow--prev:hover .pswp__icn {
+  transform: translateX(-3px);
+}
+
+.pswp__button--arrow--next:hover .pswp__icn {
+  transform: scale(-1, 1) translateX(-3px);
+}
+
+.pswp__button--arrow:active .pswp__icn {
+  transition-duration: 0.1s;
+}
+
+.pswp__button--arrow--prev:active .pswp__icn {
+  transform: translateX(-1px);
+}
+
+.pswp__button--arrow--next:active .pswp__icn {
+  transform: scale(-1, 1) translateX(-1px);
 }
 
 /* ==========================================================================
