@@ -989,83 +989,103 @@ a.tag:hover {
 }
 
 /* --------------------------------------------------------------------------
-   Homepage — Recent Shots
+   Homepage — Hero
    -------------------------------------------------------------------------- */
 
-.homepage-intro {
-  max-width: var(--content-width);
-  margin: 0 auto var(--space-xl);
-  padding: var(--space-xl) 0;
-  border-top: 1px solid var(--color-border);
-  font-family: var(--font-display);
-  font-size: var(--font-size-lg);
-  line-height: 1.55;
-  color: var(--color-text);
-  text-align: left;
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-@media (min-width: 48em) {
-  .homepage-intro {
-    column-count: 2;
-    column-gap: var(--space-2xl);
-    font-size: 1.3125rem;
-    line-height: 1.5;
-  }
-}
-
-.homepage-logo {
-  column-span: all;
-  text-align: center;
-  margin-bottom: var(--space-xl);
-}
-
-.homepage-logo img {
-  max-width: 60rem;
+.hero {
+  position: relative;
   width: 100%;
-  height: auto;
+  height: 70vh;
+  min-height: 400px;
+  max-height: 800px;
+  overflow: hidden;
+  margin-bottom: var(--space-2xl);
 }
 
-/* Light mode: show light logo, hide dark */
-.homepage-logo .homepage-logo__dark { display: none; }
-.homepage-logo .homepage-logo__light { display: inline-block; }
-
-/* Dark mode (system preference) */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .homepage-logo .homepage-logo__light { display: none; }
-  :root:not([data-theme="light"]) .homepage-logo .homepage-logo__dark { display: inline-block; }
+.hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
-/* Dark mode (manual toggle) */
-:root[data-theme="dark"] .homepage-logo .homepage-logo__light { display: none; }
-:root[data-theme="dark"] .homepage-logo .homepage-logo__dark { display: inline-block; }
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.15) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
 
-.homepage-intro h1 {
-  column-span: all;
+.hero__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-2xl) var(--space-xl);
+}
+
+.hero__title {
   font-family: var(--font-display);
-  font-size: var(--font-size-3xl);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-tight);
-  margin-bottom: var(--space-lg);
+  color: #f0eeea;
+  margin: 0;
+}
+
+@media (min-width: 48em) {
+  .hero {
+    height: 75vh;
+    max-height: 900px;
+  }
+
+  .hero__content {
+    padding: var(--space-2xl) var(--space-2xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Homepage — Intro Text
+   -------------------------------------------------------------------------- */
+
+.homepage-intro {
+  max-width: 40rem;
+  margin: 0 auto var(--space-2xl);
+  padding: 0 var(--space-md);
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  line-height: 1.6;
+  color: var(--color-text);
+  text-align: center;
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .homepage-intro p {
   margin-bottom: var(--space-lg);
-  break-inside: avoid;
-}
-
-.homepage-intro p:first-of-type:not(:only-of-type) {
-  break-after: column;
-}
-
-.homepage-intro p:only-of-type {
-  column-span: all;
 }
 
 .homepage-intro p:last-child {
   margin-bottom: 0;
 }
+
+@media (min-width: 48em) {
+  .homepage-intro {
+    font-size: 1.3125rem;
+    line-height: 1.55;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Homepage — Recent Shots
+   -------------------------------------------------------------------------- */
 
 /* Prose highlight underlines — used via <u> in Markdown content */
 .prose u {
@@ -1122,6 +1142,67 @@ a.tag:hover {
 .recent-shots__link:hover {
   color: var(--color-text);
   border-color: var(--color-text);
+}
+
+/* --------------------------------------------------------------------------
+   Homepage — Recent Posts
+   -------------------------------------------------------------------------- */
+
+.homepage-posts {
+  max-width: var(--content-width);
+  margin: var(--space-2xl) auto;
+  padding: 0 var(--space-md);
+}
+
+.homepage-posts__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.homepage-posts__item {
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.homepage-posts__item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.homepage-posts__date {
+  display: block;
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-xs);
+}
+
+.homepage-posts__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  margin: 0 0 var(--space-xs);
+}
+
+.homepage-posts__title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.homepage-posts__title a:hover {
+  color: var(--color-link-hover);
+}
+
+.homepage-posts__summary {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+  margin: 0;
 }
 
 /* --------------------------------------------------------------------------

@@ -28,6 +28,11 @@ license: all-rights-reserved
 #     url: https://pixelfed.social/yourhandle
 #   - platform: github
 #     url: https://github.com/yourhandle
+# Hero image for the homepage. Set to "gallery-slug/photo-slug" to pin a
+# specific photo. If omitted, the first landscape photo from recent shots
+# is used automatically.
+# hero_image: street/golden-hour-alley
+
 # Which metadata fields to show on photo detail pages.
 # Options: date, camera, lens, settings, location, tags, license
 # Use "exif" as shorthand for date + camera + lens + settings.

@@ -66,6 +66,7 @@ interface RawSiteConfig {
   social_links?: RawSocialLink[];
   photo_display_fields?: string[];
   lightbox_display_fields?: string[];
+  hero_image?: string;
   images?: {
     breakpoints?: number[];
     webp_quality?: number;
@@ -195,6 +196,10 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     social_links: parseSocialLinks(raw.social_links),
     photo_display_fields: parseDisplayFields(raw.photo_display_fields),
     lightbox_display_fields: parseDisplayFields(raw.lightbox_display_fields),
+    hero_image:
+      typeof raw.hero_image === 'string' && raw.hero_image.length > 0
+        ? raw.hero_image
+        : undefined,
     images: {
       breakpoints: raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
       webp_quality:

@@ -75,6 +75,8 @@ export interface SiteConfig {
   readonly social_links: readonly SocialLink[];
   readonly photo_display_fields: readonly DisplayField[];
   readonly lightbox_display_fields: readonly DisplayField[];
+  /** Optional hero image for homepage: "gallery-slug/photo-slug" */
+  readonly hero_image?: string | undefined;
 }
 
 // ---------------------------------------------------------------------------

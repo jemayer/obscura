@@ -3,23 +3,33 @@
 {% block title %}{{ site.title }}{% endblock %}
 
 {% block content %}
-<div class="content content--full">
-  {% if homepage_content %}
-  <div class="homepage-intro prose">
-    {% if has_logo_light or has_logo_dark %}
-    <div class="homepage-logo">
-      {% if has_logo_light %}
-      <img class="homepage-logo__light" src="{{ '/assets/images/logo-light.svg' | url }}" alt="{{ site.title }}">
-      {% endif %}
-      {% if has_logo_dark %}
-      <img class="homepage-logo__dark" src="{{ '/assets/images/logo-dark.svg' | url }}" alt="{{ site.title }}">
-      {% endif %}
-    </div>
-    {% endif %}
-    {{ homepage_content | safe_html }}
-  </div>
+{# ── Hero section ── #}
+{% if hero %}
+<section class="hero">
+  {% if hero.photo.variants.length %}
+  <img class="hero__image"
+       src="{{ (hero.photo.variants | bestvariant(2400)).path | url }}"
+       srcset="{{ hero.photo.variants | srcset }}"
+       sizes="100vw"
+       alt="{{ hero.photo.metadata.title or (hero.photo.slug | bareslug) }}"
+       decoding="async">
   {% endif %}
+  <div class="hero__scrim"></div>
+  <div class="hero__content">
+    <h1 class="hero__title">{{ site.title }}</h1>
+  </div>
+</section>
+{% endif %}
 
+{# ── Intro text (from index.md) ── #}
+{% if homepage_content %}
+<section class="homepage-intro prose">
+  {{ homepage_content | safe_html }}
+</section>
+{% endif %}
+
+{# ── Recent shots ── #}
+<div class="content content--full">
   <div class="recent-shots__header">
     <h2 class="section-label">Recent Shots</h2>
     <div class="recent-shots__actions">
@@ -60,4 +70,27 @@
   </div>
   {% endif %}
 </div>
+
+{# ── Recent posts ── #}
+{% if recent_posts.length %}
+<section class="homepage-posts">
+  <h2 class="section-label">Recent Posts</h2>
+  <div class="homepage-posts__list">
+    {% for post in recent_posts %}
+    <article class="homepage-posts__item">
+      <time class="homepage-posts__date" datetime="{{ post.frontmatter.date | isodate }}">
+        {{ post.frontmatter.date | datereadable }}
+      </time>
+      <h3 class="homepage-posts__title">
+        <a href="{{ ('/blog/' + post.slug + '/') | url }}">{{ post.frontmatter.title }}</a>
+      </h3>
+      {% if post.frontmatter.summary %}
+      <p class="homepage-posts__summary">{{ post.frontmatter.summary }}</p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  <a class="recent-shots__link" href="{{ '/blog/' | url }}">All posts &rarr;</a>
+</section>
+{% endif %}
 {% endblock %}

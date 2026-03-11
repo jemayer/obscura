@@ -229,10 +229,38 @@ export async function renderToFile(
 // Page renderers — each corresponds to a route
 // ---------------------------------------------------------------------------
 
+/**
+ * Select the hero image for the homepage.
+ * If `hero_image` is configured (as "gallery-slug/photo-slug"), look it up.
+ * Otherwise, pick the first landscape photo from the recent photos list.
+ */
+export function selectHeroImage(
+  recentPhotos: readonly { readonly photo: Photo; readonly gallery: Gallery }[],
+  galleries: readonly Gallery[],
+  heroImageConfig: string | undefined,
+): { readonly photo: Photo; readonly gallery: Gallery } | undefined {
+  // Configured hero image: look up by "gallery-slug/photo-slug"
+  if (heroImageConfig) {
+    const photoIndex = buildPhotoIndex(galleries);
+    const entry = photoIndex.get(heroImageConfig);
+    if (entry) return entry;
+  }
+
+  // Auto-select: first landscape photo (width > height) from recent photos
+  return recentPhotos.find((item) => {
+    const variants = item.photo.variants;
+    if (variants.length === 0) return false;
+    // Use the largest variant to determine aspect ratio
+    const largest = variants.reduce((a, b) => (a.width > b.width ? a : b));
+    return largest.width > largest.height;
+  });
+}
+
 /** Render the homepage (/) */
 export async function renderHomepage(
   engine: RenderingEngine,
   galleries: readonly Gallery[],
+  posts: readonly BlogPost[],
   homepageContent: string | undefined,
   distDir: string,
 ): Promise<void> {
@@ -247,6 +275,12 @@ export async function renderHomepage(
     })
     .slice(0, engine.siteConfig.recent_shots_count);
 
+  const heroImage = selectHeroImage(
+    allPhotos,
+    galleries,
+    engine.siteConfig.hero_image,
+  );
+
   const processedContent = homepageContent
     ? replaceShortcodes(
         homepageContent,
@@ -255,10 +289,18 @@ export async function renderHomepage(
       )
     : undefined;
 
+  // Pass a handful of recent posts for the homepage
+  const recentPosts = posts.slice(0, 5);
+
   await renderToFile(
     engine,
     'homepage.html',
-    { recent_photos: allPhotos, homepage_content: processedContent },
+    {
+      recent_photos: allPhotos,
+      homepage_content: processedContent,
+      hero: heroImage,
+      recent_posts: recentPosts,
+    },
     distDir,
     'index.html',
   );
@@ -498,7 +540,7 @@ export async function renderAll(
   } = context;
 
   // Homepage
-  await renderHomepage(engine, galleries, homepageContent, distDir);
+  await renderHomepage(engine, galleries, posts, homepageContent, distDir);
 
   // Gallery index
   await renderGalleryIndex(engine, galleries, galleryIndexContent, distDir);
