@@ -826,13 +826,23 @@ a:hover {
   padding: 0;
 }
 
-.post-body a {
-  border-bottom: 1px solid var(--color-text-tertiary);
-  transition: border-color var(--duration-fast) var(--ease-out);
+.post-body a,
+.page-body a {
+  border-bottom: none;
+  background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+  background-size: 0% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition:
+    background-size 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.25s var(--ease-out);
 }
 
-.post-body a:hover {
-  border-color: var(--color-text);
+.post-body a:hover,
+.page-body a:hover {
+  color: var(--color-highlight);
+  background-size: 100% 1px;
 }
 
 .post-body ul,
@@ -862,6 +872,8 @@ a:hover {
 .page-body .photo-card a,
 .page-body .photo-card a:hover {
   border-bottom: none;
+  background-image: none;
+  color: inherit;
 }
 
 /* --------------------------------------------------------------------------
@@ -917,13 +929,7 @@ a:hover {
   padding: 0;
 }
 
-.page-body a {
-  border-bottom: 1px solid var(--color-text-tertiary);
-}
-
-.page-body a:hover {
-  border-color: var(--color-text);
-}
+/* page-body a styles merged with .post-body a above */
 
 /* --------------------------------------------------------------------------
    Tag Pages
@@ -1258,8 +1264,8 @@ a.tag:hover {
     --color-border-subtle: #232320;
     --color-accent: #e5e3de;
     --color-accent-hover: #c5c3be;
-    --color-link: #e5e3de;
-    --color-link-hover: #908b82;
+    --color-link: #d4a898;
+    --color-link-hover: #d4745a;
     --color-overlay: rgba(18, 18, 17, 0.85);
     --color-overlay-light: rgba(229, 227, 222, 0.04);
     --color-highlight: #d4745a;
@@ -1280,8 +1286,8 @@ a.tag:hover {
   --color-border-subtle: #232320;
   --color-accent: #e5e3de;
   --color-accent-hover: #c5c3be;
-  --color-link: #e5e3de;
-  --color-link-hover: #908b82;
+  --color-link: #d4a898;
+  --color-link-hover: #d4745a;
   --color-overlay: rgba(18, 18, 17, 0.85);
   --color-highlight: #d4745a;
   --color-highlight-muted: rgba(212, 116, 90, 0.3);
