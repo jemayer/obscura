@@ -5,7 +5,7 @@
 {% block content %}
 <div class="content content--full">
   <div class="tag-page__header">
-    <h1 class="page-title">{{ location_page.location }}</h1>
+    <h1 class="page-title">location: {{ location_page.location }}</h1>
     <span class="tag-page__count">{{ location_page.photos.length }} photo{{ 's' if location_page.photos.length != 1 else '' }}</span>
   </div>
 
