@@ -956,27 +956,61 @@ a:hover {
    Tag Pages
    -------------------------------------------------------------------------- */
 
-.tag-list {
-  list-style: none;
-  max-width: var(--content-narrow);
-  border-top: 1px solid var(--color-border);
+.tag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-sm);
 }
 
-.tag-list__item {
+.tag-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--color-surface);
+  border-radius: 2px;
+}
+
+.tag-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tag-card:hover .tag-card__image {
+  transform: scale(1.04);
+}
+
+.tag-card__overlay {
+  position: absolute;
+  inset: 0;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: var(--space-sm) 0;
-  border-bottom: 1px solid var(--color-border-subtle);
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-md);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+  transition: background 0.3s ease;
 }
 
-.tag-list__item a {
-  font-size: var(--font-size-base);
+.tag-card:hover .tag-card__overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.15) 50%, transparent 100%);
 }
 
-.tag-list__count {
+.tag-card__name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: #f0eeea;
+  line-height: 1.2;
+}
+
+.tag-card__count {
   font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
+  color: rgba(240, 238, 234, 0.7);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  margin-top: 0.15em;
 }
 
 .tag-page__header {

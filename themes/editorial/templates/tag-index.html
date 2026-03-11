@@ -1,20 +1,30 @@
 {% extends "base.html" %}
 
+{% set nav_current = 'tags' %}
+
 {% block title %}Tags — {{ site.title }}{% endblock %}
 
 {% block content %}
-<div class="content">
+<div class="content content--full">
   <h1 class="page-title">Tags</h1>
 
   {% if tag_pages.length %}
-  <ul class="tag-list">
-    {% for tp in tag_pages %}
-    <li class="tag-list__item">
-      <a href="{{ ('/tags/' + tp.slug + '/') | url }}">{{ tp.tag }}</a>
-      <span class="tag-list__count">{{ tp.photos.length }}</span>
-    </li>
+  <div class="tag-grid">
+    {% for tp in tag_pages | sort(true, false, "photos.length") %}
+    <a class="tag-card" href="{{ ('/tags/' + tp.slug + '/') | url }}">
+      {% if tp.photos.length and tp.photos[0].photo.variants.length %}
+      <img class="tag-card__image"
+           src="{{ (tp.photos[0].photo.variants | bestvariant(800)).path | url }}"
+           alt=""
+           loading="lazy" decoding="async">
+      {% endif %}
+      <div class="tag-card__overlay">
+        <span class="tag-card__name">{{ tp.tag }}</span>
+        <span class="tag-card__count">{{ tp.photos.length }} photo{{ 's' if tp.photos.length != 1 else '' }}</span>
+      </div>
+    </a>
     {% endfor %}
-  </ul>
+  </div>
   {% endif %}
 </div>
 {% endblock %}
