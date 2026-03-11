@@ -231,6 +231,7 @@ a:hover {
   color: var(--color-text-secondary);
   font-weight: 400;
   margin-top: var(--space-sm);
+  margin-bottom: var(--space-lg);
   line-height: var(--line-height-base);
 }
 
@@ -406,6 +407,7 @@ a:hover {
 
 .gallery-content.page-body {
   max-width: none;
+  margin-bottom: var(--space-lg);
 }
 
 .gallery-list {
