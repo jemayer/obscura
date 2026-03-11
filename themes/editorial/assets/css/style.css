@@ -1029,6 +1029,14 @@ a.tag:hover {
   left: 0;
   right: 0;
   padding: var(--space-2xl) var(--space-xl);
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.25) 60%,
+    transparent 100%
+  );
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .hero__title {
@@ -1064,7 +1072,11 @@ a.tag:hover {
   font-size: var(--font-size-lg);
   line-height: 1.6;
   color: var(--color-text);
-  text-align: center;
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 2;
   letter-spacing: var(--letter-spacing-tight);
 }
 
