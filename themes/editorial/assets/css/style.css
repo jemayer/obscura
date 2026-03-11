@@ -1065,17 +1065,6 @@ a.tag:hover {
   animation: hero-fade-up 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.35s both;
 }
 
-.hero__location {
-  display: block;
-  margin-top: var(--space-xs);
-  font-family: var(--font-body);
-  font-size: var(--font-size-xs);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-  color: rgba(240, 238, 234, 0.6);
-  animation: hero-fade-up 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
-}
-
 @keyframes hero-fade-up {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1181,65 +1170,6 @@ a.tag:hover {
 .recent-shots__link:hover {
   color: var(--color-text);
   border-color: var(--color-text);
-}
-
-/* --------------------------------------------------------------------------
-   Homepage — Recent Posts
-   -------------------------------------------------------------------------- */
-
-.homepage-posts {
-  margin-top: var(--space-2xl);
-}
-
-.homepage-posts__list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-  margin-bottom: var(--space-lg);
-}
-
-.homepage-posts__item {
-  padding-bottom: var(--space-lg);
-  border-bottom: 1px solid var(--color-border-subtle);
-}
-
-.homepage-posts__item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.homepage-posts__date {
-  display: block;
-  font-size: var(--font-size-xs);
-  letter-spacing: var(--letter-spacing-wide);
-  text-transform: uppercase;
-  color: var(--color-text-tertiary);
-  margin-bottom: var(--space-xs);
-}
-
-.homepage-posts__title {
-  font-family: var(--font-display);
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
-  margin: 0 0 var(--space-xs);
-}
-
-.homepage-posts__title a {
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.homepage-posts__title a:hover {
-  color: var(--color-link-hover);
-}
-
-.homepage-posts__summary {
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
-  line-height: var(--line-height-base);
-  margin: 0;
 }
 
 /* --------------------------------------------------------------------------

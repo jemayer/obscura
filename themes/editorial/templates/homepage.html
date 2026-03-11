@@ -18,9 +18,6 @@
   <div class="hero__content">
     <div class="hero__rule"></div>
     <h1 class="hero__title">{{ site.title }}</h1>
-    {% if hero.photo.metadata.location %}
-    <span class="hero__location">{{ hero.photo.metadata.location }}</span>
-    {% endif %}
   </div>
 </section>
 {% endif %}
@@ -73,28 +70,5 @@
     {% endfor %}
   </div>
   {% endif %}
-
-{# ── Recent posts ── #}
-{% if recent_posts.length %}
-<section class="homepage-posts">
-  <h2 class="section-label">Recent Posts</h2>
-  <div class="homepage-posts__list">
-    {% for post in recent_posts %}
-    <article class="homepage-posts__item">
-      <time class="homepage-posts__date" datetime="{{ post.frontmatter.date | isodate }}">
-        {{ post.frontmatter.date | datereadable }}
-      </time>
-      <h3 class="homepage-posts__title">
-        <a href="{{ ('/blog/' + post.slug + '/') | url }}">{{ post.frontmatter.title }}</a>
-      </h3>
-      {% if post.frontmatter.summary %}
-      <p class="homepage-posts__summary">{{ post.frontmatter.summary }}</p>
-      {% endif %}
-    </article>
-    {% endfor %}
-  </div>
-  <a class="recent-shots__link" href="{{ '/blog/' | url }}">All posts &rarr;</a>
-</section>
-{% endif %}
 </div>
 {% endblock %}
