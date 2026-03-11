@@ -1161,9 +1161,7 @@ a.tag:hover {
    -------------------------------------------------------------------------- */
 
 .homepage-posts {
-  max-width: var(--content-width);
-  margin: var(--space-2xl) auto;
-  padding: 0 var(--space-md);
+  margin-top: var(--space-2xl);
 }
 
 .homepage-posts__list {
