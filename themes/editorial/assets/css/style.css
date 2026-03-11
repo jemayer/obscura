@@ -138,10 +138,16 @@ a:hover {
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
   color: var(--color-text);
+  min-width: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
 }
 
 .site-title a {
   color: inherit;
+  display: block;
+  white-space: nowrap;
 }
 
 .site-title a:hover {
