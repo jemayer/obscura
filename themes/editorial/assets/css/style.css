@@ -1034,7 +1034,7 @@ a.tag:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: var(--space-xl) var(--space-md);
+  padding: var(--space-xl) var(--space-md) var(--space-2xl);
   background: linear-gradient(
     to right,
     rgba(0, 0, 0, 0.45) 0%,
