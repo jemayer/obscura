@@ -830,10 +830,8 @@ a:hover {
 .page-body a {
   color: var(--color-highlight);
   border-bottom: none;
-  background-image:
-    linear-gradient(var(--color-highlight), var(--color-highlight)),
-    linear-gradient(var(--color-highlight-muted), var(--color-highlight-muted));
-  background-size: 0% 1px, 100% 1px;
+  background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+  background-size: 0% 1px;
   background-position: left bottom, left bottom;
   background-repeat: no-repeat;
   padding-bottom: 1px;
@@ -845,7 +843,7 @@ a:hover {
 .post-body a:hover,
 .page-body a:hover {
   color: var(--color-highlight);
-  background-size: 100% 1px, 100% 1px;
+  background-size: 100% 1px;
 }
 
 .post-body ul,
