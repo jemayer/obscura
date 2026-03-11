@@ -140,6 +140,7 @@ a:hover {
   color: var(--color-text);
   min-width: 0;
   overflow: hidden;
+  margin-right: var(--space-xl);
   mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
 }
