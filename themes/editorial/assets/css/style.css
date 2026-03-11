@@ -1134,7 +1134,6 @@ a.tag:hover {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: var(--space-lg);
 }
 
 .recent-shots__actions {
