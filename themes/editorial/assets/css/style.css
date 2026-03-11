@@ -1028,7 +1028,7 @@ a.tag:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: var(--space-2xl) var(--space-xl);
+  padding: var(--space-xl) var(--space-md);
   background: linear-gradient(
     to right,
     rgba(0, 0, 0, 0.45) 0%,
@@ -1039,24 +1039,52 @@ a.tag:hover {
   -webkit-backdrop-filter: blur(2px);
 }
 
+/* Thin accent rule — a warm editorial mark */
+.hero__rule {
+  width: 2.5rem;
+  height: 2px;
+  background: var(--color-highlight);
+  margin-bottom: var(--space-sm);
+  animation: hero-rule-draw 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+@keyframes hero-rule-draw {
+  from { width: 0; opacity: 0; }
+  to { width: 2.5rem; opacity: 1; }
+}
+
 .hero__title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
+  font-weight: 600;
+  font-style: italic;
   line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-tight);
+  letter-spacing: -0.02em;
   color: #f0eeea;
   margin: 0;
+  animation: hero-fade-up 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.35s both;
+}
+
+.hero__location {
+  display: block;
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: rgba(240, 238, 234, 0.6);
+  animation: hero-fade-up 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+}
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (min-width: 48em) {
   .hero {
     height: 75vh;
     max-height: 900px;
-  }
-
-  .hero__content {
-    padding: var(--space-2xl) var(--space-2xl);
   }
 }
 

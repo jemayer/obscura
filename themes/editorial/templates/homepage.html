@@ -16,7 +16,11 @@
   {% endif %}
   <div class="hero__scrim"></div>
   <div class="hero__content">
+    <div class="hero__rule"></div>
     <h1 class="hero__title">{{ site.title }}</h1>
+    {% if hero.photo.metadata.location %}
+    <span class="hero__location">{{ hero.photo.metadata.location }}</span>
+    {% endif %}
   </div>
 </section>
 {% endif %}
