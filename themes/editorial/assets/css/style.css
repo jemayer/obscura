@@ -209,8 +209,8 @@ a:hover {
 
 .content--full {
   max-width: none;
-  padding-left: var(--space-md);
-  padding-right: var(--space-md);
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
 }
 
 /* --------------------------------------------------------------------------
