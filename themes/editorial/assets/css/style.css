@@ -138,6 +138,7 @@ a:hover {
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
   color: var(--color-text);
+  flex: 1 1 0;
   min-width: 0;
   overflow: hidden;
   margin-right: var(--space-xl);
