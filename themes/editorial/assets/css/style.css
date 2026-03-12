@@ -454,13 +454,19 @@ a:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--space-lg) var(--space-xl);
   background: linear-gradient(
     0deg,
-    rgba(28, 27, 25, 0.7) 0%,
+    rgba(28, 27, 25, 0.55) 0%,
+    rgba(28, 27, 25, 0.25) 50%,
     rgba(28, 27, 25, 0) 100%
   );
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  mask-image: linear-gradient(to top, #000 60%, transparent);
+  -webkit-mask-image: linear-gradient(to top, #000 60%, transparent);
   color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .gallery-card__title {
@@ -478,9 +484,9 @@ a:hover {
 }
 
 .gallery-card__info p {
-  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
-  line-height: 1.4;
-  margin-top: var(--space-xs);
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  line-height: 1.5;
+  margin-top: var(--space-sm);
   opacity: 0.85;
 }
 
