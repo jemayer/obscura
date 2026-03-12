@@ -477,6 +477,13 @@ a:hover {
   opacity: 0.75;
 }
 
+.gallery-card__info p {
+  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+  line-height: 1.4;
+  margin-top: var(--space-xs);
+  opacity: 0.85;
+}
+
 /* --------------------------------------------------------------------------
    Photo Permalink Page
    -------------------------------------------------------------------------- */
