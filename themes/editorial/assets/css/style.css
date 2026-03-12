@@ -449,60 +449,56 @@ a:hover {
   transform: scale(1.02);
 }
 
-.gallery-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.15) 40%,
-    transparent 70%
-  );
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  mask-image: linear-gradient(to top, #000 0%, transparent 50%);
-  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 1;
-}
-
 .gallery-card__info {
-  z-index: 2;
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: var(--space-lg) var(--space-lg) var(--space-xl);
   background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.45) 0%,
-    rgba(0, 0, 0, 0.25) 60%,
+    to top,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.08) 60%,
     transparent 100%
   );
   color: #f0eeea;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: background var(--duration-base) var(--ease-out);
+}
+
+.gallery-card:hover .gallery-card__info {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.12) 60%,
+    transparent 100%
+  );
 }
 
 .gallery-card__title {
   font-family: var(--font-display);
   font-size: var(--font-size-lg);
   font-weight: 700;
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.gallery-card:hover .gallery-card__title {
+  transform: translateY(-2px);
 }
 
 .gallery-card__count {
   font-size: var(--font-size-xs);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
-  opacity: 0.75;
+  opacity: 0.7;
+  padding-top: var(--space-sm);
+  border-top: 1.5px solid var(--color-highlight);
+  transition: transform var(--duration-base) var(--ease-out);
 }
 
-.gallery-card__info p {
-  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-  line-height: 1.5;
-  margin-top: var(--space-sm);
-  opacity: 0.85;
+.gallery-card:hover .gallery-card__count {
+  transform: translateY(-2px);
 }
 
 /* --------------------------------------------------------------------------

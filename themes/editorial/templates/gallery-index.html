@@ -28,9 +28,6 @@
       <div class="gallery-card__info">
         <h2 class="gallery-card__title">{{ gallery.title }}</h2>
         <span class="gallery-card__count">{{ gallery.photos.length }} photo{{ 's' if gallery.photos.length != 1 }}</span>
-        {% if gallery.description %}
-        <p>{{ gallery.description }}</p>
-        {% endif %}
       </div>
     </a>
     {% endfor %}
