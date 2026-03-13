@@ -481,7 +481,7 @@ a:hover {
 .photo-detail {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
 }
 
 .photo-detail__image {
