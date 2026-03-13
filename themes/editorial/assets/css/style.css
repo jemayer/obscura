@@ -1035,6 +1035,7 @@ a:hover {
   font-weight: 400;
   color: var(--color-text-tertiary);
   margin-left: var(--space-xs);
+  white-space: nowrap;
 }
 
 .tag-page__back {
