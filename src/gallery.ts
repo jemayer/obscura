@@ -56,6 +56,12 @@ async function loadPhotosForGallery(
     });
   }
 
+  photos.sort((a, b) => {
+    const dateA = a.metadata.date ?? a.exif.date ?? new Date(0);
+    const dateB = b.metadata.date ?? b.exif.date ?? new Date(0);
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return photos;
 }
 
