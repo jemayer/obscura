@@ -1027,15 +1027,14 @@ a:hover {
 }
 
 .tag-page__header {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-md);
   margin-bottom: var(--space-lg);
 }
 
 .tag-page__count {
   font-size: var(--font-size-sm);
+  font-weight: 400;
   color: var(--color-text-tertiary);
+  margin-left: var(--space-xs);
 }
 
 .tag-page__back {

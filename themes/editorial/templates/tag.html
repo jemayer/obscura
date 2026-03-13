@@ -7,8 +7,7 @@
 {% block content %}
 <div class="content content--full">
   <div class="tag-page__header">
-    <h1 class="page-title">tag: {{ tag_page.tag }}</h1>
-    <span class="tag-page__count">{{ tag_page.photos.length }} photo{{ 's' if tag_page.photos.length != 1 else '' }}</span>
+    <h1 class="page-title">tag: {{ tag_page.tag }} <span class="tag-page__count">{{ tag_page.photos.length }} photo{{ 's' if tag_page.photos.length != 1 else '' }}</span></h1>
   </div>
 
   {% if tag_page.photos.length %}
