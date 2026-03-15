@@ -895,10 +895,29 @@ a:hover {
   margin: var(--space-2xl) 0;
 }
 
-/* Photo cards inside post body break out of narrow width */
+/* Images and photo cards inside post/page body break out of narrow width.
+   Target width: 57rem (halves the margin between 42rem text and 72rem container).
+   Falls back to inline at small viewports. */
+.post-body p:has(> img),
 .post-body .photo-card,
+.page-body p:has(> img),
 .page-body .photo-card {
-  max-width: 56rem;
+  max-width: 57rem;
+  width: calc(100% + 15rem);
+  margin-left: -7.5rem;
+  margin-right: -7.5rem;
+}
+
+@media (max-width: 60em) {
+  .post-body p:has(> img),
+  .post-body .photo-card,
+  .page-body p:has(> img),
+  .page-body .photo-card {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .post-body .photo-card a,

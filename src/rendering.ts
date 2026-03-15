@@ -684,7 +684,7 @@ function renderPhotoCard(
     '<div class="photo-card">',
     `  <a href="${href}">`,
     '    <div class="photo-card__image">',
-    `      <img src="${basePath}${best.path}" srcset="${prefixedSrcset(photo.variants, basePath)}" sizes="(max-width: 42rem) 100vw, 42rem" alt="${alt}" loading="lazy" decoding="async">`,
+    `      <img src="${basePath}${best.path}" srcset="${prefixedSrcset(photo.variants, basePath)}" sizes="(max-width: 57rem) 100vw, 57rem" alt="${alt}" loading="lazy" decoding="async">`,
     '    </div>',
     '    <div class="photo-card__info">',
     title
