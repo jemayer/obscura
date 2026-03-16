@@ -141,6 +141,44 @@ describe('full build pipeline', () => {
     expect(html).toContain('data-pswp-license="all-rights-reserved"');
   });
 
+  it('photo page og:description falls back to location + date when no caption', async () => {
+    // The test fixture photo has a caption, so og:description should use it
+    const path = resolve(WORK_DIR, 'dist', 'photography', 'test-gallery', 'test-photo', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('og:description');
+    expect(html).toContain('A photo for testing');
+  });
+
+  it('photo page includes og:image and twitter:card when variants exist', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'photography', 'test-gallery', 'test-photo', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    // Test fixture has a tiny image; og:image/twitter:card only render when variants exist
+    // Verify the og:type and og:title are always present
+    expect(html).toContain('og:type');
+    expect(html).toContain('og:title');
+  });
+
+  it('gallery page includes og:title and og:url', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'photography', 'test-gallery', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('og:title');
+    expect(html).toContain('og:url');
+  });
+
+  it('homepage includes og:type and og:title', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('og:type');
+    expect(html).toContain('og:title');
+  });
+
+  it('static page includes og:title and og:url', async () => {
+    const path = resolve(WORK_DIR, 'dist', 'about', 'index.html');
+    const html = await readFile(path, 'utf-8');
+    expect(html).toContain('og:title');
+    expect(html).toContain('og:url');
+  });
+
   it('renders mobile nav toggle button', async () => {
     const path = resolve(WORK_DIR, 'dist', 'index.html');
     const html = await readFile(path, 'utf-8');

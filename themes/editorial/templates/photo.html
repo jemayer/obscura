@@ -10,6 +10,13 @@
 <meta property="og:title" content="{{ photo.metadata.title or (photo.slug | bareslug) }}">
 {% if photo.metadata.caption %}
 <meta property="og:description" content="{{ photo.metadata.caption }}">
+{% else %}
+{% set og_desc_parts = [] %}
+{% if photo.metadata.location %}{% set _ = og_desc_parts.push(photo.metadata.location) %}{% endif %}
+{% if photo.metadata.date %}{% set _ = og_desc_parts.push(photo.metadata.date | datereadable) %}{% endif %}
+{% if og_desc_parts.length %}
+<meta property="og:description" content="{{ og_desc_parts | join(' · ') }}">
+{% endif %}
 {% endif %}
 {% if photo.variants.length %}
 {% set og_variant = photo.variants | bestvariant(1200) %}

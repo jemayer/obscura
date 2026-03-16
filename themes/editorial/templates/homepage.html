@@ -5,6 +5,9 @@
 {% block og_meta %}
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ site.title }}">
+{% if site.description %}
+<meta property="og:description" content="{{ site.description }}">
+{% endif %}
 {% if hero and hero.photo.variants.length %}
 {% set og_variant = hero.photo.variants | bestvariant(1200) %}
 <meta property="og:image" content="{{ og_variant.path | absurl }}">

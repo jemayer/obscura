@@ -1,5 +1,7 @@
 base_url: https://example.com
 title: "Obscura - A Static Site Generator for Photographers only"
+# Short site description — used in OpenGraph previews when sharing your homepage.
+# description: "Photography portfolio by Your Name"
 theme: editorial
 recent_shots_count: 10
 # Default license for all photos (can be overridden per-photo in sidecar YAML).

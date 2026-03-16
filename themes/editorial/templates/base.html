@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ site.title }}{% endblock %}</title>
-  <meta name="description" content="{% block description %}{{ site.title }}{% endblock %}">
+  <meta name="description" content="{% block description %}{{ site.description or site.title }}{% endblock %}">
   <meta name="generator" content="Obscura {{ build_timestamp }}">
 
   {% block og_meta %}{% endblock %}
