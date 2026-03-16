@@ -12,7 +12,11 @@
 <meta property="og:description" content="{{ photo.metadata.caption }}">
 {% endif %}
 {% if photo.variants.length %}
-<meta property="og:image" content="{{ (photo.variants | bestvariant(1200)).path | absurl }}">
+{% set og_variant = photo.variants | bestvariant(1200) %}
+<meta property="og:image" content="{{ og_variant.path | absurl }}">
+<meta property="og:image:width" content="{{ og_variant.width }}">
+<meta property="og:image:height" content="{{ og_variant.height }}">
+<meta name="twitter:card" content="summary_large_image">
 {% endif %}
 <meta property="og:url" content="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | absurl }}">
 {% if photo.metadata.license | licenseurl %}

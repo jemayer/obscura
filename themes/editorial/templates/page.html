@@ -4,6 +4,12 @@
 
 {% block title %}{{ page.frontmatter.title }} — {{ site.title }}{% endblock %}
 
+{% block og_meta %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ page.frontmatter.title }}">
+<meta property="og:url" content="{{ ('/' + page.slug + '/') | absurl }}">
+{% endblock %}
+
 {% block content %}
 <div class="content content--narrow">
   <h1 class="page-title">{{ page.frontmatter.title }}</h1>

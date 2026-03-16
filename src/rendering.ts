@@ -385,10 +385,16 @@ export async function renderBlogPost(
     engine.siteConfig.base_path,
   );
   const postWithCards = { ...post, renderedContent: content };
+
+  // Use the first referenced photo as the OG image for social previews
+  const firstRef = post.referencedPhotos[0];
+  const ogEntry = firstRef ? photoIndex.get(firstRef) : undefined;
+  const ogImage = ogEntry?.photo ?? null;
+
   await renderToFile(
     engine,
     'blog-post.html',
-    { post: postWithCards },
+    { post: postWithCards, og_image: ogImage },
     distDir,
     `blog/${post.slug}/index.html`,
   );
