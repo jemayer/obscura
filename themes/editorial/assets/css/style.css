@@ -1325,11 +1325,20 @@ a.tag:hover {
 }
 
 .error-page__links a {
-  border-bottom: 1px solid var(--color-border);
+  color: var(--color-highlight);
+  border-bottom: none;
+  background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+  background-size: 0% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  transition:
+    background-size 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.25s var(--ease-out);
 }
 
 .error-page__links a:hover {
-  border-color: var(--color-text);
+  color: var(--color-highlight);
+  background-size: 100% 1px;
 }
 
 /* --------------------------------------------------------------------------
