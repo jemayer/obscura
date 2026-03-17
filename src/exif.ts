@@ -81,9 +81,15 @@ function buildExifData(parsed: ExifrOutput): ExifData {
     rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
-  const focal_length = parsed.FocalLength;
+  const focal_length =
+    parsed.FocalLength !== undefined
+      ? Math.round(parsed.FocalLength * 100) / 100
+      : undefined;
   const iso = parsed.ISO;
-  const aperture = parsed.FNumber;
+  const aperture =
+    parsed.FNumber !== undefined
+      ? Math.round(parsed.FNumber * 100) / 100
+      : undefined;
   const shutter_speed =
     parsed.ExposureTime !== undefined
       ? formatShutterSpeed(parsed.ExposureTime)
