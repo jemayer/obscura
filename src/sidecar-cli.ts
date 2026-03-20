@@ -1,7 +1,6 @@
 import { resolve } from 'node:path';
 import * as p from '@clack/prompts';
 import sharp from 'sharp';
-import terminalImage from 'terminal-image';
 import { loadGalleryConfig, loadSiteConfig } from './config.js';
 import { generateSidecars } from './sidecar.js';
 import type { GalleryEntry } from './types.js';
@@ -49,14 +48,52 @@ function buildContextLine(target: SidecarEditTarget): string {
   return parts.length > 0 ? parts.join(' · ') : 'No EXIF data';
 }
 
+/**
+ * Render a photo as colored ANSI half-block characters in the terminal.
+ * Uses sharp to resize to a small thumbnail, then pairs rows of pixels
+ * using the Unicode upper-half-block (▀) with 24-bit ANSI colors:
+ * foreground = top pixel, background = bottom pixel → 2 rows per line.
+ */
+async function renderAnsiImage(photoPath: string, cols: number): Promise<string> {
+  const { info, data } = await sharp(photoPath)
+    .resize({ width: cols, withoutEnlargement: true })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const w = info.width;
+  const h = info.height;
+  const lines: string[] = [];
+
+  for (let y = 0; y < h; y += 2) {
+    let line = '';
+    for (let x = 0; x < w; x++) {
+      const topIdx = (y * w + x) * 4;
+      const tr = String(data[topIdx] ?? 0);
+      const tg = String(data[topIdx + 1] ?? 0);
+      const tb = String(data[topIdx + 2] ?? 0);
+
+      if (y + 1 < h) {
+        const botIdx = ((y + 1) * w + x) * 4;
+        const br = String(data[botIdx] ?? 0);
+        const bg = String(data[botIdx + 1] ?? 0);
+        const bb = String(data[botIdx + 2] ?? 0);
+        // Upper-half-block: fg = top pixel, bg = bottom pixel
+        line += `\x1b[38;2;${tr};${tg};${tb}m\x1b[48;2;${br};${bg};${bb}m▀`;
+      } else {
+        // Odd last row: top pixel only
+        line += `\x1b[38;2;${tr};${tg};${tb}m▀`;
+      }
+    }
+    line += '\x1b[0m';
+    lines.push(line);
+  }
+  return lines.join('\n');
+}
+
 async function showPreview(photoPath: string): Promise<void> {
   try {
-    // Convert through sharp to handle format mismatches (e.g. WebP with .jpg extension)
-    const buffer = await sharp(photoPath).png().toBuffer();
-    const image = await terminalImage.buffer(buffer, {
-      width: '50%',
-      height: '50%',
-    });
+    const cols = Math.min(process.stdout.columns, 80);
+    const image = await renderAnsiImage(photoPath, cols);
     console.log(image);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : String(error);
