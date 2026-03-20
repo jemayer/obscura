@@ -1196,6 +1196,24 @@ a.tag:hover {
   margin-bottom: 0;
 }
 
+.homepage-intro a {
+  color: var(--color-highlight);
+  border-bottom: none;
+  background-image: linear-gradient(var(--color-highlight), var(--color-highlight));
+  background-size: 0% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  padding-bottom: 1px;
+  transition:
+    background-size 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.25s var(--ease-out);
+}
+
+.homepage-intro a:hover {
+  color: var(--color-highlight);
+  background-size: 100% 1px;
+}
+
 @media (min-width: 48em) {
   .homepage-intro {
     font-size: 1.3125rem;
