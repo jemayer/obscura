@@ -42,6 +42,9 @@
   --color-overlay-light: rgba(28, 27, 25, 0.03);
   --color-highlight: #c45d3e;
   --color-highlight-muted: rgba(196, 93, 62, 0.25);
+  --color-marker: rgba(255, 240, 50, 0.38);
+  --color-marker-edge: rgba(255, 240, 50, 0.15);
+  --color-marker-line: rgba(215, 190, 10, 0.35);
   --color-code-bg: var(--color-bg-subtle);
 
   /* Spacing */
@@ -1233,17 +1236,17 @@ a.tag:hover {
   background-image:
     linear-gradient(
       170deg,
-      rgba(196, 93, 62, 0.08) 0%,
-      rgba(196, 93, 62, 0.18) 35%,
-      rgba(196, 93, 62, 0.22) 50%,
-      rgba(196, 93, 62, 0.16) 75%,
-      rgba(196, 93, 62, 0.10) 100%
+      var(--color-marker-edge) 0%,
+      var(--color-marker) 18%,
+      var(--color-marker) 82%,
+      var(--color-marker-edge) 100%
     );
   background-repeat: no-repeat;
   background-position: left center;
   padding: 0.05em 0.15em;
   margin: 0 -0.05em;
   border-radius: 0.15em 0.25em 0.2em 0.18em;
+  border-bottom: 1.5px solid var(--color-marker-line);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
@@ -1393,6 +1396,9 @@ a.tag:hover {
     --color-overlay-light: rgba(229, 227, 222, 0.04);
     --color-highlight: #d4745a;
     --color-highlight-muted: rgba(212, 116, 90, 0.3);
+    --color-marker: rgba(255, 235, 50, 0.22);
+    --color-marker-edge: rgba(255, 235, 50, 0.08);
+    --color-marker-line: rgba(225, 200, 30, 0.28);
     --color-code-bg: #262622;
   }
 }
@@ -1414,6 +1420,9 @@ a.tag:hover {
   --color-overlay: rgba(18, 18, 17, 0.85);
   --color-highlight: #d4745a;
   --color-highlight-muted: rgba(212, 116, 90, 0.3);
+  --color-marker: rgba(255, 235, 50, 0.22);
+  --color-marker-edge: rgba(255, 235, 50, 0.08);
+  --color-marker-line: rgba(225, 200, 30, 0.28);
   --color-overlay-light: rgba(229, 227, 222, 0.04);
   --color-code-bg: #262622;
 }
