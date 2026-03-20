@@ -50,5 +50,9 @@
     "terminal-image": "^4.2.0",
     "unified": "^11.0.5",
     "yaml": "^2.8.2"
+  },
+  "overrides": {
+    "phin": "^3.7.1",
+    "file-type": "^21.3.3"
   }
 }
