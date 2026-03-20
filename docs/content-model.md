@@ -80,6 +80,57 @@ The shorthand `exif` expands to `date`, `camera`, `lens`, and `settings` — use
 
 Both fields default to showing everything when omitted.
 
+## Site Configuration — Navigation
+
+Customise the site navigation menu in `config/site.yaml`. When omitted, the default menu is used (Photography, Tags, Locations, Blog, About, Contact).
+
+```yaml
+navigation:
+  - label: Photography
+    url: photography
+  - label: Tags
+    url: tags
+  - label: About
+    url: page:about
+```
+
+Each item has a `label` (display text) and a `url` (link target):
+
+| URL format | Example | Description |
+|-----------|---------|-------------|
+| Built-in keyword | `photography`, `tags`, `locations`, `blog` | Links to the corresponding section |
+| Page reference | `page:about` | Links to a page in `content/pages/`. Build fails if the page doesn't exist |
+| Literal path | `/custom/page/` | Used as-is (with `base_path` prepended) |
+| External URL | `https://prints.example.com` | Opens in a new tab |
+
+Active-link highlighting works automatically for built-in keywords, page references, and simple `/<slug>/` literal paths.
+
+### Examples
+
+Minimal portfolio (no blog, no tags):
+
+```yaml
+navigation:
+  - label: Portfolio
+    url: photography
+  - label: About
+    url: page:about
+```
+
+With an external link:
+
+```yaml
+navigation:
+  - label: Photos
+    url: photography
+  - label: Prints
+    url: https://prints.example.com
+  - label: About
+    url: page:about
+```
+
+An empty list (`navigation: []`) removes the menu entirely.
+
 ## Site Configuration — Gallery Layout
 
 Set the site-wide default gallery layout in `config/site.yaml`:

@@ -11,6 +11,7 @@ import type {
   DisplayField,
   SocialLink,
   SocialPlatform,
+  NavItem,
 } from './types.js';
 import { ALL_DISPLAY_FIELDS, EXIF_SUB_FIELDS } from './types.js';
 
@@ -68,6 +69,7 @@ interface RawSiteConfig {
   photo_display_fields?: string[];
   lightbox_display_fields?: string[];
   hero_image?: string;
+  navigation?: Array<{ label?: string; url?: string }>;
   images?: {
     breakpoints?: number[];
     webp_quality?: number;
@@ -148,6 +150,28 @@ export function parseDisplayFields(
   return expanded.length > 0 ? expanded : ALL_DISPLAY_FIELDS;
 }
 
+/**
+ * Parse and validate navigation items from config.
+ * Returns undefined when omitted (use default menu), or the validated list.
+ */
+export function parseNavigation(
+  raw: Array<{ label?: string; url?: string }> | undefined,
+): readonly NavItem[] | undefined {
+  if (!raw || !Array.isArray(raw)) return undefined;
+  const result: NavItem[] = [];
+  for (const entry of raw) {
+    if (
+      typeof entry.label === 'string' &&
+      entry.label.length > 0 &&
+      typeof entry.url === 'string' &&
+      entry.url.length > 0
+    ) {
+      result.push({ label: entry.label, url: entry.url });
+    }
+  }
+  return result;
+}
+
 async function loadYamlFile(filePath: string): Promise<unknown> {
   const content = await readFile(filePath, 'utf-8');
   return parseYaml(content) as unknown;
@@ -205,6 +229,7 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
       typeof raw.hero_image === 'string' && raw.hero_image.length > 0
         ? raw.hero_image
         : undefined,
+    navigation: parseNavigation(raw.navigation),
     images: {
       breakpoints: raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
       webp_quality:

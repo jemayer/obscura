@@ -78,6 +78,8 @@ export interface SiteConfig {
   readonly lightbox_display_fields: readonly DisplayField[];
   /** Optional hero image for homepage: "gallery-slug/photo-slug" */
   readonly hero_image?: string | undefined;
+  /** Optional custom navigation menu items */
+  readonly navigation?: readonly NavItem[] | undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -135,6 +137,22 @@ export const LICENSE_LABELS: Readonly<Record<string, string>> = {
   'CC-BY-NC-ND-4.0': 'CC BY-NC-ND 4.0',
   'CC0-1.0': 'CC0 1.0',
 };
+
+// ---------------------------------------------------------------------------
+// Navigation
+// ---------------------------------------------------------------------------
+
+export interface NavItem {
+  readonly label: string;
+  readonly url: string;
+}
+
+export interface ResolvedNavItem {
+  readonly label: string;
+  readonly href: string;
+  readonly navKey: string | null;
+  readonly external: boolean;
+}
 
 // ---------------------------------------------------------------------------
 // Photo

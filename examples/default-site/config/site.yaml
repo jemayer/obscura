@@ -30,6 +30,24 @@ license: all-rights-reserved
 #     url: https://pixelfed.social/yourhandle
 #   - platform: github
 #     url: https://github.com/yourhandle
+# Navigation menu — customise which links appear in the site header.
+# When omitted, the default menu is: Photography, Tags, Locations, Blog, About, Contact.
+# URL values can be: built-in keywords (photography, tags, locations, blog),
+# page references (page:about), literal paths (/custom/), or external URLs.
+# navigation:
+#   - label: Photography
+#     url: photography
+#   - label: Tags
+#     url: tags
+#   - label: Locations
+#     url: locations
+#   - label: Blog
+#     url: blog
+#   - label: About
+#     url: page:about
+#   - label: Contact
+#     url: page:contact
+
 # Hero image for the homepage. Set to "gallery-slug/photo-slug" to pin a
 # specific photo. If omitted, the first landscape photo from recent shots
 # is used automatically.

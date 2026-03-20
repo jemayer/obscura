@@ -20,6 +20,8 @@ import {
   responsiveImg,
 } from './responsive.js';
 import { slugifyTag, slugifyLocation } from './slugs.js';
+import type { ResolvedNavItem } from './types.js';
+import { resolveNavigation } from './navigation.js';
 
 // ---------------------------------------------------------------------------
 // Nunjucks Environment
@@ -535,6 +537,7 @@ export async function renderAll(
   distDir: string,
 ): Promise<void> {
   const {
+    siteConfig,
     galleries,
     posts,
     pages,
@@ -544,6 +547,13 @@ export async function renderAll(
     homepageContent,
     galleryIndexContent,
   } = context;
+
+  // Resolve navigation and inject as global template variable
+  const navItems: readonly ResolvedNavItem[] = resolveNavigation(
+    siteConfig,
+    pages,
+  );
+  engine.env.addGlobal('nav_items', navItems);
 
   // Homepage
   await renderHomepage(engine, galleries, posts, homepageContent, distDir);
