@@ -1,63 +1,101 @@
 # Getting Started
 
-A step-by-step guide to setting up your photography portfolio with Obscura.
+This guide gets you from zero to a running portfolio in five steps. You'll need [Node.js](https://nodejs.org/) 20 or later and a terminal.
 
-## Prerequisites
-
-- [Node.js](https://nodejs.org/) 20 or later
-- A terminal (Terminal on macOS, Command Prompt or PowerShell on Windows)
-- A [GitHub](https://github.com) account (for hosting and updates)
-- Your photos (JPEG, PNG, TIFF, or WebP)
-
-## Setup
-
-### 1. Fork the Repository
-
-Create your own copy of Obscura on GitHub:
-
-1. Go to [github.com/jemayer/obscura](https://github.com/jemayer/obscura)
-2. Click the **Fork** button (top-right corner)
-3. On the "Create a new fork" page, choose your GitHub account as the owner
-4. Optionally rename the repository (e.g. `my-portfolio`) — this will be part of your GitHub URL
-5. Click **Create fork**
-
-GitHub will create a copy at `https://github.com/YOUR-USERNAME/obscura` (or whatever you named it).
-
-### 2. Clone Your Fork
-
-Clone the fork to your machine and install dependencies:
+## 1. Clone and Install
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/obscura.git my-portfolio
+git clone https://github.com/jemayer/obscura.git my-portfolio
 cd my-portfolio
 npm install
 ```
 
-At this point, `origin` points to your fork on GitHub. You can push your content and config changes there freely.
+That gives you the Obscura engine, the default theme, and the example content. Your config and content directories are created in the next step — they're not tracked in the repository, so pulling updates later won't touch your files.
 
-### 3. Initialise Example Content
-
-A fresh clone doesn't include `config/` or `content/` — the demo site lives in `examples/` to avoid merge conflicts when you pull engine updates. Run the init script to get started:
+## 2. Initialise the Example Site
 
 ```bash
 npm run init
 ```
 
-This copies the example site (config files, sample gallery, pages, and a blog post) into `config/` and `content/`. You can skip this step if you prefer to create your config and content from scratch.
+This creates `config/` and `content/` with a sample gallery, pages, and a blog post. You can skip this step if you prefer to start from scratch.
 
-### 4. Add the Upstream Remote (Optional)
+## 3. Add Your Content
 
-If you want to pull future Obscura engine updates into your fork, add the original repo as a second remote:
+### Photos
 
-```bash
-git remote add upstream https://github.com/jemayer/obscura.git
+Create a gallery by adding an entry to `config/galleries.yaml`:
+
+```yaml
+galleries:
+  - slug: street
+    title: Street Photography
+    description: Moments from the city
+    listed: true
 ```
 
-You now have two remotes:
-- **origin** — your fork on GitHub (your content, your site)
-- **upstream** — the original Obscura repo (engine updates, theme improvements)
+Then drop your photos into the matching folder:
 
-You can verify with `git remote -v`.
+```bash
+mkdir -p content/photos/street
+cp ~/Pictures/best-of/*.jpg content/photos/street/
+```
+
+Obscura handles the rest — resizing, WebP conversion, thumbnails, EXIF extraction. When you build, it auto-generates a sidecar YAML file for each photo, pre-filled with whatever metadata your camera embedded.
+
+### Blog Posts
+
+Create a Markdown file in `content/posts/` with a bit of frontmatter:
+
+```markdown
+---
+title: My First Shoot
+date: 2026-03-20
+tags:
+  - street
+summary: A morning walk through the city with a camera.
+---
+
+Your text goes here. You can embed photos from any gallery
+using a shortcode:
+
+{{< photo "street/morning-light" >}}
+```
+
+The welcome post created by `npm run init` has a working example you can use as a starting point.
+
+## 4. Fill In Your Metadata
+
+The interactive sidecar editor walks you through each photo with a preview:
+
+```bash
+npm run sidecar
+```
+
+It prompts for title, location, caption, and tags — the things your camera doesn't know. Press Enter to skip any field. You can also edit the YAML files by hand if you prefer (e.g., `content/photos/street/photo-name.yaml`).
+
+## 5. Build and Preview
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000. Your site rebuilds automatically when you change files — photos, posts, and pages alike.
+
+When you're happy, build for production:
+
+```bash
+npm run build
+```
+
+The output lands in `dist/` — plain static files ready to deploy anywhere. Subsequent builds are faster because processed images are cached — only new or modified photos are re-processed. If you ever need a guaranteed-fresh build, use `npm run build:clean`.
+
+## What's Next
+
+- **Deploy your site** — rsync to your own server, or push to GitHub Pages, Netlify, or Cloudflare Pages. The [Deployment Guide](./deployment.md) walks through each option.
+- **Customise your config** — Edit `config/site.yaml` to set your site title, URL, and display preferences. The [Content Model Reference](./content-model.md) covers all the options.
+- **Write a blog post** — Create a Markdown file in `content/posts/` and use photo shortcodes to embed your images. The welcome post shows you how.
+- **Stay up to date** — Since `config/` and `content/` aren't tracked in the repository, updating Obscura is just `git pull && npm install`. Your content is never affected.
 
 ## Project Structure
 
@@ -92,111 +130,42 @@ This means:
 - A fresh clone of your repo won't have the images until you copy them back into `content/photos/`
 - The build will warn about sidecars that reference missing images
 
-## Configure Your Site
+## Optional: Fork Instead of Clone
 
-Edit `config/site.yaml`:
+If you'd like to version-control your content on GitHub — or contribute back to Obscura — you can fork the repository instead of cloning it directly:
 
-```yaml
-base_url: https://your-domain.com
-title: "Your Name — Photography"
-theme: editorial
-recent_shots_count: 12
-license: all-rights-reserved
-
-# Control which metadata shows on photo pages and lightbox.
-# Available fields: date, camera, lens, settings, location, tags, license
-# Use "exif" as shorthand for date + camera + lens + settings.
-# photo_display_fields: [date, camera, lens, settings, location, tags, license]
-# lightbox_display_fields: [date, camera, location, license]
-
-images:
-  breakpoints: [400, 800, 1200, 2400]
-  webp_quality: 85
-```
-
-## Add Your First Gallery
-
-1. Define the gallery in `config/galleries.yaml`:
-
-```yaml
-galleries:
-  - slug: street
-    title: Street Photography
-    description: Moments from the city
-    listed: true
-```
-
-2. Create a folder and add photos:
+1. Go to [github.com/jemayer/obscura](https://github.com/jemayer/obscura)
+2. Click the **Fork** button (top-right corner)
+3. On the "Create a new fork" page, choose your GitHub account as the owner
+4. Optionally rename the repository (e.g. `my-portfolio`)
+5. Click **Create fork**
+6. Clone your fork instead:
 
 ```bash
-mkdir -p content/photos/street
-cp ~/Pictures/street-photos/*.jpg content/photos/street/
+git clone https://github.com/YOUR-USERNAME/obscura.git my-portfolio
+cd my-portfolio
+npm install
 ```
 
-3. Build the site — Obscura will auto-generate sidecar YAML files for each photo:
+Add the original repo as an upstream remote to pull engine updates:
 
 ```bash
-npm run build
+git remote add upstream https://github.com/jemayer/obscura.git
 ```
 
-4. Fill in titles, locations, and captions using the interactive sidecar editor:
-
-```bash
-npm run sidecar
-```
-
-The editor walks you through each photo with an image preview and prompts for each field. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
-
-Alternatively, you can edit the generated sidecar files by hand (e.g., `content/photos/street/photo-name.yaml`):
-
-```yaml
-title: Morning Light
-date: 2024-06-15
-camera: Leica M10
-location: Berlin, Germany
-caption: Early morning in Kreuzberg
-tags:
-  - berlin
-  - street
-```
-
-## Preview Your Site
-
-```bash
-npm run dev
-```
-
-Open http://localhost:3000 in your browser. The site rebuilds automatically when you change files.
-
-## Build for Production
-
-```bash
-npm run build
-```
-
-The generated site is in `dist/`. Subsequent builds are faster because processed images are cached — only new or modified photos are re-processed. If you ever need a guaranteed-fresh build, use `npm run build:clean`.
-
-## Pulling Upstream Updates
+You now have two remotes:
+- **origin** — your fork on GitHub (your content, your site)
+- **upstream** — the original Obscura repo (engine updates, theme improvements)
 
 When Obscura releases new features or bug fixes, pull them into your fork:
 
 ```bash
 git fetch upstream
 git merge upstream/main
-```
-
-Conflicts are rare because your content (`config/`, `content/`) isn't tracked in the upstream repo at all — only engine code changes come through. If you've customised theme CSS in `themes/`, you may occasionally need to resolve a merge conflict there — git will tell you.
-
-After merging, install any new dependencies and rebuild:
-
-```bash
 npm install
 npm run build:clean
 ```
 
-## Next Steps
+Conflicts are rare because your content (`config/`, `content/`) isn't tracked in the upstream repo at all — only engine code changes come through. If you've customised theme CSS in `themes/`, you may occasionally need to resolve a merge conflict there — git will tell you.
 
-- [Content Model Reference](./content-model.md) — all the fields and options
-- [CLI Reference](./cli.md) — build commands and options
-- [Theming Guide](./theming.md) — customise the look
-- [Deployment Guide](./deployment.md) — publish your site
+This is entirely optional. A plain clone works perfectly for most workflows.

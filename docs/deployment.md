@@ -1,47 +1,50 @@
 # Deployment Guide
 
-Obscura generates a static site in `dist/`. You can host it anywhere that serves static files.
+Obscura generates a plain `dist/` folder of static files — no application server, no runtime, no database. You can host it anywhere that serves files over HTTP.
 
-## Important: Photos Are Not in Git
+## The One Thing to Know First
 
-Original photo files are [gitignored](../docs/adr/ADR-011-gitignore-originals.md) to keep the repository small. This means **CI/CD services cannot build your site** from the repository alone — they won't have the source images.
+Your original photos are [gitignored](./adr/ADR-011-gitignore-originals.md) to keep the repository small — a portfolio of high-resolution images would make your repository enormous. That means CI services can't build the site from your repo alone; they don't have the source images.
 
-You have two options:
+The simplest approach: **build locally, deploy the output.** Run `npm run build` on your machine and push only the `dist/` folder. Every option below follows this pattern.
 
-1. **Build locally, deploy the output** (recommended) — run `npm run build` on your machine and push only the `dist/` folder to your hosting provider. Simple, no extra infrastructure needed.
-2. **Store photos externally for CI** — use Git LFS, or sync photos into the CI environment from cloud storage (S3, Google Drive, etc.) before building. More complex, but enables fully automated deploys.
+## rsync to Your Own Server
 
-Most photographers will prefer option 1. The guides below cover both approaches where applicable.
-
-## GitHub Pages
-
-### Option A: Build Locally, Deploy to gh-pages (Recommended)
-
-This is the simplest approach. You build on your machine and push the result.
-
-1. Build the site:
+If you have a VPS, a shared host with SSH access, or any machine you can reach over the network, rsync is hard to beat. It compares files on both sides and only transfers what's changed — which matters when your `dist/` folder is hundreds of megabytes but you've only added a few new photos.
 
 ```bash
 npm run build
+rsync -avz --delete dist/ you@yourserver:/var/www/portfolio/
 ```
 
-2. Deploy `dist/` to the `gh-pages` branch:
+The `--delete` flag removes files on the server that no longer exist locally — so if you delete a gallery or rename a post, the old files don't linger. The `-avz` flags preserve file attributes, show progress, and compress during transfer.
+
+To redeploy after changes:
 
 ```bash
+npm run build && rsync -avz --delete dist/ you@yourserver:/var/www/portfolio/
+```
+
+This is as straightforward as deployment gets: no platform accounts, no CLI tools to install, no build minutes to manage. If you can SSH into a server, you can deploy your portfolio.
+
+## GitHub Pages
+
+A good free option if your code already lives on GitHub.
+
+```bash
+npm run build
 npx gh-pages -d dist
 ```
 
-3. In your GitHub repository settings, go to **Pages** and set the source to the `gh-pages` branch.
+The `gh-pages` package pushes your `dist/` folder to a `gh-pages` branch. Go to your repository settings, enable Pages, set the source to the `gh-pages` branch, and your site is live at `https://YOUR-USERNAME.github.io/obscura/`.
 
-Your site will be available at `https://YOUR-USERNAME.github.io/obscura/` (or your custom domain).
-
-**To redeploy after changes:**
+To redeploy after changes:
 
 ```bash
 npm run build && npx gh-pages -d dist
 ```
 
-### Option B: GitHub Actions (Requires Photos in CI)
+### GitHub Actions (Requires Photos in CI)
 
 If you want fully automated deploys on every push, the CI runner needs access to your photos. This requires extra setup (e.g., Git LFS, or a sync step from cloud storage).
 
@@ -90,14 +93,14 @@ Enable GitHub Pages in your repository settings and set the source to "GitHub Ac
 
 ## Netlify
 
-### Build Locally (Recommended)
-
-Use the [Netlify CLI](https://docs.netlify.com/cli/get-started/) to deploy a local build:
+If you'd like a CDN and instant rollbacks:
 
 ```bash
 npm run build
 npx netlify deploy --prod --dir=dist
 ```
+
+The first time, the Netlify CLI will walk you through linking your project. After that, deploys are one command. Netlify gives you HTTPS, a global CDN, and deploy previews — all on the free tier.
 
 ### Netlify CI (Requires Photos)
 
@@ -109,14 +112,14 @@ If your photos are available in the build environment:
 
 ## Cloudflare Pages
 
-### Build Locally (Recommended)
-
-Use [Wrangler](https://developers.cloudflare.com/workers/wrangler/) to deploy a local build:
+Cloudflare Pages offers fast global distribution and generous free limits:
 
 ```bash
 npm run build
 npx wrangler pages deploy dist
 ```
+
+Same pattern — build locally, push the output. Cloudflare handles the rest.
 
 ### Cloudflare CI (Requires Photos)
 
@@ -126,21 +129,23 @@ If your photos are available in the build environment:
 2. Set the build command to `npm run build`
 3. Set the output directory to `dist`
 
-## Any Static Host
-
-Build locally and upload the contents of `dist/` to your hosting provider:
-
-```bash
-npm run build
-# Upload dist/ contents via FTP, rsync, S3, etc.
-```
-
 ## Custom Domain
 
-Set `base_url` in `config/site.yaml` to your domain before building:
+Whichever host you choose, set your `base_url` in `config/site.yaml` before building:
 
 ```yaml
 base_url: https://www.your-domain.com
 ```
 
-Then configure your DNS and hosting provider to point to the deployed site. Refer to your hosting provider's documentation for specifics.
+Then configure DNS with your hosting provider. Their documentation covers the specifics — it's usually a CNAME or A record.
+
+## The Routine
+
+Once you're set up, publishing new work follows the same rhythm:
+
+1. Add photos to a gallery folder, write or update a blog post
+2. Run `npm run sidecar` to fill in photo metadata
+3. `npm run build`
+4. Deploy with your one-liner of choice
+
+Build on your machine, push the result, done.
