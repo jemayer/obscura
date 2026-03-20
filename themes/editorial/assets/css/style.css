@@ -44,6 +44,8 @@
   --color-highlight-muted: rgba(196, 93, 62, 0.25);
   --color-marker: rgba(255, 240, 50, 0.38);
   --color-marker-edge: rgba(255, 240, 50, 0.15);
+  --color-marker-text: inherit;
+  --color-marker-glow: transparent;
   --color-code-bg: var(--color-bg-subtle);
 
   /* Spacing */
@@ -1245,6 +1247,8 @@ a.tag:hover {
   padding: 0.05em 0.15em;
   margin: 0 -0.05em;
   border-radius: 0.15em 0.25em 0.2em 0.18em;
+  color: var(--color-marker-text);
+  box-shadow: 0 0 8px var(--color-marker-glow), 0 0 2px var(--color-marker-glow);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
@@ -1394,9 +1398,11 @@ a.tag:hover {
     --color-overlay-light: rgba(229, 227, 222, 0.04);
     --color-highlight: #d4745a;
     --color-highlight-muted: rgba(212, 116, 90, 0.3);
-    --color-marker: rgba(255, 240, 50, 0.45);
-    --color-marker-edge: rgba(255, 240, 50, 0.18);
-      --color-code-bg: #262622;
+    --color-marker: rgba(255, 235, 50, 0.85);
+    --color-marker-edge: rgba(255, 235, 50, 0.55);
+    --color-marker-text: #1c1b19;
+    --color-marker-glow: rgba(255, 240, 50, 0.25);
+    --color-code-bg: #262622;
   }
 }
 
@@ -1417,8 +1423,10 @@ a.tag:hover {
   --color-overlay: rgba(18, 18, 17, 0.85);
   --color-highlight: #d4745a;
   --color-highlight-muted: rgba(212, 116, 90, 0.3);
-  --color-marker: rgba(255, 240, 50, 0.45);
-  --color-marker-edge: rgba(255, 240, 50, 0.18);
+  --color-marker: rgba(255, 235, 50, 0.85);
+  --color-marker-edge: rgba(255, 235, 50, 0.55);
+  --color-marker-text: #1c1b19;
+  --color-marker-glow: rgba(255, 240, 50, 0.25);
   --color-overlay-light: rgba(229, 227, 222, 0.04);
   --color-code-bg: #262622;
 }
