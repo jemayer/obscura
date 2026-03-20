@@ -1256,6 +1256,8 @@ a.tag:hover {
 /* Animated marker sweep on the homepage intro */
 .prose u {
   background-size: 0% 100%;
+  color: inherit;
+  box-shadow: none;
   animation: marker-sweep 0.7s var(--ease-out) forwards;
   animation-delay: 0.3s;
 }
@@ -1263,6 +1265,8 @@ a.tag:hover {
 @keyframes marker-sweep {
   to {
     background-size: 100% 100%;
+    color: var(--color-marker-text);
+    box-shadow: 0 0 8px var(--color-marker-glow), 0 0 2px var(--color-marker-glow);
   }
 }
 
