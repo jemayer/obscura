@@ -151,7 +151,7 @@ The output path is derived from the filename: `site/content/pages/about.md` prod
 
 **Output:** Processed images go to `dist/assets/images/`. Originals are never served or copied to `dist/`.
 
-**Version control:** Original image files are gitignored. Only sidecar YAML files are committed.
+**Version control:** Original image files are gitignored (too large for git). Sidecar YAML files are not ignored and can be committed at the user's discretion.
 
 ---
 

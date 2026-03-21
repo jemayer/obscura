@@ -124,7 +124,7 @@ my-portfolio/
 
 ### A Note on Photos and Git
 
-Original photo files (JPEG, PNG, TIFF, WebP) in `site/content/photos/` are **gitignored** to keep the repository small — a portfolio of 100 photos could easily exceed 2 GB. Everything else under `site/` — sidecar YAML files, config, posts, pages, custom themes — is safe to commit.
+Original photo files (JPEG, PNG, TIFF, WebP) in `site/content/photos/` are **gitignored** to keep the repository small — a portfolio of 100 photos could easily exceed 2 GB. Everything else under `site/` — sidecar YAML files, config, posts, pages, custom themes — is *not* ignored and can be committed if you choose to (e.g., for CI deployment or managing your project as a fork).
 
 This means:
 - Your photos live on your local machine (back them up separately — cloud storage, NAS, external drive)

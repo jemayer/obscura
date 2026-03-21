@@ -58,7 +58,7 @@ A `npm run migrate` command detects the old layout (checks for `config/site.yaml
 With the boundary made explicit, `.gitignore` becomes easier to reason about:
 
 - **Build artifacts** (`dist/`, `dist-build/`, `.cache/`, `node_modules/`) — always ignored, always regenerated.
-- **Large photo binaries** (`site/content/photos/**/*.{jpg,jpeg,...}`) — ignored because they're too large for git (per ADR-011). Everything else under `site/` is safe to commit.
+- **Large photo binaries** (`site/content/photos/**/*.{jpg,jpeg,...}`) — ignored because they're too large for git (per ADR-011). Everything else under `site/` is not ignored and can be committed at the user's discretion.
 - **OS noise** (`.DS_Store`, `Thumbs.db`) — standard ignores.
 
 Nothing under `site/` is blanket-ignored. The only carve-out is photo binaries, with a clear documented reason. Users who deploy via CI (GitHub Pages, Netlify) can commit their entire `site/` directory; users who build locally don't need to think about it at all.

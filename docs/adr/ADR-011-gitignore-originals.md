@@ -29,7 +29,7 @@ Everything else under `site/` — sidecar YAML files, Markdown content, config f
 ## Consequences
 
 - The repository stays small and fast to clone, regardless of portfolio size
-- Sidecar YAML files (which live alongside the images) are committed, preserving the metadata library
+- Sidecar YAML files (which live alongside the images) are not gitignored, so users can commit them to preserve their metadata library
 - Users must manage original images outside of git (local backup, cloud storage, NAS, etc.)
 - A fresh clone requires the user to provide their images before building — the build will warn about missing images referenced by sidecars
 - This is the standard approach for content-heavy static sites and aligns with how tools like Hugo and Gatsby handle large assets
