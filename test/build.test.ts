@@ -12,7 +12,7 @@ describe('full build pipeline', () => {
     // Copy fixture to a work directory so we don't pollute
     await rm(WORK_DIR, { recursive: true, force: true });
     await cp(FIXTURE_DIR, WORK_DIR, { recursive: true });
-    // Symlink the real editorial theme
+    // Symlink the real editorial theme (built-in themes stay at project root)
     await symlink(THEME_SRC, resolve(WORK_DIR, 'themes', 'editorial'));
   });
 
