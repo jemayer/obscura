@@ -6,7 +6,7 @@
 
 Runs the build pipeline with incremental image caching:
 
-1. Loads configuration (`config/site.yaml`, `config/galleries.yaml`)
+1. Loads configuration (`site/config/site.yaml`, `site/config/galleries.yaml`)
 2. Validates image formats
 3. Generates sidecar YAML for photos without them
 4. Reads EXIF data and merges with sidecars
@@ -31,8 +31,8 @@ Image cache: 28/28 photos skipped (unchanged)
 ⚠ Warnings:
 
 ⚠ Missing or corrupt EXIF data in 3 photos:
-  - content/photos/mono/old-scan.jpg (no date, no camera info)
-  - content/photos/street/phone-snap.jpg (no lens info)
+  - site/content/photos/mono/old-scan.jpg (no date, no camera info)
+  - site/content/photos/street/phone-snap.jpg (no lens info)
   Tip: fill in the missing fields in the corresponding sidecar YAML files.
 
 ✓ Built 42 pages, 28 photos in 1234ms
@@ -40,7 +40,7 @@ Image cache: 28/28 photos skipped (unchanged)
 
 **On error** (hard errors abort the build):
 ```
-✗ Build failed: Unsupported image format: content/photos/mono/sketch.psd
+✗ Build failed: Unsupported image format: site/content/photos/mono/sketch.psd
 ```
 
 ### `npm run build:clean`
@@ -61,7 +61,7 @@ Starts a local development server with file watching:
 
 - Builds the site (with image caching)
 - Serves `dist/` at http://localhost:3000
-- Watches `content/`, `config/`, and `themes/` for changes
+- Watches `site/content/`, `site/config/`, `site/themes/`, and `themes/` for changes
 - Rebuilds automatically on file changes
 
 Press `Ctrl+C` to stop.
@@ -185,4 +185,4 @@ Formats source files with Prettier.
 | `Photo not found: "slug"` | Shortcode references a photo that doesn't exist | Check the slug spelling and gallery name |
 | `Ambiguous photo slug "slug"` | Same filename in multiple galleries | Use the full `gallery/photo` form |
 | `Duplicate photo slug` | Two files with the same name in one gallery | Rename one of the files |
-| `Theme "X" not found` | Theme name in `site.yaml` doesn't match a folder in `themes/` | Check the `theme` setting |
+| `Theme "X" not found` | Theme name in `site.yaml` doesn't match a folder in `site/themes/` or `themes/` | Check the `theme` setting |

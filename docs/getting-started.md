@@ -10,7 +10,7 @@ cd my-portfolio
 npm install
 ```
 
-That gives you the Obscura engine, the default theme, and the example content. Your config and content directories are created in the next step — they're not tracked in the repository, so pulling updates later won't touch your files.
+That gives you the Obscura engine, the default theme, and the example content. Your site directory is created in the next step — it's not tracked in the repository, so pulling updates later won't touch your files.
 
 ## 2. Initialise the Example Site
 
@@ -18,13 +18,13 @@ That gives you the Obscura engine, the default theme, and the example content. Y
 npm run init
 ```
 
-This creates `config/` and `content/` with a sample gallery, pages, and a blog post. You can skip this step if you prefer to start from scratch.
+This creates `site/` with a sample gallery, pages, and a blog post. Everything under `site/` is yours — edit freely. You can skip this step if you prefer to start from scratch.
 
 ## 3. Add Your Content
 
 ### Photos
 
-Create a gallery by adding an entry to `config/galleries.yaml`:
+Create a gallery by adding an entry to `site/config/galleries.yaml`:
 
 ```yaml
 galleries:
@@ -37,15 +37,15 @@ galleries:
 Then drop your photos into the matching folder:
 
 ```bash
-mkdir -p content/photos/street
-cp ~/Pictures/best-of/*.jpg content/photos/street/
+mkdir -p site/content/photos/street
+cp ~/Pictures/best-of/*.jpg site/content/photos/street/
 ```
 
 Obscura handles the rest — resizing, WebP conversion, thumbnails, EXIF extraction. When you build, it auto-generates a sidecar YAML file for each photo, pre-filled with whatever metadata your camera embedded.
 
 ### Blog Posts
 
-Create a Markdown file in `content/posts/` with a bit of frontmatter:
+Create a Markdown file in `site/content/posts/` with a bit of frontmatter:
 
 ```markdown
 ---
@@ -72,7 +72,7 @@ The interactive sidecar editor walks you through each photo with a preview:
 npm run sidecar
 ```
 
-It prompts for title, location, caption, and tags — the things your camera doesn't know. Press Enter to skip any field. You can also edit the YAML files by hand if you prefer (e.g., `content/photos/street/photo-name.yaml`).
+It prompts for title, location, caption, and tags — the things your camera doesn't know. Press Enter to skip any field. You can also edit the YAML files by hand if you prefer (e.g., `site/content/photos/street/photo-name.yaml`).
 
 ## 5. Build and Preview
 
@@ -93,41 +93,42 @@ The output lands in `dist/` — plain static files ready to deploy anywhere. Sub
 ## What's Next
 
 - **Deploy your site** — rsync to your own server, or push to GitHub Pages, Netlify, or Cloudflare Pages. The [Deployment Guide](./deployment.md) walks through each option.
-- **Customise your config** — Edit `config/site.yaml` to set your site title, URL, and display preferences. The [Content Model Reference](./content-model.md) covers all the options.
-- **Write a blog post** — Create a Markdown file in `content/posts/` and use photo shortcodes to embed your images. The welcome post shows you how.
-- **Stay up to date** — Since `config/` and `content/` aren't tracked in the repository, updating Obscura is just `git pull && npm install`. Your content is never affected.
+- **Customise your config** — Edit `site/config/site.yaml` to set your site title, URL, and display preferences. The [Content Model Reference](./content-model.md) covers all the options.
+- **Write a blog post** — Create a Markdown file in `site/content/posts/` and use photo shortcodes to embed your images. The welcome post shows you how.
+- **Customise your theme** — Copy `themes/editorial/` to `site/themes/editorial/` and modify it freely. User themes in `site/themes/` take priority over built-in ones. See the [Theming Guide](./theming.md) for details.
+- **Stay up to date** — Since `site/` isn't tracked in the repository, updating Obscura is just `git pull && npm install`. Your content is never affected.
 
 ## Project Structure
 
 ```
 my-portfolio/
-├── config/                # ← Your site settings (created by npm run init)
-│   ├── site.yaml
-│   └── galleries.yaml
-├── content/               # ← Your content (created by npm run init)
-│   ├── photos/            #    Photo galleries (images + sidecar YAML)
-│   ├── posts/             #    Blog posts (Markdown)
-│   └── pages/             #    Static pages (about, contact, homepage)
-├── examples/
-│   └── default-site/      # Example content (source for npm run init)
+├── site/                  # ← YOUR site (created by npm run init)
+│   ├── config/            #    Site settings
+│   │   ├── site.yaml
+│   │   └── galleries.yaml
+│   ├── content/           #    Your content
+│   │   ├── photos/        #    Photo galleries (images + sidecar YAML)
+│   │   ├── posts/         #    Blog posts (Markdown)
+│   │   └── pages/         #    Static pages (about, contact, homepage)
+│   └── themes/            #    Your custom themes (override built-in ones)
 ├── themes/
-│   └── editorial/         # Default theme
+│   └── editorial/         # Built-in default theme (updated by upstream)
 ├── src/                   # Obscura engine (TypeScript)
 ├── dist/                  # Generated site (gitignored)
 └── .cache/                # Build cache (gitignored)
 ```
 
-**What's yours:** `config/` and `content/`. These directories are created by `npm run init` and are yours to edit day-to-day. They're not tracked in the upstream repo, so pulling updates will never cause merge conflicts on your content.
+**What's yours:** `site/`. This directory is created by `npm run init` and is yours to edit day-to-day. It's not tracked in the upstream repo, so pulling updates will never cause merge conflicts on your content or custom themes.
 
 **What's Obscura's:** `src/`, `examples/`, `themes/`, `package.json`, `docs/`. These are updated when you pull from upstream.
 
 ### A Note on Photos and Git
 
-Original photo files (JPEG, PNG, TIFF, WebP) in `content/photos/` are **gitignored** to keep the repository small — a portfolio of 100 photos could easily exceed 2 GB. The sidecar YAML files (titles, locations, captions) *are* committed, so your metadata library is always version-controlled.
+Original photo files (JPEG, PNG, TIFF, WebP) in `site/content/photos/` are **gitignored** to keep the repository small — a portfolio of 100 photos could easily exceed 2 GB. Everything else under `site/` — sidecar YAML files, config, posts, pages, custom themes — is safe to commit.
 
 This means:
 - Your photos live on your local machine (back them up separately — cloud storage, NAS, external drive)
-- A fresh clone of your repo won't have the images until you copy them back into `content/photos/`
+- A fresh clone of your repo won't have the images until you copy them back into `site/content/photos/`
 - The build will warn about sidecars that reference missing images
 
 ## Optional: Fork Instead of Clone
@@ -166,6 +167,6 @@ npm install
 npm run build:clean
 ```
 
-Conflicts are rare because your content (`config/`, `content/`) isn't tracked in the upstream repo at all — only engine code changes come through. If you've customised theme CSS in `themes/`, you may occasionally need to resolve a merge conflict there — git will tell you.
+Conflicts are rare because your content (`site/`) isn't tracked in the upstream repo at all — only engine code changes come through. Custom themes in `site/themes/` are also yours, so they won't conflict with upstream updates to built-in themes in `themes/`.
 
 This is entirely optional. A plain clone works perfectly for most workflows.

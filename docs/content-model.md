@@ -35,11 +35,11 @@ Use `npm run sidecar` to fill in missing fields interactively with terminal imag
 
 You can add a markdown file to include formatted text on gallery pages. No frontmatter is needed — titles and metadata come from `galleries.yaml`.
 
-- **`content/photos/index.md`** — displayed on the gallery index page (`/photography/`), below the heading and above the gallery cards.
-- **`content/photos/<gallery>/index.md`** — displayed on an individual gallery page, between the title/description and the photo grid.
+- **`site/content/photos/index.md`** — displayed on the gallery index page (`/photography/`), below the heading and above the gallery cards.
+- **`site/content/photos/<gallery>/index.md`** — displayed on an individual gallery page, between the title/description and the photo grid.
 
 ```
-content/photos/street/
+site/content/photos/street/
 ├── index.md              ← optional gallery content
 ├── morning-light.jpg
 ├── morning-light.yaml
@@ -56,7 +56,7 @@ Any other format in a gallery folder causes a build error.
 
 ## Site Configuration — Display Fields
 
-You can control which metadata fields appear on photo detail pages and in the lightbox overlay via `config/site.yaml`:
+You can control which metadata fields appear on photo detail pages and in the lightbox overlay via `site/config/site.yaml`:
 
 ```yaml
 # Which fields to show on the photo detail page
@@ -82,7 +82,7 @@ Both fields default to showing everything when omitted.
 
 ## Site Configuration — Navigation
 
-Customise the site navigation menu in `config/site.yaml`. When omitted, the default menu is used (Photography, Tags, Locations, Blog, About, Contact).
+Customise the site navigation menu in `site/config/site.yaml`. When omitted, the default menu is used (Photography, Tags, Locations, Blog, About, Contact).
 
 ```yaml
 navigation:
@@ -99,7 +99,7 @@ Each item has a `label` (display text) and a `url` (link target):
 | URL format | Example | Description |
 |-----------|---------|-------------|
 | Built-in keyword | `photography`, `tags`, `locations`, `blog` | Links to the corresponding section |
-| Page reference | `page:about` | Links to a page in `content/pages/`. Build fails if the page doesn't exist |
+| Page reference | `page:about` | Links to a page in `site/content/pages/`. Build fails if the page doesn't exist |
 | Literal path | `/custom/page/` | Used as-is (with `base_path` prepended) |
 | External URL | `https://prints.example.com` | Opens in a new tab |
 
@@ -133,7 +133,7 @@ An empty list (`navigation: []`) removes the menu entirely.
 
 ## Site Configuration — Gallery Layout
 
-Set the site-wide default gallery layout in `config/site.yaml`:
+Set the site-wide default gallery layout in `site/config/site.yaml`:
 
 ```yaml
 # "masonry" (variable-height tiles, default) or "grid" (uniform cells)
@@ -144,7 +144,7 @@ Individual galleries can override this in `galleries.yaml` via the `layout` fiel
 
 ## Site Configuration — Social Links
 
-Add social media links in `config/site.yaml`. These are displayed as monochromatic icons in the site footer, adapting to light and dark mode automatically.
+Add social media links in `site/config/site.yaml`. These are displayed as monochromatic icons in the site footer, adapting to light and dark mode automatically.
 
 ```yaml
 social_links:
@@ -168,7 +168,7 @@ Supported platforms: `500px`, `bluesky`, `flickr`, `github`, `instagram`, `masto
 
 ## Gallery Configuration
 
-Defined in `config/galleries.yaml`:
+Defined in `site/config/galleries.yaml`:
 
 ```yaml
 galleries:
@@ -183,13 +183,13 @@ galleries:
     listed: false                         # hidden from gallery index
 ```
 
-- **slug**: URL-safe identifier, must match the folder name under `content/photos/`
+- **slug**: URL-safe identifier, must match the folder name under `site/content/photos/`
 - **listed**: Set to `false` for galleries that should not appear on the gallery index (useful for photos used only in blog posts)
 - **layout**: Display layout — `grid` (uniform cells) or `masonry` (variable-height tiles). Optional; overrides the site-wide `gallery_default_layout` setting.
 
 ## Blog Posts
 
-Markdown files in `content/posts/`. The filename (without `.md`) becomes the URL slug.
+Markdown files in `site/content/posts/`. The filename (without `.md`) becomes the URL slug.
 
 ### Frontmatter
 
@@ -231,7 +231,7 @@ The shortcode renders as a styled photo card with the image and metadata.
 
 ## Pages
 
-Markdown files in `content/pages/`. Each file becomes a top-level page (e.g., `about.md` → `/about/`).
+Markdown files in `site/content/pages/`. Each file becomes a top-level page (e.g., `about.md` → `/about/`).
 
 ### Frontmatter
 

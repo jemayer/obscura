@@ -18,14 +18,15 @@ Obscura is a static site generator for photography portfolio websites, written i
 - `npm run dev` — watch mode with incremental rebuild
 - `npm run dev:clean` — watch mode with clean initial build
 - `npm run sidecar` — interactive sidecar YAML editor (fill in titles, locations, captions, tags)
-- `npm run init` — scaffold config/ and content/ from examples/default-site/
+- `npm run init` — scaffold site/ from examples/default-site/
+- `npm run migrate` — move config/ and content/ into site/ (for upgrading from old layout)
 - `npm test` — run Vitest test suite
 
 ## Architecture
 
 The build pipeline flows in stages:
 
-1. **Config loading** (`src/config.ts`) — parse `config/site.yaml` and `config/galleries.yaml`
+1. **Config loading** (`src/config.ts`) — parse `site/config/site.yaml` and `site/config/galleries.yaml`
 2. **Content pipeline** — EXIF reading → sidecar generation → metadata merging → slug indexing → gallery/post/page loading → shortcode resolution → cross-reference graph
 3. **Image processing** — resize at breakpoints, WebP conversion, thumbnail generation (via sharp)
 4. **Rendering** — Nunjucks templates produce HTML pages, RSS feed, sitemap
@@ -46,12 +47,14 @@ Core types live in `src/types.ts` — these are the contract between pipeline st
 ## Directory Layout
 
 - `src/` — TypeScript source (compiles to `dist-build/`)
-- `config/` — site.yaml, galleries.yaml (created by `npm run init`, not in upstream repo)
-- `content/photos/<gallery>/` — photos + sidecar YAML files
-- `content/posts/` — Markdown blog posts
-- `content/pages/` — simple Markdown pages
+- `site/` — **user-owned content** (created by `npm run init`, not in upstream repo)
+  - `site/config/` — site.yaml, galleries.yaml
+  - `site/content/photos/<gallery>/` — photos + sidecar YAML files
+  - `site/content/posts/` — Markdown blog posts
+  - `site/content/pages/` — simple Markdown pages
+  - `site/themes/` — user/custom themes (override built-in themes)
+- `themes/` — built-in themes (CSS, templates, manifest)
 - `examples/default-site/` — example content used by `npm run init`
-- `themes/` — theme directories (CSS, templates, manifest)
 - `dist/` — generated site output (gitignored)
 - `.cache/` — build cache (image processing manifest, gitignored)
 - `docs/` — PRD, ADRs, user documentation

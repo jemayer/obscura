@@ -14,17 +14,17 @@ At the same time, the project contains many files that *should* be version-contr
 Original image files are gitignored by extension:
 
 ```
-content/photos/**/*.jpg
-content/photos/**/*.jpeg
-content/photos/**/*.png
-content/photos/**/*.tiff
-content/photos/**/*.tif
-content/photos/**/*.webp
+site/content/photos/**/*.jpg
+site/content/photos/**/*.jpeg
+site/content/photos/**/*.png
+site/content/photos/**/*.tiff
+site/content/photos/**/*.tif
+site/content/photos/**/*.webp
 ```
 
 The `dist/` output directory is also gitignored.
 
-Everything else is committed: sidecar YAML files, Markdown content, config files, templates, themes, Beans tickets, ADRs, documentation, and the PRD.
+Everything else under `site/` is committed: sidecar YAML files, Markdown content, config files, and custom themes. Obscura source (code, docs, built-in themes) is also committed.
 
 ## Consequences
 

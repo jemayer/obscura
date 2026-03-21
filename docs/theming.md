@@ -1,8 +1,17 @@
 # Theming Guide
 
+## Built-in vs. Custom Themes
+
+Obscura has two theme locations:
+
+- **`themes/`** — built-in themes shipped with Obscura (updated by upstream)
+- **`site/themes/`** — your custom themes (never touched by upstream)
+
+When you set `theme: foo` in `site/config/site.yaml`, Obscura checks `site/themes/foo/` first, then falls back to `themes/foo/`. This means you can override a built-in theme by copying it to `site/themes/` and modifying it there — no merge conflicts on upstream updates.
+
 ## Theme Structure
 
-Each theme lives in its own folder under `themes/`:
+Each theme lives in its own folder:
 
 ```
 themes/editorial/
@@ -74,13 +83,23 @@ The editorial theme uses CSS custom properties for all colours, typography, and 
 
 The editorial theme includes automatic dark mode via `@media (prefers-color-scheme: dark)`. It overrides the colour custom properties for dark backgrounds and light text.
 
+## Customising a Built-in Theme
+
+The easiest way to customise is to fork a built-in theme:
+
+```bash
+cp -r themes/editorial site/themes/editorial
+```
+
+Now edit `site/themes/editorial/` freely — your copy takes priority over the built-in one. When Obscura updates the built-in theme, your copy is unaffected.
+
 ## Creating a New Theme
 
-1. Create a folder under `themes/` with your theme name
+1. Create a folder under `site/themes/` with your theme name
 2. Add a `manifest.yaml`
 3. Create the required templates (see the list above)
 4. Add your CSS/JS in `assets/`
-5. Set `theme: your-theme-name` in `config/site.yaml`
+5. Set `theme: your-theme-name` in `site/config/site.yaml`
 
 ### Template Variables
 

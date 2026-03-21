@@ -72,7 +72,7 @@ jobs:
 
       # Add your photo sync step here if not using LFS:
       # - name: Sync photos from cloud storage
-      #   run: aws s3 sync s3://my-photos content/photos/
+      #   run: aws s3 sync s3://my-photos site/content/photos/
 
       - uses: actions/setup-node@v4
         with:
@@ -131,7 +131,7 @@ If your photos are available in the build environment:
 
 ## Custom Domain
 
-Whichever host you choose, set your `base_url` in `config/site.yaml` before building:
+Whichever host you choose, set your `base_url` in `site/config/site.yaml` before building:
 
 ```yaml
 base_url: https://www.your-domain.com

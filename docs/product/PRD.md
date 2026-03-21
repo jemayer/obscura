@@ -37,7 +37,7 @@ Photos are the primary content type. Each photo belongs to exactly one gallery.
 **Directory structure:**
 
 ```
-content/photos/<gallery-slug>/<photo-filename>.{jpg,jpeg,png,tiff,tif,webp}
+site/content/photos/<gallery-slug>/<photo-filename>.{jpg,jpeg,png,tiff,tif,webp}
 ```
 
 **Metadata** is assembled from two sources, merged at build time:
@@ -68,11 +68,11 @@ tags: []
 
 ### The `post-assets` Gallery
 
-Photos that illustrate blog posts but do not belong to any curated gallery live in `content/photos/post-assets/`. This directory behaves identically to any other gallery — sidecars, EXIF reading, image processing, shortcode references (`post-assets/some-photo`), and permalink pages all work the same way. The only difference is that `post-assets` is marked `listed: false` in `config/galleries.yaml`, so it does not appear on the gallery index page.
+Photos that illustrate blog posts but do not belong to any curated gallery live in `site/content/photos/post-assets/`. This directory behaves identically to any other gallery — sidecars, EXIF reading, image processing, shortcode references (`post-assets/some-photo`), and permalink pages all work the same way. The only difference is that `post-assets` is marked `listed: false` in `site/config/galleries.yaml`, so it does not appear on the gallery index page.
 
 ### Galleries
 
-Galleries are declared in `config/galleries.yaml`. Adding a new gallery is just adding an entry:
+Galleries are declared in `site/config/galleries.yaml`. Adding a new gallery is just adding an entry:
 
 ```yaml
 galleries:
@@ -90,7 +90,7 @@ The `listed` flag controls whether the gallery appears on the gallery index page
 
 ### Blog Posts
 
-Blog posts are Markdown files in `content/posts/` with YAML frontmatter:
+Blog posts are Markdown files in `site/content/posts/` with YAML frontmatter:
 
 ```yaml
 ---
@@ -107,7 +107,7 @@ The `summary` field is optional and used for the RSS feed. If omitted, the feed 
 
 ### Pages
 
-Simple Markdown-driven pages (About, Contact, etc.) live in `content/pages/`. Each is a Markdown file with minimal frontmatter:
+Simple Markdown-driven pages (About, Contact, etc.) live in `site/content/pages/`. Each is a Markdown file with minimal frontmatter:
 
 ```yaml
 ---
@@ -115,7 +115,7 @@ title: "About"
 ---
 ```
 
-The output path is derived from the filename: `content/pages/about.md` produces `/about/`.
+The output path is derived from the filename: `site/content/pages/about.md` produces `/about/`.
 
 ---
 
@@ -123,16 +123,16 @@ The output path is derived from the filename: `content/pages/about.md` produces 
 
 | Route | Description |
 |---|---|
-| `/` | Homepage with "Recent Shots" — latest N photos across all galleries, ordered by date (sidecar `date` overrides EXIF date). N is configurable via `recent_shots_count` in `config/site.yaml`. |
+| `/` | Homepage with "Recent Shots" — latest N photos across all galleries, ordered by date (sidecar `date` overrides EXIF date). N is configurable via `recent_shots_count` in `site/config/site.yaml`. |
 | `/photography/` | Gallery index listing all galleries with `listed: true` |
 | `/photography/<gallery-slug>/` | Individual gallery page — grid of photos |
 | `/photography/<gallery-slug>/<photo-slug>/` | Photo permalink page — full metadata, back-links to referencing blog posts |
 | `/blog/` | Blog index — all posts, reverse chronological |
 | `/blog/<post-slug>/` | Individual blog post |
-| `/about/` | About page (from `content/pages/about.md`) |
-| `/contact/` | Contact page (from `content/pages/contact.md`) |
+| `/about/` | About page (from `site/content/pages/about.md`) |
+| `/contact/` | Contact page (from `site/content/pages/contact.md`) |
 | `/feed.xml` | RSS feed of blog posts, auto-discovered via `<link rel="alternate">` in every page's `<head>` |
-| `/sitemap.xml` | Full sitemap using `base_url` from `config/site.yaml` |
+| `/sitemap.xml` | Full sitemap using `base_url` from `site/config/site.yaml` |
 | `/404.html` | Custom 404 page, themed, with links to homepage and gallery index |
 
 ---
@@ -163,11 +163,11 @@ Clicking a photo in a gallery grid opens a **PhotoSwipe** lightbox — full-scre
 
 ## Theming
 
-Themes are based on CSS custom properties and a theme manifest file. Themes live in `themes/<theme-name>/`.
+Themes are based on CSS custom properties and a theme manifest file. Built-in themes live in `themes/<theme-name>/`; custom themes go in `site/themes/<theme-name>/` (checked first).
 
 Obscura ships with one theme: **`editorial`** — light background, strong typography, inspired by Foam magazine and LensCulture. The `editorial` theme includes a full dark mode variant via `prefers-color-scheme: dark`.
 
-The active theme is set in `config/site.yaml`.
+The active theme is set in `site/config/site.yaml`.
 
 ---
 
@@ -184,9 +184,9 @@ EXIF warning format:
 
 ```
 ⚠ Missing or corrupt EXIF data in 3 photos:
-  - content/photos/monochromatic/berlin-rain-2024.jpg (no date)
-  - content/photos/color/market.jpg (corrupt EXIF)
-  - content/photos/analog/scan-001.jpg (no camera info)
+  - site/content/photos/monochromatic/berlin-rain-2024.jpg (no date)
+  - site/content/photos/color/market.jpg (corrupt EXIF)
+  - site/content/photos/analog/scan-001.jpg (no camera info)
   Tip: fill in the missing fields in the corresponding sidecar YAML files.
 ```
 
@@ -194,7 +194,7 @@ EXIF warning format:
 
 ## Configuration
 
-### `config/site.yaml`
+### `site/config/site.yaml`
 
 ```yaml
 base_url: https://coma.photography
@@ -215,7 +215,7 @@ images:
   webp_quality: 85
 ```
 
-### `config/galleries.yaml`
+### `site/config/galleries.yaml`
 
 Declares all galleries with their metadata and listing visibility.
 
