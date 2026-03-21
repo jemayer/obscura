@@ -24,7 +24,7 @@ site/content/photos/**/*.webp
 
 The `dist/` output directory is also gitignored.
 
-Everything else under `site/` is committed: sidecar YAML files, Markdown content, config files, and custom themes. Obscura source (code, docs, built-in themes) is also committed.
+Everything else under `site/` — sidecar YAML files, Markdown content, config files, custom themes — is *not* gitignored and can be safely committed. Whether a user chooses to version-control their `site/` content is up to them; it becomes relevant when deploying via CI (e.g., GitHub Pages with a build action) or managing the project as a fork or subtree.
 
 ## Consequences
 
