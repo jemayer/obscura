@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { cp } from 'node:fs/promises';
+import { cp, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const projectRoot = process.cwd();
@@ -27,6 +27,7 @@ async function main(): Promise<void> {
   console.log('Copying example site into site/...');
 
   await cp(exampleDir, siteTarget, { recursive: true });
+  await mkdir(resolve(siteTarget, 'themes'), { recursive: true });
 
   console.log('');
   console.log('Done! Your site is ready.');
