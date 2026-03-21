@@ -189,6 +189,16 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
   const filePath = resolve(projectRoot, 'site', 'config', 'site.yaml');
 
   if (!existsSync(filePath)) {
+    // Check for old layout and give a helpful migration message
+    const oldPath = resolve(projectRoot, 'config', 'site.yaml');
+    if (existsSync(oldPath)) {
+      throw new Error(
+        `Found config/site.yaml but expected site/config/site.yaml.\n\n` +
+          `Obscura now uses a site/ directory for all user content.\n` +
+          `Run "npm run migrate" to move your files automatically.`,
+      );
+    }
+
     throw new Error(
       `Config file not found: ${filePath}\n\n` +
         `It looks like your site hasn't been initialised yet.\n` +
