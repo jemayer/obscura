@@ -53,10 +53,12 @@ export async function build(
   const galleryConfig = await loadGalleryConfig(projectDir);
 
   // -- 2. Resolve directories --
-  const photosDir = resolve(projectDir, 'content', 'photos');
-  const postsDir = resolve(projectDir, 'content', 'posts');
-  const pagesDir = resolve(projectDir, 'content', 'pages');
-  const themesDir = resolve(projectDir, 'themes');
+  const siteDir = resolve(projectDir, 'site');
+  const photosDir = resolve(siteDir, 'content', 'photos');
+  const postsDir = resolve(siteDir, 'content', 'posts');
+  const pagesDir = resolve(siteDir, 'content', 'pages');
+  const userThemesDir = resolve(siteDir, 'themes');
+  const builtinThemesDir = resolve(projectDir, 'themes');
   const distDir = resolve(projectDir, 'dist');
 
   // -- 3. Clean dist --
@@ -183,12 +185,15 @@ export async function build(
   );
 
   // -- 12. Load theme and copy assets --
-  const theme = await loadTheme(themesDir, siteConfig.theme);
+  const theme = await loadTheme(
+    [userThemesDir, builtinThemesDir],
+    siteConfig.theme,
+  );
   await copyThemeAssets(theme, distDir);
   await copyPhotoSwipeAssets(distDir);
 
   // -- 12b. Copy user logo files if present --
-  const contentImagesDir = resolve(projectDir, 'content', 'images');
+  const contentImagesDir = resolve(siteDir, 'content', 'images');
   const logoLightSrc = resolve(contentImagesDir, 'logo-light.svg');
   const logoDarkSrc = resolve(contentImagesDir, 'logo-dark.svg');
   const hasLogo = existsSync(logoLightSrc) || existsSync(logoDarkSrc);

@@ -27,16 +27,25 @@ export interface Theme {
 }
 
 export async function loadTheme(
-  themesDir: string,
+  themesDirs: readonly string[],
   themeName: string,
 ): Promise<Theme> {
-  const themeDir = resolve(themesDir, themeName);
+  let themeDir: string | undefined;
+  for (const dir of themesDirs) {
+    const candidate = resolve(dir, themeName);
+    try {
+      await access(candidate);
+      themeDir = candidate;
+      break;
+    } catch {
+      // Not found in this directory, try next
+    }
+  }
 
-  try {
-    await access(themeDir);
-  } catch {
+  if (!themeDir) {
+    const searched = themesDirs.map((d) => resolve(d, themeName)).join('\n  ');
     throw new Error(
-      `Theme "${themeName}" not found at ${themeDir}. Check the "theme" setting in config/site.yaml.`,
+      `Theme "${themeName}" not found. Searched:\n  ${searched}\nCheck the "theme" setting in site/config/site.yaml.`,
     );
   }
 

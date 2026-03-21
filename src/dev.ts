@@ -51,8 +51,9 @@ async function main(): Promise<void> {
 
   const watcher = chokidar.watch(
     [
-      resolve(projectDir, 'content'),
-      resolve(projectDir, 'config'),
+      resolve(projectDir, 'site', 'content'),
+      resolve(projectDir, 'site', 'config'),
+      resolve(projectDir, 'site', 'themes'),
       resolve(projectDir, 'themes'),
     ],
     {

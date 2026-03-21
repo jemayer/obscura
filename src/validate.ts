@@ -47,9 +47,10 @@ async function main(): Promise<void> {
   }
 
   // -- 2. Theme --
-  const themesDir = resolve(projectDir, 'themes');
+  const userThemesDir = resolve(projectDir, 'site', 'themes');
+  const builtinThemesDir = resolve(projectDir, 'themes');
   try {
-    await loadTheme(themesDir, siteConfig.theme);
+    await loadTheme([userThemesDir, builtinThemesDir], siteConfig.theme);
     console.log(`  ✓ theme "${siteConfig.theme}"`);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'unknown error';
@@ -58,7 +59,7 @@ async function main(): Promise<void> {
   }
 
   // -- 3. Image format validation --
-  const photosDir = resolve(projectDir, 'content', 'photos');
+  const photosDir = resolve(projectDir, 'site', 'content', 'photos');
   const gallerySlugs = galleryConfig.galleries.map((g) => g.slug);
 
   try {
@@ -89,7 +90,7 @@ async function main(): Promise<void> {
   }
 
   // -- 5. Blog posts (shortcode resolution) --
-  const postsDir = resolve(projectDir, 'content', 'posts');
+  const postsDir = resolve(projectDir, 'site', 'content', 'posts');
   try {
     // We need slugIndex for shortcode validation — re-load if galleries succeeded
     const { slugIndex } = await loadGalleries(
@@ -105,7 +106,7 @@ async function main(): Promise<void> {
   }
 
   // -- 6. Pages --
-  const pagesDir = resolve(projectDir, 'content', 'pages');
+  const pagesDir = resolve(projectDir, 'site', 'content', 'pages');
   try {
     const pages = await loadAllPages(pagesDir, '');
     console.log(`  ✓ pages (${String(pages.length)})`);

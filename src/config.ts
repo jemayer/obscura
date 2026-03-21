@@ -186,14 +186,14 @@ function isGalleryConfig(value: unknown): value is RawGalleryConfig {
 }
 
 export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
-  const filePath = resolve(projectRoot, 'config', 'site.yaml');
+  const filePath = resolve(projectRoot, 'site', 'config', 'site.yaml');
 
   if (!existsSync(filePath)) {
     throw new Error(
       `Config file not found: ${filePath}\n\n` +
         `It looks like your site hasn't been initialised yet.\n` +
-        `Run "npm run init" to populate config/ and content/ with example content,\n` +
-        `or create config/site.yaml manually.`,
+        `Run "npm run init" to populate site/config/ and site/content/ with example content,\n` +
+        `or create site/config/site.yaml manually.`,
     );
   }
 
@@ -241,7 +241,7 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
 export async function loadGalleryConfig(
   projectRoot: string,
 ): Promise<GalleryConfig> {
-  const filePath = resolve(projectRoot, 'config', 'galleries.yaml');
+  const filePath = resolve(projectRoot, 'site', 'config', 'galleries.yaml');
   const raw = await loadYamlFile(filePath);
 
   if (!isGalleryConfig(raw) || !Array.isArray(raw.galleries)) {

@@ -315,12 +315,12 @@ async function main(): Promise<void> {
 
   const allGalleries = galleryConfig.galleries;
   if (allGalleries.length === 0) {
-    p.cancel('No galleries found in config/galleries.yaml.');
+    p.cancel('No galleries found in site/config/galleries.yaml.');
     process.exitCode = 1;
     return;
   }
 
-  const photosDir = resolve(projectDir, 'content', 'photos');
+  const photosDir = resolve(projectDir, 'site', 'content', 'photos');
 
   // Scan all galleries to count photos and collect global tags/locations
   const galleryCounts = new Map<string, number>();
