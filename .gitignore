@@ -3,26 +3,34 @@
 .beans/
 .beans.yml
 
-# Dependencies
+# ============================================================
+# Build artifacts — always regenerated, never committed
+# ============================================================
 node_modules/
-
-# Site output
 dist/
-
-# Build cache
+dist-build/
 .cache/
 
-# Compiled TypeScript
-dist-build/
+# ============================================================
+# Large photo binaries (see ADR-011)
+#
+# Everything under site/ is yours and safe to commit — config,
+# sidecars, posts, pages, custom themes. The only exception is
+# original photo files, which are too large for git.
+#
+# This matters if you deploy via CI (GitHub Pages, Netlify, etc.)
+# and need your content in the repository. If you only build
+# locally, you don't need to commit any of site/ at all.
+# ============================================================
+site/content/photos/**/*.jpg
+site/content/photos/**/*.jpeg
+site/content/photos/**/*.png
+site/content/photos/**/*.tiff
+site/content/photos/**/*.tif
+site/content/photos/**/*.webp
 
-# Original image files (per ADR-011)
-content/photos/**/*.jpg
-content/photos/**/*.jpeg
-content/photos/**/*.png
-content/photos/**/*.tiff
-content/photos/**/*.tif
-content/photos/**/*.webp
-
-# OS files
+# ============================================================
+# OS and editor noise
+# ============================================================
 .DS_Store
 Thumbs.db
