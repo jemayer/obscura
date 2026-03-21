@@ -20,9 +20,9 @@ The shortcode pulls in the photo as a styled card with its metadata. You can use
 ## What's Next
 
 1. Replace these sample photos with your own
-2. Edit `config/site.yaml` to set your site title and URL
-3. Create your galleries in `config/galleries.yaml`
-4. Write blog posts in `content/posts/`
+2. Edit `site/config/site.yaml` to set your site title and URL
+3. Create your galleries in `site/config/galleries.yaml`
+4. Write blog posts in `site/content/posts/`
 5. Run `npm run build` and deploy
 
 Check out the [Getting Started guide](https://github.com/jemayer/obscura/blob/main/docs/getting-started.md) for more details. Happy shooting.
