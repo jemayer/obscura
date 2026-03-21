@@ -1,6 +1,6 @@
 {
   "name": "obscura",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A purpose-built static site generator for photography portfolio websites.",
   "type": "module",
   "main": "dist-build/index.js",
