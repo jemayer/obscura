@@ -68,6 +68,14 @@
       {% endif %}
 
       <ul class="photo-meta">
+        {% if "photographer" in site.photo_display_fields %}
+        {% if photo.metadata.photographer %}
+        <li>
+          <span class="photo-meta__label">Photographer</span>
+          <span class="photo-meta__value">{{ photo.metadata.photographer }}</span>
+        </li>
+        {% endif %}
+        {% endif %}
         {% if "date" in site.photo_display_fields %}
         {% if photo.metadata.date %}
         <li>
@@ -112,14 +120,6 @@
         <li>
           <span class="photo-meta__label">Location</span>
           <span class="photo-meta__value"><a href="{{ ('/locations/' + (photo.metadata.location | slugifylocation) + '/') | url }}">{{ photo.metadata.location }}</a></span>
-        </li>
-        {% endif %}
-        {% endif %}
-        {% if "photographer" in site.photo_display_fields %}
-        {% if photo.metadata.photographer %}
-        <li>
-          <span class="photo-meta__label">Photographer</span>
-          <span class="photo-meta__value">{{ photo.metadata.photographer }}</span>
         </li>
         {% endif %}
         {% endif %}
