@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.2.1 — 2026-03-28
+
+### Photographer field
+
+Photos now carry a **photographer** metadata field. It is populated in this order:
+
+1. **Per-photo sidecar** — set `photographer: Name` in the photo's YAML sidecar to override everything else.
+2. **EXIF Artist tag** — when a sidecar doesn't specify a photographer, the EXIF Artist field embedded in the image is used automatically.
+3. **Site-wide default** — set `default_photographer: Name` in `site/config/site.yaml` as a fallback for all photos.
+
+If none of the above are present, the field is left empty and hidden from the UI.
+
+The photographer appears on the photo detail page by default. In the lightbox it is hidden by default but can be enabled via `lightbox_display_fields`.
+
+### Exclusion syntax for display fields
+
+`photo_display_fields` and `lightbox_display_fields` now support an exclusion mode. Instead of listing every field you want, prefix fields with `-` to exclude them from the full set:
+
+```yaml
+# Show everything except photographer
+lightbox_display_fields: [-photographer]
+```
+
+Inclusions and exclusions cannot be mixed in the same list.
+
 ## 0.2.0 — 2026-03-21
 
 ### Breaking: `site/` directory for user content
