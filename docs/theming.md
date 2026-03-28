@@ -105,7 +105,7 @@ Now edit `site/themes/editorial/` freely — your copy takes priority over the b
 
 All templates have access to:
 
-- `site` — the site configuration object (title, base_url, photo_display_fields, lightbox_display_fields, etc.)
+- `site` — the full site configuration object. Key fields: `title`, `subtitle`, `description`, `base_url`, `base_path`, `theme`, `license`, `default_photographer`, `hero_image`, `recent_shots_count`, `gallery_default_layout`, `photo_display_fields`, `lightbox_display_fields`, `social_links`, `navigation`, `images`
 - `current_year` — the current year (for copyright notices)
 
 ### Template Filters

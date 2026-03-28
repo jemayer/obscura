@@ -200,10 +200,13 @@ EXIF warning format:
 ```yaml
 base_url: https://coma.photography
 title: "coma.photography"
+# subtitle: "Street & Documentary"
 theme: editorial
 recent_shots_count: 12
 license: all-rights-reserved
 # default_photographer: Your Name
+# hero_image: street/golden-hour-alley
+# gallery_default_layout: masonry
 
 # Display fields for photo detail pages and lightbox overlay.
 # Options: date, camera, lens, settings, location, tags, photographer, license
@@ -213,6 +216,16 @@ license: all-rights-reserved
 # Defaults to all fields when omitted.
 # photo_display_fields: [date, camera, lens, settings, location, tags, photographer, license]
 # lightbox_display_fields: [date, camera, location, photographer, license]
+
+# social_links:
+#   - platform: instagram
+#     url: https://www.instagram.com/yourhandle
+
+# navigation:
+#   - label: Photography
+#     url: photography
+#   - label: About
+#     url: page:about
 
 images:
   breakpoints: [400, 800, 1200, 2400]

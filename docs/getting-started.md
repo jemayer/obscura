@@ -93,7 +93,15 @@ The output lands in `dist/` — plain static files ready to deploy anywhere. Sub
 ## What's Next
 
 - **Deploy your site** — rsync to your own server, or push to GitHub Pages, Netlify, or Cloudflare Pages. The [Deployment Guide](./deployment.md) walks through each option.
-- **Customise your config** — Edit `site/config/site.yaml` to set your site title, URL, and display preferences. The [Content Model Reference](./content-model.md) covers all the options.
+- **Customise your config** — Edit `site/config/site.yaml` to set your site title, URL, and display preferences:
+  ```yaml
+  base_url: https://yoursite.com
+  title: "Your Name Photography"
+  subtitle: "Landscapes & Portraits"   # optional tagline
+  license: CC-BY-4.0
+  default_photographer: Your Name
+  ```
+  The [Content Model Reference](./content-model.md#site-configuration) covers all the options.
 - **Write a blog post** — Create a Markdown file in `site/content/posts/` and use photo shortcodes to embed your images. The welcome post shows you how.
 - **Customise your theme** — Copy `themes/editorial/` to `site/themes/editorial/` and modify it freely. User themes in `site/themes/` take priority over built-in ones. See the [Theming Guide](./theming.md) for details.
 - **Stay up to date** — Since `site/` isn't tracked in the repository, updating Obscura is just `git pull && npm install`. Your content is never affected.

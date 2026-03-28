@@ -55,6 +55,58 @@ JPEG (`.jpg`, `.jpeg`), PNG (`.png`), TIFF (`.tif`, `.tiff`), WebP (`.webp`).
 
 Any other format in a gallery folder causes a build error.
 
+## Site Configuration
+
+All site-wide settings live in `site/config/site.yaml`. Here is a complete reference of every field:
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `base_url` | string | yes | `http://localhost:3000` | Public URL of your site (used for absolute links, RSS, sitemap) |
+| `title` | string | yes | `My Photography` | Site title — shown in the header, hero, browser tab, and footer copyright |
+| `subtitle` | string | no | — | Optional tagline displayed below the title on the homepage hero and as "Title - Subtitle" in the nav bar and browser title |
+| `description` | string | no | — | Short site description for OpenGraph/SEO meta tags (not displayed on the page) |
+| `theme` | string | yes | `editorial` | Theme to use (looks in `site/themes/` first, then `themes/`) |
+| `recent_shots_count` | number | yes | `12` | Number of photos shown in the "Recent Shots" section on the homepage |
+| `license` | string | yes | `all-rights-reserved` | Default license for all photos. Options: `all-rights-reserved`, `CC-BY-4.0`, `CC-BY-SA-4.0`, `CC-BY-NC-4.0`, `CC-BY-NC-SA-4.0`, `CC-BY-ND-4.0`, `CC-BY-NC-ND-4.0`, `CC0-1.0`, or any custom text |
+| `default_photographer` | string | no | — | Default photographer name for all photos (can be overridden per-photo in sidecar YAML) |
+| `hero_image` | string | no | auto-detected | Homepage hero image as `gallery-slug/photo-slug`. If omitted, the first landscape photo from recent shots is used |
+| `gallery_default_layout` | string | yes | `masonry` | Default gallery layout: `masonry` (variable-height tiles) or `grid` (uniform cells). Individual galleries can override this in `galleries.yaml` |
+| `photo_display_fields` | string[] | no | all fields | Which metadata fields to show on photo detail pages |
+| `lightbox_display_fields` | string[] | no | all fields | Which metadata fields to show in the lightbox overlay |
+| `social_links` | object[] | no | `[]` | Social media links displayed in the footer |
+| `navigation` | object[] | no | default menu | Custom navigation menu items |
+| `images.breakpoints` | number[] | yes | `[400, 800, 1200, 2400]` | Responsive image widths to generate |
+| `images.webp_quality` | number | yes | `85` | WebP compression quality (1–100) |
+
+### Minimal example
+
+```yaml
+base_url: https://example.com
+title: "Jane Doe Photography"
+theme: editorial
+```
+
+### Full example
+
+```yaml
+base_url: https://example.com
+title: "Jane Doe Photography"
+subtitle: "Landscapes & Portraits"
+description: "Photography portfolio by Jane Doe"
+theme: editorial
+recent_shots_count: 12
+license: CC-BY-4.0
+default_photographer: Jane Doe
+hero_image: landscapes/golden-hour
+gallery_default_layout: masonry
+
+images:
+  breakpoints: [400, 800, 1200, 2400]
+  webp_quality: 85
+```
+
+See the sections below for detailed documentation of `photo_display_fields`, `lightbox_display_fields`, `navigation`, `social_links`, and `gallery_default_layout`.
+
 ## Site Configuration — Display Fields
 
 You can control which metadata fields appear on photo detail pages and in the lightbox overlay via `site/config/site.yaml`:
