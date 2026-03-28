@@ -32,7 +32,7 @@
     grids.forEach(function (grid) {
       // Read display-field config from data attribute (default: show all)
       var fieldsAttr = grid.getAttribute('data-lightbox-fields') || '';
-      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license'];
+      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['date', 'camera', 'lens', 'settings', 'location', 'tags', 'photographer', 'license'];
 
       grid.addEventListener('click', function (e) {
         var item = e.target.closest('.gallery-item');
@@ -130,8 +130,8 @@
 
             if (showPhotographer && data.photographer) {
               parts.push(
-                '<span class="pswp-caption__photographer">' +
-                  escapeHtml(data.photographer) +
+                '<span class="pswp-caption__meta">' +
+                  'by ' + escapeHtml(data.photographer) +
                   '</span>',
               );
             }
