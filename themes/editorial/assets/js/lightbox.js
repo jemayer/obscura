@@ -119,19 +119,12 @@
             if (showLocation && data.location) meta.push(escapeHtml(data.location));
             if (showCamera && !isMobile && data.camera) meta.push(escapeHtml(data.camera));
             if (showDate && data.date) meta.push(escapeHtml(data.date));
+            if (showPhotographer && data.photographer) meta.push('by ' + escapeHtml(data.photographer));
 
             if (meta.length) {
               parts.push(
                 '<span class="pswp-caption__meta">' +
                   meta.join(' &middot; ') +
-                  '</span>',
-              );
-            }
-
-            if (showPhotographer && data.photographer) {
-              parts.push(
-                '<span class="pswp-caption__meta">' +
-                  'by ' + escapeHtml(data.photographer) +
                   '</span>',
               );
             }
