@@ -61,6 +61,7 @@ interface RawSiteConfig {
   base_url?: string;
   title?: string;
   description?: string;
+  subtitle?: string;
   theme?: string;
   recent_shots_count?: number;
   license?: string;
@@ -252,6 +253,10 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     description:
       typeof raw.description === 'string' && raw.description.length > 0
         ? raw.description
+        : undefined,
+    subtitle:
+      typeof raw.subtitle === 'string' && raw.subtitle.length > 0
+        ? raw.subtitle
         : undefined,
     theme: raw.theme ?? DEFAULT_SITE_CONFIG.theme,
     recent_shots_count:

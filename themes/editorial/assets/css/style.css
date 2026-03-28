@@ -160,6 +160,17 @@ a:hover {
   color: var(--color-text-secondary);
 }
 
+.site-title__separator {
+  opacity: 0.4;
+  margin: 0 0.15em;
+}
+
+.site-title__subtitle {
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  opacity: 0.65;
+}
+
 .site-nav {
   display: flex;
   align-items: center;
@@ -1164,6 +1175,19 @@ a.tag:hover {
 @keyframes hero-fade-up {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+.hero__subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  font-weight: 300;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240, 238, 234, 0.7);
+  margin: var(--space-xs) 0 0;
+  animation: hero-fade-up 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.55s both;
 }
 
 @media (min-width: 48em) {

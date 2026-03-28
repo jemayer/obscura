@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{{ site.title }}{% endblock %}</title>
+  <title>{% block title %}{{ site.title }}{% if site.subtitle %} - {{ site.subtitle }}{% endif %}{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ site.description or site.title }}{% endblock %}">
   <meta name="generator" content="Obscura {{ build_timestamp }}">
 
@@ -28,7 +28,7 @@
 <body>
   <header class="site-header">
     <div class="site-title">
-      <a href="{{ '/' | url }}">{{ site.title }}</a>
+      <a href="{{ '/' | url }}">{{ site.title }}{% if site.subtitle %} <span class="site-title__separator">-</span> <span class="site-title__subtitle">{{ site.subtitle }}</span>{% endif %}</a>
     </div>
     <nav class="site-nav" id="site-nav">
       {% for item in nav_items %}

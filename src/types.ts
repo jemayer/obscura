@@ -71,6 +71,7 @@ export interface SiteConfig {
   readonly base_path: string;
   readonly title: string;
   readonly description?: string | undefined;
+  readonly subtitle?: string | undefined;
   readonly theme: string;
   readonly recent_shots_count: number;
   readonly images: ImageConfig;

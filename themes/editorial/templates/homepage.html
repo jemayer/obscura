@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ site.title }}{% endblock %}
+{% block title %}{{ site.title }}{% if site.subtitle %} - {{ site.subtitle }}{% endif %}{% endblock %}
 
 {% block og_meta %}
 <meta property="og:type" content="website">
@@ -34,6 +34,7 @@
   <div class="hero__content">
     <div class="hero__rule"></div>
     <h1 class="hero__title">{{ site.title }}</h1>
+    {% if site.subtitle %}<p class="hero__subtitle">{{ site.subtitle }}</p>{% endif %}
   </div>
 </section>
 {% endif %}
