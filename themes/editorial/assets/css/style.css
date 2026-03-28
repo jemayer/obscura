@@ -554,7 +554,7 @@ a:hover {
   list-style: none;
   font-size: var(--font-size-sm);
   border-top: 2px solid var(--color-highlight);
-  padding-top: var(--space-md);
+  padding-top: var(--space-sm);
 }
 
 .photo-meta li {
