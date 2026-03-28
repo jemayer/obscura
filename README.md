@@ -2,7 +2,7 @@
 
 **A static site generator built for photographers only.**
 
-*Less webpack, more f-stop.* Drop your photos into folders, write in Markdown, invoke `npm run build` — and get a fast, beautiful portfolio site.
+*Less webpack, more f-stop.* Drop your photos into folders, write in Markdown, invoke `npm run build`, and get a fast, beautiful portfolio site you can host everywhere. Get back in the driver's seat!
 
 [Project Homepage](https://obscura.md)
 
@@ -10,7 +10,7 @@
 
 ## Why Obscura?
 
-Most static site generators are built for developers. Obscura is built for photographers. No plugins to install, no wild frontmatter gymnastics: you are not fighting that generic tool into doing what you need. The entire design — from the image pipeline to the content model — serves a single use case: **publishing your photography on the web.**
+Most static site generators are built for developers. Obscura is built for photographers. No plugins to install, no wild frontmatter gymnastics – you are not fighting that generic tool into doing what you need! The entire design, from the image pipeline to the content model, serves a single use case: **publishing your photography on the web.**
 
 Keep your photos in folders, organised by gallery. Obscura reads EXIF data from your images, generates responsive WebP variants at multiple breakpoints, builds a gallery with a full-screen lightbox viewer, and produces plain static files you can host anywhere.
 
@@ -39,7 +39,7 @@ npm run init    # scaffold example site
 npm run dev     # build and preview at localhost:3000
 ```
 
-Add your photos to `site/content/photos/<gallery>/`, declare galleries in `site/config/galleries.yaml`, and build. That's it.
+Add your photos to `site/content/photos/<gallery>/`, declare galleries in `site/config/galleries.yaml`, and build. That's it!
 
 See the **[Getting Started guide](docs/getting-started.md)** for the full walkthrough.
 
