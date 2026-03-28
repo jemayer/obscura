@@ -131,24 +131,53 @@ export function parseSocialLinks(
  * Parse and validate a display-fields array from config.
  * Returns only recognised field names; falls back to all fields if omitted.
  * The alias "exif" expands to date, camera, lens, settings.
+ *
+ * Supports two modes (must not be mixed):
+ *  - Additive:     ["date", "camera"]       → show only these fields
+ *  - Subtractive:  ["-photographer"]         → show all fields except these
  */
 export function parseDisplayFields(
   raw: string[] | undefined,
 ): readonly DisplayField[] {
   if (!raw || !Array.isArray(raw)) return ALL_DISPLAY_FIELDS;
   const allFieldNames = ALL_DISPLAY_FIELDS as readonly string[];
-  const expanded: DisplayField[] = [];
+
+  const negations: DisplayField[] = [];
+  const additions: DisplayField[] = [];
+  let hasPositive = false;
+  let hasNegative = false;
+
   for (const f of raw) {
-    if (f === 'exif') {
-      for (const sub of EXIF_SUB_FIELDS) {
-        if (!expanded.includes(sub)) expanded.push(sub);
+    if (f.startsWith('-')) {
+      const name = f.slice(1);
+      if (allFieldNames.includes(name)) {
+        hasNegative = true;
+        negations.push(name as DisplayField);
       }
-    } else if (allFieldNames.includes(f)) {
-      const field = f as DisplayField;
-      if (!expanded.includes(field)) expanded.push(field);
+    } else {
+      hasPositive = true;
+      if (f === 'exif') {
+        for (const sub of EXIF_SUB_FIELDS) {
+          if (!additions.includes(sub)) additions.push(sub);
+        }
+      } else if (allFieldNames.includes(f)) {
+        const field = f as DisplayField;
+        if (!additions.includes(field)) additions.push(field);
+      }
     }
   }
-  return expanded.length > 0 ? expanded : ALL_DISPLAY_FIELDS;
+
+  if (hasPositive && hasNegative) {
+    throw new Error(
+      'display_fields cannot mix inclusions and exclusions (e.g. "date" and "-photographer")',
+    );
+  }
+
+  if (hasNegative) {
+    return ALL_DISPLAY_FIELDS.filter((f) => !negations.includes(f));
+  }
+
+  return additions.length > 0 ? additions : ALL_DISPLAY_FIELDS;
 }
 
 /**

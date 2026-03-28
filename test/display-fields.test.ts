@@ -79,4 +79,32 @@ describe('parseDisplayFields', () => {
       'settings',
     ]);
   });
+
+  it('excludes a single field with negation prefix', () => {
+    expect(parseDisplayFields(['-photographer'])).toEqual(
+      ALL_DISPLAY_FIELDS.filter((f) => f !== 'photographer'),
+    );
+  });
+
+  it('excludes multiple fields with negation prefix', () => {
+    expect(parseDisplayFields(['-photographer', '-license'])).toEqual(
+      ALL_DISPLAY_FIELDS.filter((f) => f !== 'photographer' && f !== 'license'),
+    );
+  });
+
+  it('ignores unknown negated fields', () => {
+    expect(parseDisplayFields(['-bogus', '-photographer'])).toEqual(
+      ALL_DISPLAY_FIELDS.filter((f) => f !== 'photographer'),
+    );
+  });
+
+  it('returns all fields when all negated entries are unknown', () => {
+    expect(parseDisplayFields(['-bogus', '-nope'])).toEqual(ALL_DISPLAY_FIELDS);
+  });
+
+  it('throws when mixing inclusions and exclusions', () => {
+    expect(() => parseDisplayFields(['date', '-photographer'])).toThrow(
+      /cannot mix inclusions and exclusions/,
+    );
+  });
 });
