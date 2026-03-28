@@ -208,6 +208,8 @@ license: all-rights-reserved
 # Display fields for photo detail pages and lightbox overlay.
 # Options: date, camera, lens, settings, location, tags, photographer, license
 # "exif" is a shorthand alias for date + camera + lens + settings.
+# Prefix a field with "-" to exclude it (e.g. [-photographer] = all except photographer).
+# Cannot mix inclusions and exclusions in the same list.
 # Defaults to all fields when omitted.
 # photo_display_fields: [date, camera, lens, settings, location, tags, photographer, license]
 # lightbox_display_fields: [date, camera, location, photographer, license]

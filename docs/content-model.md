@@ -82,6 +82,17 @@ The shorthand `exif` expands to `date`, `camera`, `lens`, and `settings` — use
 
 Both fields default to showing everything when omitted.
 
+### Exclusion syntax
+
+Instead of listing every field you *do* want, you can exclude specific fields by prefixing them with `-`:
+
+```yaml
+# Show everything except photographer
+lightbox_display_fields: [-photographer]
+```
+
+You cannot mix inclusions and exclusions in the same list.
+
 ## Site Configuration — Navigation
 
 Customise the site navigation menu in `site/config/site.yaml`. When omitted, the default menu is used (Photography, Tags, Locations, Blog, About, Contact).
