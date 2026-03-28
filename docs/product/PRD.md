@@ -61,6 +61,7 @@ gps_lat:          # from EXIF if available
 gps_lon:          # from EXIF if available
 location: ""      # fill in manually
 caption: ""
+photographer:     # from EXIF Artist if available
 tags: []
 ```
 
@@ -202,13 +203,14 @@ title: "coma.photography"
 theme: editorial
 recent_shots_count: 12
 license: all-rights-reserved
+# default_photographer: Your Name
 
 # Display fields for photo detail pages and lightbox overlay.
-# Options: date, camera, lens, settings, location, tags, license
+# Options: date, camera, lens, settings, location, tags, photographer, license
 # "exif" is a shorthand alias for date + camera + lens + settings.
 # Defaults to all fields when omitted.
-# photo_display_fields: [date, camera, lens, settings, location, tags, license]
-# lightbox_display_fields: [date, camera, location, license]
+# photo_display_fields: [date, camera, lens, settings, location, tags, photographer, license]
+# lightbox_display_fields: [date, camera, location, photographer, license]
 
 images:
   breakpoints: [400, 800, 1200, 2400]

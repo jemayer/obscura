@@ -21,13 +21,14 @@ Each photo in a gallery can have a companion YAML sidecar file with the same nam
 | `gps_lat`       | number   | GPS latitude (overrides EXIF)                        |
 | `gps_lon`       | number   | GPS longitude (overrides EXIF)                       |
 | `tags`          | string[] | Tags for categorisation                              |
+| `photographer`  | string   | Photographer name (overrides EXIF Artist and site default) |
 | `license`       | string   | License for this photo (overrides site-wide default) |
 
 Sidecar values always win over EXIF data when both are present. Empty sidecar fields do not override EXIF values.
 
 ### Auto-Generated Sidecars
 
-When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens, focal length, ISO, aperture, shutter speed) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
+When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens, focal length, ISO, aperture, shutter speed, photographer from the EXIF Artist tag) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
 
 Use `npm run sidecar` to fill in missing fields interactively with terminal image previews, or edit the YAML files by hand. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
 
@@ -60,10 +61,10 @@ You can control which metadata fields appear on photo detail pages and in the li
 
 ```yaml
 # Which fields to show on the photo detail page
-photo_display_fields: [date, camera, lens, settings, location, tags, license]
+photo_display_fields: [date, camera, lens, settings, location, tags, photographer, license]
 
 # Which fields to show in the lightbox overlay
-lightbox_display_fields: [date, camera, location, license]
+lightbox_display_fields: [date, camera, location, photographer, license]
 ```
 
 | Field      | What it controls                                         |
@@ -74,6 +75,7 @@ lightbox_display_fields: [date, camera, location, license]
 | `settings` | Focal length, aperture, ISO, shutter speed               |
 | `location` | Location name                                            |
 | `tags`     | Tag list (photo detail page only)                        |
+| `photographer` | Photographer name                                    |
 | `license`  | License badge                                            |
 
 The shorthand `exif` expands to `date`, `camera`, `lens`, and `settings` — useful if you want all EXIF fields without listing them individually.

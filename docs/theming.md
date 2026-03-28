@@ -127,7 +127,7 @@ All templates have access to:
 
 ### Display Fields
 
-Templates can check `site.photo_display_fields` and `site.lightbox_display_fields` to conditionally show metadata. These are arrays of field names (`date`, `camera`, `lens`, `settings`, `location`, `tags`, `license`):
+Templates can check `site.photo_display_fields` and `site.lightbox_display_fields` to conditionally show metadata. These are arrays of field names (`date`, `camera`, `lens`, `settings`, `location`, `tags`, `photographer`, `license`):
 
 ```nunjucks
 {% if "date" in site.photo_display_fields %}
