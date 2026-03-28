@@ -32,7 +32,7 @@
     grids.forEach(function (grid) {
       // Read display-field config from data attribute (default: show all)
       var fieldsAttr = grid.getAttribute('data-lightbox-fields') || '';
-      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['date', 'camera', 'lens', 'settings', 'location', 'tags', 'photographer', 'license'];
+      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license'];
 
       grid.addEventListener('click', function (e) {
         var item = e.target.closest('.gallery-item');
