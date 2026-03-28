@@ -93,7 +93,9 @@ export function mergeMetadata(
     tags: sidecar?.tags ?? [],
     license: nonEmpty(sidecar?.license) ?? defaultLicense,
     photographer:
-      nonEmpty(sidecar?.photographer) ?? exif.photographer ?? defaultPhotographer,
+      nonEmpty(sidecar?.photographer) ??
+      exif.photographer ??
+      defaultPhotographer,
   };
 
   // Sidecar wins on conflict; filter out epoch dates from EXIF too

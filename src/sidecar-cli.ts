@@ -54,7 +54,10 @@ function buildContextLine(target: SidecarEditTarget): string {
  * using the Unicode upper-half-block (▀) with 24-bit ANSI colors:
  * foreground = top pixel, background = bottom pixel → 2 rows per line.
  */
-async function renderAnsiImage(photoPath: string, cols: number): Promise<string> {
+async function renderAnsiImage(
+  photoPath: string,
+  cols: number,
+): Promise<string> {
   const { info, data } = await sharp(photoPath)
     .resize({ width: cols, withoutEnlargement: true })
     .ensureAlpha()
