@@ -115,6 +115,14 @@
         </li>
         {% endif %}
         {% endif %}
+        {% if "photographer" in site.photo_display_fields %}
+        {% if photo.metadata.photographer %}
+        <li>
+          <span class="photo-meta__label">Photographer</span>
+          <span class="photo-meta__value">{{ photo.metadata.photographer }}</span>
+        </li>
+        {% endif %}
+        {% endif %}
         {% if "license" in site.photo_display_fields %}
         {% if photo.metadata.license %}
         <li>

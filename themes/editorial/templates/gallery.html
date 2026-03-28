@@ -48,6 +48,7 @@
        data-pswp-camera="{{ photo.metadata.camera }}"
        data-pswp-date="{% if photo.metadata.date %}{{ photo.metadata.date | dateformat }}{% endif %}"
        data-pswp-license="{{ photo.metadata.license }}"
+       data-pswp-photographer="{{ photo.metadata.photographer }}"
        data-pswp-permalink="{{ ('/photography/' + gallery.slug + '/' + (photo.slug | bareslug) + '/') | url }}">
       {% if photo.variants.length %}
       <img src="{{ (photo.variants | bestvariant(800)).path | url }}"

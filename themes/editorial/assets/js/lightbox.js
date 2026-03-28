@@ -32,7 +32,7 @@
     grids.forEach(function (grid) {
       // Read display-field config from data attribute (default: show all)
       var fieldsAttr = grid.getAttribute('data-lightbox-fields') || '';
-      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license'];
+      var displayFields = fieldsAttr ? fieldsAttr.split(',') : ['date', 'camera', 'lens', 'settings', 'location', 'tags', 'photographer', 'license'];
 
       grid.addEventListener('click', function (e) {
         var item = e.target.closest('.gallery-item');
@@ -55,6 +55,7 @@
             camera: el.getAttribute('data-pswp-camera') || '',
             date: el.getAttribute('data-pswp-date') || '',
             license: el.getAttribute('data-pswp-license') || '',
+            photographer: el.getAttribute('data-pswp-photographer') || '',
             permalink: el.getAttribute('data-pswp-permalink') || '',
           };
         });
@@ -110,6 +111,7 @@
             var showDate = displayFields.indexOf('date') !== -1;
             var showCamera = displayFields.indexOf('camera') !== -1;
             var showLocation = displayFields.indexOf('location') !== -1;
+            var showPhotographer = displayFields.indexOf('photographer') !== -1;
             var showLicense = displayFields.indexOf('license') !== -1;
             var isMobile = window.matchMedia('(max-width: 48em)').matches;
 
@@ -122,6 +124,14 @@
               parts.push(
                 '<span class="pswp-caption__meta">' +
                   meta.join(' &middot; ') +
+                  '</span>',
+              );
+            }
+
+            if (showPhotographer && data.photographer) {
+              parts.push(
+                '<span class="pswp-caption__photographer">' +
+                  escapeHtml(data.photographer) +
                   '</span>',
               );
             }

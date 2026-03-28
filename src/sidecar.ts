@@ -29,6 +29,7 @@ interface SidecarTemplate {
   gps_lon: number | null;
   location: string;
   caption: string;
+  photographer: string | null;
   tags: string[];
 }
 
@@ -50,6 +51,7 @@ function buildSidecarTemplate(exif: ExifData): SidecarTemplate {
     gps_lon: exif.gps_lon ?? null,
     location: '',
     caption: '',
+    photographer: exif.photographer ?? null,
     tags: [],
   };
 }

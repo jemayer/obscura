@@ -15,6 +15,7 @@ export interface ImageConfig {
  * - settings: focal length, aperture, ISO, shutter speed
  * - location: location name
  * - tags: tag list (photo page only)
+ * - photographer: photographer name
  * - license: license badge
  *
  * In config YAML, "exif" is accepted as a shorthand alias that expands to
@@ -27,6 +28,7 @@ export type DisplayField =
   | 'settings'
   | 'location'
   | 'tags'
+  | 'photographer'
   | 'license';
 
 /** The sub-fields that the "exif" alias expands to. */
@@ -44,6 +46,7 @@ export const ALL_DISPLAY_FIELDS: readonly DisplayField[] = [
   'settings',
   'location',
   'tags',
+  'photographer',
   'license',
 ] as const;
 
@@ -76,6 +79,8 @@ export interface SiteConfig {
   readonly social_links: readonly SocialLink[];
   readonly photo_display_fields: readonly DisplayField[];
   readonly lightbox_display_fields: readonly DisplayField[];
+  /** Default photographer name for all photos (can be overridden per-photo in sidecar YAML). */
+  readonly default_photographer?: string | undefined;
   /** Optional hero image for homepage: "gallery-slug/photo-slug" */
   readonly hero_image?: string | undefined;
   /** Optional custom navigation menu items */
@@ -168,6 +173,7 @@ export interface ExifData {
   readonly shutter_speed?: string;
   readonly gps_lat?: number;
   readonly gps_lon?: number;
+  readonly photographer?: string;
 }
 
 export interface PhotoMetadata {
@@ -185,6 +191,7 @@ export interface PhotoMetadata {
   readonly caption: string;
   readonly tags: readonly string[];
   readonly license: string;
+  readonly photographer: string;
 }
 
 export interface ImageVariant {

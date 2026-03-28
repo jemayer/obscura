@@ -16,6 +16,7 @@ export interface SidecarSnapshot {
   readonly caption: string;
   readonly tags: readonly string[];
   readonly license?: string;
+  readonly photographer?: string;
   readonly camera?: string;
   readonly date?: Date;
   readonly lens?: string;
@@ -71,12 +72,14 @@ export function loadSidecarSnapshot(content: string): SidecarSnapshot {
   const date = parseDate(data['date']);
 
   const license = asString(data['license']);
+  const photographer = asString(data['photographer']);
   const base = {
     title: asString(data['title']),
     location: asString(data['location']),
     caption: asString(data['caption']),
     tags: asStringArray(data['tags']),
     ...(license ? { license } : {}),
+    ...(photographer ? { photographer } : {}),
   };
 
   const focal_length =

@@ -16,6 +16,7 @@ interface RawSidecar {
   gps_lon?: number;
   location?: string;
   caption?: string;
+  photographer?: string;
   tags?: string[];
   license?: string;
 }
@@ -63,6 +64,7 @@ export function mergeMetadata(
   exif: ExifData,
   sidecar: RawSidecar | undefined,
   defaultLicense: string = 'all-rights-reserved',
+  defaultPhotographer: string = '',
 ): PhotoMetadata {
   const sidecarDate = sidecar ? parseDate(sidecar.date) : undefined;
   const sidecarCamera = sidecar ? nonEmpty(sidecar.camera) : undefined;
@@ -83,12 +85,15 @@ export function mergeMetadata(
     caption: string;
     tags: readonly string[];
     license: string;
+    photographer: string;
   } = {
     title: sidecar?.title ?? '',
     location: sidecar?.location ?? '',
     caption: sidecar?.caption ?? '',
     tags: sidecar?.tags ?? [],
     license: nonEmpty(sidecar?.license) ?? defaultLicense,
+    photographer:
+      nonEmpty(sidecar?.photographer) ?? exif.photographer ?? defaultPhotographer,
   };
 
   // Sidecar wins on conflict; filter out epoch dates from EXIF too
@@ -121,7 +126,8 @@ export async function loadAndMergeMetadata(
   photoPath: string,
   exif: ExifData,
   defaultLicense: string = 'all-rights-reserved',
+  defaultPhotographer: string = '',
 ): Promise<PhotoMetadata> {
   const sidecar = await loadSidecar(photoPath);
-  return mergeMetadata(exif, sidecar, defaultLicense);
+  return mergeMetadata(exif, sidecar, defaultLicense, defaultPhotographer);
 }

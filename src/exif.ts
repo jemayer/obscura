@@ -31,6 +31,7 @@ interface ExifrOutput {
   ExposureTime?: number;
   latitude?: number;
   longitude?: number;
+  Artist?: string;
 }
 
 const EXIF_PICK_FIELDS = [
@@ -46,6 +47,7 @@ const EXIF_PICK_FIELDS = [
   'ExposureTime',
   'latitude',
   'longitude',
+  'Artist',
 ];
 
 function buildCameraString(
@@ -96,6 +98,7 @@ function buildExifData(parsed: ExifrOutput): ExifData {
       : undefined;
   const gps_lat = parsed.latitude;
   const gps_lon = parsed.longitude;
+  const photographer = parsed.Artist;
 
   const result: {
     date?: Date;
@@ -107,6 +110,7 @@ function buildExifData(parsed: ExifrOutput): ExifData {
     shutter_speed?: string;
     gps_lat?: number;
     gps_lon?: number;
+    photographer?: string;
   } = {};
 
   if (date !== undefined) result.date = date;
@@ -118,6 +122,7 @@ function buildExifData(parsed: ExifrOutput): ExifData {
   if (shutter_speed !== undefined) result.shutter_speed = shutter_speed;
   if (gps_lat !== undefined) result.gps_lat = gps_lat;
   if (gps_lon !== undefined) result.gps_lon = gps_lon;
+  if (photographer !== undefined) result.photographer = photographer;
 
   return result;
 }

@@ -9,6 +9,9 @@ recent_shots_count: 10
 #          CC-BY-NC-SA-4.0, CC-BY-ND-4.0, CC-BY-NC-ND-4.0, CC0-1.0,
 #          or any custom text.
 license: all-rights-reserved
+# Default photographer name for all photos (can be overridden per-photo in sidecar YAML).
+# If omitted and no EXIF Artist or per-photo value is set, the field is hidden.
+# default_photographer: Your Name
 # Default gallery layout: "masonry" (variable-height tiles) or "grid" (uniform cells).
 # Individual galleries can override this in galleries.yaml.
 # gallery_default_layout: masonry
@@ -54,16 +57,16 @@ license: all-rights-reserved
 # hero_image: street/golden-hour-alley
 
 # Which metadata fields to show on photo detail pages.
-# Options: date, camera, lens, settings, location, tags, license
+# Options: date, camera, lens, settings, location, tags, photographer, license
 # Use "exif" as shorthand for date + camera + lens + settings.
 # Default: all fields shown.
-# photo_display_fields: [date, camera, lens, settings, location, tags, license]
+# photo_display_fields: [date, camera, lens, settings, location, tags, photographer, license]
 
 # Which metadata fields to show in the lightbox overlay.
-# Options: date, camera, lens, settings, location, tags, license
+# Options: date, camera, lens, settings, location, tags, photographer, license
 # Use "exif" as shorthand for date + camera + lens + settings.
 # Default: all fields shown.
-# lightbox_display_fields: [date, camera, location, license]
+# lightbox_display_fields: [date, camera, location, photographer, license]
 
 images:
   breakpoints: [400, 800, 1200, 2400]

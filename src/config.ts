@@ -64,6 +64,7 @@ interface RawSiteConfig {
   theme?: string;
   recent_shots_count?: number;
   license?: string;
+  default_photographer?: string;
   gallery_default_layout?: string;
   social_links?: RawSocialLink[];
   photo_display_fields?: string[];
@@ -227,6 +228,11 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
     recent_shots_count:
       raw.recent_shots_count ?? DEFAULT_SITE_CONFIG.recent_shots_count,
     license: raw.license ?? DEFAULT_LICENSE,
+    default_photographer:
+      typeof raw.default_photographer === 'string' &&
+      raw.default_photographer.length > 0
+        ? raw.default_photographer
+        : undefined,
     gallery_default_layout:
       raw.gallery_default_layout === 'grid' ||
       raw.gallery_default_layout === 'masonry'

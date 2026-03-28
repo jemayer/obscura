@@ -19,6 +19,7 @@ async function loadPhotosForGallery(
   slugIndex: SlugIndex,
   warnings: ExifWarning[],
   defaultLicense: string,
+  defaultPhotographer: string,
 ): Promise<Photo[]> {
   let entries: string[];
   try {
@@ -43,6 +44,7 @@ async function loadPhotosForGallery(
       sourcePath,
       exifResult.data,
       defaultLicense,
+      defaultPhotographer,
     );
 
     photos.push({
@@ -69,6 +71,7 @@ export async function loadGalleries(
   photosDir: string,
   galleryEntries: readonly GalleryEntry[],
   defaultLicense: string = 'all-rights-reserved',
+  defaultPhotographer: string = '',
 ): Promise<LoadGalleriesResult> {
   const slugIndex = new SlugIndex();
   const warnings: ExifWarning[] = [];
@@ -82,6 +85,7 @@ export async function loadGalleries(
       slugIndex,
       warnings,
       defaultLicense,
+      defaultPhotographer,
     );
 
     const gallery: Gallery = {

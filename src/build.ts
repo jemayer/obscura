@@ -108,6 +108,7 @@ export async function build(
     photosDir,
     galleryConfig.galleries,
     siteConfig.license,
+    siteConfig.default_photographer ?? '',
   );
   if (galleryWarnings.length > 0) {
     warnings.push(formatExifWarnings(galleryWarnings));

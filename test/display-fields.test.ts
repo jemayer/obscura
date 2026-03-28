@@ -35,8 +35,15 @@ describe('parseDisplayFields', () => {
 
   it('accepts all valid fields', () => {
     expect(
-      parseDisplayFields(['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license']),
-    ).toEqual(['date', 'camera', 'lens', 'settings', 'location', 'tags', 'license']);
+      parseDisplayFields(['date', 'camera', 'lens', 'settings', 'location', 'tags', 'photographer', 'license']),
+    ).toEqual(['date', 'camera', 'lens', 'settings', 'location', 'tags', 'photographer', 'license']);
+  });
+
+  it('recognises photographer as a valid field', () => {
+    expect(parseDisplayFields(['photographer', 'license'])).toEqual([
+      'photographer',
+      'license',
+    ]);
   });
 
   it('expands "exif" alias to date, camera, lens, settings', () => {

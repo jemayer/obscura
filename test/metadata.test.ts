@@ -200,4 +200,42 @@ describe('mergeMetadata', () => {
     const result = mergeMetadata(baseExif, sidecar);
     expect(result.license).toBe('Licensed under my special terms');
   });
+
+  // -- Photographer merging --
+
+  it('defaults to empty photographer when no sidecar, no EXIF, no default', () => {
+    const result = mergeMetadata(baseExif, undefined);
+    expect(result.photographer).toBe('');
+  });
+
+  it('uses the provided default photographer when no sidecar and no EXIF', () => {
+    const result = mergeMetadata(baseExif, undefined, 'all-rights-reserved', 'Jane Doe');
+    expect(result.photographer).toBe('Jane Doe');
+  });
+
+  it('uses EXIF photographer over default', () => {
+    const exifWithArtist: ExifData = { ...baseExif, photographer: 'EXIF Artist' };
+    const result = mergeMetadata(exifWithArtist, undefined, 'all-rights-reserved', 'Default Name');
+    expect(result.photographer).toBe('EXIF Artist');
+  });
+
+  it('sidecar photographer overrides EXIF and default', () => {
+    const exifWithArtist: ExifData = { ...baseExif, photographer: 'EXIF Artist' };
+    const sidecar = { title: 'Photo', photographer: 'Sidecar Name' };
+    const result = mergeMetadata(exifWithArtist, sidecar, 'all-rights-reserved', 'Default Name');
+    expect(result.photographer).toBe('Sidecar Name');
+  });
+
+  it('empty sidecar photographer does not override EXIF or default', () => {
+    const exifWithArtist: ExifData = { ...baseExif, photographer: 'EXIF Artist' };
+    const sidecar = { title: 'Photo', photographer: '' };
+    const result = mergeMetadata(exifWithArtist, sidecar, 'all-rights-reserved', 'Default Name');
+    expect(result.photographer).toBe('EXIF Artist');
+  });
+
+  it('falls back to default photographer when sidecar has no photographer and EXIF has none', () => {
+    const sidecar = { title: 'Photo' };
+    const result = mergeMetadata(baseExif, sidecar, 'all-rights-reserved', 'Site Owner');
+    expect(result.photographer).toBe('Site Owner');
+  });
 });
