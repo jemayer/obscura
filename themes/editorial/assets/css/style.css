@@ -1426,10 +1426,10 @@ a.tag:hover {
     --color-overlay-light: rgba(229, 227, 222, 0.04);
     --color-highlight: #d4745a;
     --color-highlight-muted: rgba(212, 116, 90, 0.3);
-    --color-marker: rgba(212, 116, 90, 0.25);
-    --color-marker-edge: rgba(212, 116, 90, 0.25);
+    --color-marker: rgba(212, 116, 90, 0.38);
+    --color-marker-edge: rgba(212, 116, 90, 0.15);
     --color-marker-text: inherit;
-    --color-marker-glow: transparent;
+    --color-marker-glow: rgba(212, 116, 90, 0.08);
     --color-code-bg: #262622;
   }
 }
@@ -1451,10 +1451,10 @@ a.tag:hover {
   --color-overlay: rgba(18, 18, 17, 0.85);
   --color-highlight: #d4745a;
   --color-highlight-muted: rgba(212, 116, 90, 0.3);
-  --color-marker: rgba(212, 116, 90, 0.25);
-  --color-marker-edge: rgba(212, 116, 90, 0.25);
+  --color-marker: rgba(212, 116, 90, 0.38);
+  --color-marker-edge: rgba(212, 116, 90, 0.15);
   --color-marker-text: inherit;
-  --color-marker-glow: transparent;
+  --color-marker-glow: rgba(212, 116, 90, 0.08);
   --color-overlay-light: rgba(229, 227, 222, 0.04);
   --color-code-bg: #262622;
 }
