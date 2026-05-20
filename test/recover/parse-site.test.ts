@@ -25,6 +25,18 @@ describe('parseHomepage', () => {
     expect(result.value.images?.breakpoints).toEqual([400, 800, 1200, 2400]);
   });
 
+  it('extracts hero_image from a homepage with a hero section', () => {
+    const html = fixture('homepage-full.html');
+    const result = parseHomepage(html, 'editorial');
+    expect(result.value.hero_image).toBe('sample/sample-01');
+  });
+
+  it('omits hero_image when no hero section is present', () => {
+    const html = fixture('homepage-bare.html');
+    const result = parseHomepage(html, 'editorial');
+    expect(result.value.hero_image).toBeUndefined();
+  });
+
   it('returns minimal config from a bare homepage without warnings beyond optionals', () => {
     const html = fixture('homepage-bare.html');
     const result = parseHomepage(html, 'editorial');
