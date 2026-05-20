@@ -12,7 +12,7 @@ describe('parsePage', () => {
     const result = parsePage(html, 'https://example.com/about/');
     expect(result.value.slug).toBe('about');
     expect(result.value.frontmatter.title).toBe('About');
-    expect(result.value.markdownBody).toContain('I am a photographer');
+    expect(result.value.markdownBody).toContain('I am a <u>photographer</u>');
     expect(result.value.markdownBody).toMatch(/-\s+One/u);
     expect(result.value.conversionFailed).toBe(false);
   });
@@ -33,7 +33,7 @@ describe('parseHomepageIntro', () => {
     const result = parseHomepageIntro(html);
     expect(result).not.toBeNull();
     expect(result?.value.slug).toBe('index');
-    expect(result?.value.markdownBody).toContain('Welcome to my');
+    expect(result?.value.markdownBody).toContain('Welcome to my <u>portfolio</u>');
     expect(result?.value.markdownBody).toContain('Updated weekly');
     expect(result?.value.conversionFailed).toBe(false);
   });

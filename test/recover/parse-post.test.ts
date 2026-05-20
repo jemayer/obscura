@@ -46,4 +46,13 @@ describe('parseBlogPost', () => {
     );
     expect(result.value.markdownBody).toContain('https://example.org');
   });
+
+  it('preserves <u> text-marker tags', () => {
+    const html = fixture('post-welcome.html');
+    const result = parseBlogPost(
+      html,
+      'https://example.com/blog/welcome/',
+    );
+    expect(result.value.markdownBody).toContain('<u>highlighted</u>');
+  });
 });

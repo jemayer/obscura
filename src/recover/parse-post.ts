@@ -1,16 +1,12 @@
 import * as cheerio from 'cheerio';
-import TurndownService from 'turndown';
 import type { ParsedPost, ParseResult, RecoveryWarning } from './types.js';
 import {
   rewritePhotoCards,
   postProcessShortcodes,
 } from './photo-shortcodes.js';
+import { createTurndown } from './turndown.js';
 
-const turndown = new TurndownService({
-  headingStyle: 'atx',
-  codeBlockStyle: 'fenced',
-  bulletListMarker: '-',
-});
+const turndown = createTurndown();
 
 function deriveSlug(pageUrl: string): string {
   const path = new URL(pageUrl).pathname;
