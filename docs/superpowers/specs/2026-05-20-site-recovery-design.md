@@ -21,7 +21,7 @@ The motivating scenario: a user lost their local setup but their site is still l
 
 - Byte-for-byte HTML/CSS archival mirror of the upstream site — Obscura's own build regenerates HTML deterministically; the recovered sources are the source of truth.
 - Recovering data that the upstream site never displayed: GPS coordinates, full original EXIF, `webp_quality`, content lost to crops or omissions.
-- Working on non-Obscura photography sites. The MVP hard-fails if it doesn't see the generator meta marker.
+- Working on non-Obscura photography sites. The MVP hard-fails if it doesn't see the generator meta marker. (No structural-fingerprint fallback — we trust the tag.)
 - Working when `sitemap.xml` is missing. Tracked separately as `obscura-0p2f` (link-crawl fallback).
 
 ## User workflow
@@ -156,7 +156,8 @@ Boundary conditions and their behaviour:
 
 | Failure | Behaviour |
 |---|---|
-| URL unreachable, non-HTML response, or missing generator meta | Hard error, exit non-zero, no files written |
+| URL unreachable, non-HTML response, or missing/non-Obscura generator meta | Hard error, exit non-zero, no files written |
+| Generator meta present but missing `data-theme` or `data-version` | Continue with documented fallbacks (editorial / current version), note in report |
 | `sitemap.xml` missing or unreadable | Hard error, point user at `obscura-0p2f` |
 | Theme name unknown (not in built-in `themes/`) | Warn, write `theme: <name>` anyway, report note "theme not bundled — install or rename" |
 | Individual HTTP 404 / 5xx on a photo / post / page | Warn, skip that item, list in report |
@@ -182,13 +183,39 @@ Implementation hooks into the existing `src/cli.ts` dispatcher and `package.json
 
 ## Upstream contract: generator meta marker
 
-For reliable identification, all built-in themes' `base.html` emits:
+Obscura already emits a generator marker in all built-in themes' `base.html`:
 
 ```html
-<meta name="generator" content="Obscura" data-theme="{{ site.theme }}" data-version="{{ obscura_version }}">
+<meta name="generator" content="Obscura {{ build_timestamp }}">
 ```
 
-`obscura_version` is read from `package.json` at build time and exposed to templates by the rendering pipeline. ADR-015 captures the rationale and stability commitment.
+where `build_timestamp` is the build time formatted as `YYYYMMDD-HH:MM:SS` (see `src/rendering.ts`). Every currently deployed Obscura site has this — recovery works on existing sites today, no rebuild required.
+
+To make future recoveries fully informed, we **additively** extend the tag with two data attributes:
+
+```html
+<meta name="generator"
+      content="Obscura {{ build_timestamp }}"
+      data-theme="{{ site.theme }}"
+      data-version="{{ obscura_version }}">
+```
+
+- The `content` value is unchanged — older parsers and existing tooling keep working.
+- `data-theme` carries the active theme name from `site.yaml`.
+- `data-version` carries the Obscura package version from `package.json`, exposed to templates as `obscura_version` (a small addition to the rendering pipeline).
+
+### Identification stage behaviour
+
+| HTML state | Action |
+|---|---|
+| Tag present, content matches `^Obscura `, both data attrs present | Use `data-theme` and `data-version` directly |
+| Tag present, content matches `^Obscura `, data attrs missing ("older" site) | Assume `theme = editorial` (current bundled default) and `version = <current Obscura version>`. Note both as assumptions in `recovery-report.md`. |
+| Tag present, content matches `^Obscura `, only one of the data attrs missing | Use the one that's present; fall back for the other; note the assumption |
+| Tag absent, or content does not start with `Obscura ` | Hard error, exit non-zero |
+
+The build timestamp from `content` is captured and included in the report for context (it tells the user when the live site was last built — useful diagnostic info), but is not used to drive parsing.
+
+ADR-015 captures the rationale and stability commitment.
 
 ## Testing strategy
 
