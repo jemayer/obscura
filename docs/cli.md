@@ -147,6 +147,26 @@ $ npm run sidecar
 - Use the "Missing \<field\>" filters to focus on incomplete metadata
 - Press `Ctrl+C` at any prompt to quit; already-saved photos are not affected
 
+### `npm run recover -- <url> [target-dir] [--force]`
+
+Reconstruct an editable Obscura project from a deployed site's URL. Use this when your local setup is gone but the site is still live.
+
+- `<url>` — landing URL of the live Obscura site (required).
+- `[target-dir]` — defaults to the current directory. The recovered project is written into `target-dir/site/`, and `target-dir/recovery-report.md` summarises anything that couldn't be fully recovered.
+- `--force` — proceed even if `target-dir/site/` already exists and is non-empty. Existing files may be overwritten.
+
+**What recovery extracts:**
+
+- `site.yaml`: title, subtitle, description, base URL, theme, social links, default photographer, image breakpoints
+- `galleries.yaml`: every gallery's slug, title, description, layout, and listed flag
+- Per-photo sidecar YAML: title, caption, date, camera, lens, focal length, aperture, ISO, shutter speed, location, photographer, license, tags
+- Per-photo image: the largest variant offered by the upstream `<img srcset>` (typically the 2400 px WebP)
+- Blog posts and pages: frontmatter + HTML-to-Markdown body, with photo references restored to `{{photo:gallery/slug}}` shortcodes
+
+**What it does not extract** (not recoverable from published HTML): GPS coordinates, EXIF data not displayed by the theme, the original full-resolution photos.
+
+**Identification:** Recovery requires the `<meta name="generator">` tag every Obscura theme emits. The richer `data-theme` / `data-version` attributes are used when present; older builds fall back to `theme=editorial` and the current Obscura version, with the assumptions noted in `recovery-report.md`. Recovery fails fast if the tag is missing or `/sitemap.xml` is unavailable.
+
 ### `npm run validate`
 
 Fast content validation without image processing. Checks:
