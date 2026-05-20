@@ -37,7 +37,7 @@ function collectBreakpoints($: cheerio.CheerioAPI): number[] {
     const srcset = $(el).attr('srcset') ?? '';
     for (const part of srcset.split(',')) {
       const m = /\s(\d+)w$/u.exec(part.trim());
-      if (m) widths.add(Number(m[1]));
+      if (m && m[1] !== undefined) widths.add(Number(m[1]));
     }
   });
   return [...widths].sort((a, b) => a - b);
@@ -53,7 +53,9 @@ export function parseHomepage(
   const headerTitle = $('header .site-title').first().text().trim();
   const titleTag = $('title').first().text().trim();
   const title =
-    headerTitle.length > 0 ? headerTitle : titleTag.split(' - ')[0].trim();
+    headerTitle.length > 0
+      ? headerTitle
+      : (titleTag.split(' - ')[0] ?? '').trim();
 
   const subtitle =
     $('header .site-subtitle').first().text().trim() || undefined;
@@ -78,9 +80,10 @@ export function parseHomepage(
   const credit = $('footer .site-credit').first().text().trim();
   const photographerMatch =
     /^(?:Photography|Photos?|Images?)\s+by\s+(.+)$/iu.exec(credit);
-  const defaultPhotographer = photographerMatch
-    ? photographerMatch[1].trim()
-    : undefined;
+  const defaultPhotographer =
+    photographerMatch && photographerMatch[1] !== undefined
+      ? photographerMatch[1].trim()
+      : undefined;
 
   const socialLinks: {
     readonly platform: SocialPlatform;

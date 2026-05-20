@@ -11,7 +11,7 @@ const turndown = new TurndownService({
 function deriveSlug(pageUrl: string): string {
   const path = new URL(pageUrl).pathname;
   const m = /^.*\/([^/]+)\/$/u.exec(path);
-  if (!m) {
+  if (!m || m[1] === undefined) {
     throw new Error(`page URL does not match /<slug>/: ${pageUrl}`);
   }
   return m[1];

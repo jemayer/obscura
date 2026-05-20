@@ -28,7 +28,7 @@ function pickLargestVariant(
     for (const part of srcset.split(',')) {
       const trimmed = part.trim();
       const match = /^(\S+)\s+(\d+)w$/u.exec(trimmed);
-      if (!match) continue;
+      if (!match || match[1] === undefined || match[2] === undefined) continue;
       const width = Number(match[2]);
       const absUrl = new URL(match[1], baseUrl).toString();
       if (!best || width > best.width) {
@@ -56,13 +56,21 @@ function extractMeta(
 function parseSettings(value: string): Partial<PhotoMetadata> {
   const result: Partial<PhotoMetadata> = {};
   const focal = /\b(\d+)mm\b/u.exec(value);
-  if (focal) (result as { focal_length?: number }).focal_length = Number(focal[1]);
+  if (focal && focal[1] !== undefined) {
+    (result as { focal_length?: number }).focal_length = Number(focal[1]);
+  }
   const ap = /\bf\/([\d.]+)\b/u.exec(value);
-  if (ap) (result as { aperture?: number }).aperture = Number(ap[1]);
+  if (ap && ap[1] !== undefined) {
+    (result as { aperture?: number }).aperture = Number(ap[1]);
+  }
   const iso = /\bISO\s+(\d+)\b/u.exec(value);
-  if (iso) (result as { iso?: number }).iso = Number(iso[1]);
+  if (iso && iso[1] !== undefined) {
+    (result as { iso?: number }).iso = Number(iso[1]);
+  }
   const shutter = /\b(\d+\/\d+|\d+(?:\.\d+)?)s\b/u.exec(value);
-  if (shutter) (result as { shutter_speed?: string }).shutter_speed = shutter[1];
+  if (shutter && shutter[1] !== undefined) {
+    (result as { shutter_speed?: string }).shutter_speed = shutter[1];
+  }
   return result;
 }
 
@@ -83,7 +91,7 @@ function deriveSlugs(pageUrl: string): {
 } {
   const path = new URL(pageUrl).pathname;
   const m = /^.*\/photography\/([^/]+)\/([^/]+)\/$/u.exec(path);
-  if (!m) {
+  if (!m || m[1] === undefined || m[2] === undefined) {
     throw new Error(
       `photo page URL does not match /photography/<g>/<p>/: ${pageUrl}`,
     );
@@ -169,7 +177,9 @@ export function parsePhotoPage(
     const extMatch = /\.([a-zA-Z0-9]+)(?:\?|$)/u.exec(
       new URL(variant.url).pathname,
     );
-    if (extMatch) imageExt = `.${extMatch[1].toLowerCase()}`;
+    if (extMatch && extMatch[1] !== undefined) {
+      imageExt = `.${extMatch[1].toLowerCase()}`;
+    }
   } else {
     warnings.push({
       category: 'image',

@@ -12,7 +12,7 @@ const turndown = new TurndownService({
 function deriveSlug(pageUrl: string): string {
   const path = new URL(pageUrl).pathname;
   const m = /^.*\/blog\/([^/]+)\/$/u.exec(path);
-  if (!m) {
+  if (!m || m[1] === undefined) {
     throw new Error(`post URL does not match /blog/<slug>/: ${pageUrl}`);
   }
   return m[1];
@@ -26,7 +26,7 @@ function rewritePhotoShortcodes(
   $body.find('a').each((_, el) => {
     const href = $(el).attr('href') ?? '';
     const m = /^\/photography\/([^/]+)\/([^/]+)\/$/u.exec(href);
-    if (!m) return;
+    if (!m || m[1] === undefined || m[2] === undefined) return;
     const shortcode = `{{photo:${m[1]}/${m[2]}}}`;
     $(el).replaceWith($('<p></p>').text(shortcode));
   });

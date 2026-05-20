@@ -5,7 +5,7 @@ import type { ParsedGallery, ParseResult, RecoveryWarning } from './types.js';
 function deriveSlug(pageUrl: string): string {
   const path = new URL(pageUrl).pathname;
   const m = /^.*\/photography\/([^/]+)\/$/u.exec(path);
-  if (!m) {
+  if (!m || m[1] === undefined) {
     throw new Error(`gallery URL does not match /photography/<g>/: ${pageUrl}`);
   }
   return m[1];
@@ -70,7 +70,7 @@ export function parseGalleryIndex(html: string, baseUrl: string): Set<string> {
       }
     })();
     const m = /^.*\/photography\/([^/]+)\/$/u.exec(path);
-    if (m) slugs.add(m[1]);
+    if (m && m[1] !== undefined) slugs.add(m[1]);
   });
   return slugs;
 }
