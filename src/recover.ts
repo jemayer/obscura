@@ -26,8 +26,9 @@ import {
   writePage,
 } from './recover/write.js';
 import { formatReport } from './recover/report.js';
+import { hoistCommonFields } from './recover/hoist.js';
 import type { RecoveryWarning } from './recover/types.js';
-import type { GalleryEntry } from './types.js';
+import type { GalleryEntry, PhotoMetadata } from './types.js';
 
 interface CliArgs {
   readonly url: string;
@@ -144,7 +145,13 @@ async function main(): Promise<void> {
     });
   }
 
-  let photoCount = 0;
+  // Photo pass 1: parse, download images, buffer metadata for the hoist pass.
+  interface PhotoBuffer {
+    readonly gallerySlug: string;
+    readonly photoSlug: string;
+    readonly metadata: Partial<PhotoMetadata>;
+  }
+  const photoBuffer: PhotoBuffer[] = [];
   for (const url of urls.photos) {
     try {
       const html = await fetchText(url);
@@ -152,7 +159,7 @@ async function main(): Promise<void> {
       allWarnings.push(...parsed.warnings);
       const { gallerySlug, photoSlug, metadata, imageUrl, imageExt } =
         parsed.value;
-      await writeSidecar(args.targetDir, gallerySlug, photoSlug, metadata);
+      photoBuffer.push({ gallerySlug, photoSlug, metadata });
       if (imageUrl && imageExt) {
         const dest = resolve(
           args.targetDir,
@@ -172,7 +179,6 @@ async function main(): Promise<void> {
           });
         }
       }
-      photoCount++;
     } catch (e) {
       allWarnings.push({
         category: 'photo',
@@ -180,6 +186,27 @@ async function main(): Promise<void> {
         message: `failed to fetch/parse: ${e instanceof Error ? e.message : String(e)}`,
       });
     }
+  }
+
+  // Hoist uniform license / photographer to site-level config, strip from sidecars.
+  const hoist = hoistCommonFields(photoBuffer.map((p) => p.metadata));
+  if (hoist.siteLicense !== undefined && siteConfig.license === undefined) {
+    (siteConfig as { license?: string }).license = hoist.siteLicense;
+  }
+  if (
+    hoist.defaultPhotographer !== undefined &&
+    siteConfig.default_photographer === undefined
+  ) {
+    (siteConfig as { default_photographer?: string }).default_photographer =
+      hoist.defaultPhotographer;
+  }
+
+  // Photo pass 2: write sidecars with stripped metadata.
+  let photoCount = 0;
+  for (const [i, p] of photoBuffer.entries()) {
+    const stripped = hoist.strippedMetadata[i] ?? p.metadata;
+    await writeSidecar(args.targetDir, p.gallerySlug, p.photoSlug, stripped);
+    photoCount++;
   }
 
   let postCount = 0;
