@@ -50,6 +50,15 @@ describe('parsePhotoPage', () => {
     );
   });
 
+  it('maps the "All Rights Reserved" display label back to all-rights-reserved', () => {
+    const html = fixture('photo-arr-license.html');
+    const result = parsePhotoPage(
+      html,
+      'https://example.com/photography/sample/arr/',
+    );
+    expect(result.value.metadata.license).toBe('all-rights-reserved');
+  });
+
   it('extracts only the matched parts of a partial settings line', () => {
     const html = fixture('photo-partial-settings.html');
     const result = parsePhotoPage(

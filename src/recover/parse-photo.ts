@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import type { Element } from 'domhandler';
 import type { PhotoMetadata } from '../types.js';
+import { KNOWN_LICENSE_TYPES, LICENSE_LABELS } from '../types.js';
 import type { ParsedPhoto, ParseResult, RecoveryWarning } from './types.js';
 
 const LICENSE_URL_TO_ID: ReadonlyMap<string, string> = new Map([
@@ -12,6 +13,14 @@ const LICENSE_URL_TO_ID: ReadonlyMap<string, string> = new Map([
   ['https://creativecommons.org/licenses/by-nc-nd/4.0/', 'CC-BY-NC-ND-4.0'],
   ['https://creativecommons.org/publicdomain/zero/1.0/', 'CC0-1.0'],
 ]);
+
+/** Reverse lookup: rendered license label → canonical license ID. */
+const LICENSE_LABEL_TO_ID: ReadonlyMap<string, string> = new Map(
+  KNOWN_LICENSE_TYPES.flatMap((id) => {
+    const label = LICENSE_LABELS[id];
+    return label ? [[label, id] as const] : [];
+  }),
+);
 
 interface LargestVariant {
   readonly url: string;
@@ -82,7 +91,13 @@ function parseLicense(valueEl: cheerio.Cheerio<Element>): string | undefined {
     if (mapped) return mapped;
   }
   const text = valueEl.text().trim();
-  return text.length > 0 ? text : undefined;
+  if (text.length === 0) return undefined;
+  // Map rendered display labels (e.g. "© All Rights Reserved") back to their
+  // canonical identifiers (e.g. "all-rights-reserved"). Unknown text falls
+  // through as a custom license string.
+  const mappedLabel = LICENSE_LABEL_TO_ID.get(text);
+  if (mappedLabel) return mappedLabel;
+  return text;
 }
 
 function deriveSlugs(pageUrl: string): {
