@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ site.title }}{% if site.subtitle %} - {{ site.subtitle }}{% endif %}{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ site.description or site.title }}{% endblock %}">
-  <meta name="generator" content="Obscura {{ build_timestamp }}">
+  <meta name="generator" content="Obscura {{ build_timestamp }}" data-theme="{{ site.theme }}" data-version="{{ obscura_version }}">
 
   {% block og_meta %}{% endblock %}
 
