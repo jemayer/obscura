@@ -1,6 +1,13 @@
 import * as cheerio from 'cheerio';
 import type { GalleryEntry, GalleryLayout } from '../types.js';
 import type { ParsedGallery, ParseResult, RecoveryWarning } from './types.js';
+import {
+  rewritePhotoCards,
+  postProcessShortcodes,
+} from './photo-shortcodes.js';
+import { createTurndown } from './turndown.js';
+
+const turndown = createTurndown();
 
 function deriveSlug(pageUrl: string): string {
   const path = new URL(pageUrl).pathname;
@@ -36,7 +43,10 @@ export function parseGalleryPage(
     });
   }
 
-  const description = $('.gallery-intro').first().text().trim();
+  // Editorial shows .page-subtitle only when there's no gallery index.md.
+  // When index.md is present, it's rendered as .gallery-content and the
+  // description is suppressed — recovered separately by parseGalleryContent.
+  const description = $('.page-subtitle').first().text().trim();
   const layout = detectLayout($);
 
   const entry: GalleryEntry = {
@@ -48,6 +58,35 @@ export function parseGalleryPage(
   };
 
   return { value: { entry }, warnings };
+}
+
+/**
+ * Extract the gallery's rendered index.md content from <div class="gallery-content">
+ * and return it as Markdown ready to be written to site/content/photos/<slug>/index.md.
+ * Returns null when the gallery has no index.md.
+ */
+export function parseGalleryContent(html: string): {
+  readonly markdownBody: string;
+  readonly conversionFailed: boolean;
+  readonly rawHtml?: string;
+} | null {
+  const $ = cheerio.load(html);
+  const section = $('.gallery-content').first();
+  if (section.length === 0) return null;
+  rewritePhotoCards(section, $);
+  const bodyHtml = section.html() ?? '';
+  try {
+    return {
+      markdownBody: postProcessShortcodes(turndown.turndown(bodyHtml).trim()),
+      conversionFailed: false,
+    };
+  } catch {
+    return {
+      markdownBody: '',
+      conversionFailed: true,
+      rawHtml: bodyHtml,
+    };
+  }
 }
 
 /**

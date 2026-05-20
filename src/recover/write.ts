@@ -51,6 +51,22 @@ export async function writeGalleriesConfig(
   );
 }
 
+export async function writeGalleryIndexContent(
+  targetDir: string,
+  gallerySlug: string,
+  markdown: string,
+): Promise<void> {
+  const path = resolve(
+    targetDir,
+    'site',
+    'content',
+    'photos',
+    gallerySlug,
+    'index.md',
+  );
+  await writeText(path, `${markdown}\n`);
+}
+
 export async function writeSidecar(
   targetDir: string,
   gallerySlug: string,

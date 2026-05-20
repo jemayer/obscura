@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import {
   parseGalleryPage,
   parseGalleryIndex,
+  parseGalleryContent,
 } from '../../src/recover/parse-gallery.js';
 
 const fixture = (name: string): string =>
@@ -43,5 +44,23 @@ describe('parseGalleryIndex', () => {
     const html = fixture('gallery-index.html');
     const slugs = parseGalleryIndex(html, 'https://example.com');
     expect([...slugs].sort()).toEqual(['landscapes', 'sample']);
+  });
+});
+
+describe('parseGalleryContent', () => {
+  it('extracts the rendered .gallery-content section as Markdown', () => {
+    const html = fixture('gallery-with-content.html');
+    const result = parseGalleryContent(html);
+    expect(result).not.toBeNull();
+    expect(result?.markdownBody).toContain(
+      'This is intro prose <u>rendered</u> from',
+    );
+    expect(result?.markdownBody).toContain('Second paragraph');
+  });
+
+  it('returns null when there is no .gallery-content section', () => {
+    const html = fixture('gallery-sample.html');
+    const result = parseGalleryContent(html);
+    expect(result).toBeNull();
   });
 });

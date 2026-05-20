@@ -11,6 +11,7 @@ import { parseHomepage } from './recover/parse-site.js';
 import {
   parseGalleryPage,
   parseGalleryIndex,
+  parseGalleryContent,
 } from './recover/parse-gallery.js';
 import { parsePhotoPage } from './recover/parse-photo.js';
 import { parseBlogPost } from './recover/parse-post.js';
@@ -19,6 +20,7 @@ import { downloadImage } from './recover/download-image.js';
 import {
   writeSiteConfig,
   writeGalleriesConfig,
+  writeGalleryIndexContent,
   writeSidecar,
   writePost,
   writePage,
@@ -108,6 +110,16 @@ async function main(): Promise<void> {
       allWarnings.push(...parsed.warnings);
       galleries.push(parsed.value.entry);
       parsedSlugs.add(parsed.value.entry.slug);
+
+      // Gallery-level index.md content (if present)
+      const content = parseGalleryContent(html);
+      if (content && content.markdownBody.length > 0) {
+        await writeGalleryIndexContent(
+          args.targetDir,
+          parsed.value.entry.slug,
+          content.markdownBody,
+        );
+      }
     } catch (e) {
       allWarnings.push({
         category: 'gallery',
