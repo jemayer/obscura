@@ -19,7 +19,8 @@
     "validate": "tsc && node dist-build/validate.js",
     "sidecar": "tsc && node dist-build/sidecar-cli.js",
     "init": "tsc && node dist-build/init.js",
-    "migrate": "tsc && node dist-build/migrate.js"
+    "migrate": "tsc && node dist-build/migrate.js",
+    "recover": "tsc && node dist-build/recover.js"
   },
   "keywords": [
     "static-site-generator",
