@@ -14,7 +14,7 @@ import {
 } from './recover/parse-gallery.js';
 import { parsePhotoPage } from './recover/parse-photo.js';
 import { parseBlogPost } from './recover/parse-post.js';
-import { parsePage } from './recover/parse-page.js';
+import { parsePage, parseHomepageIntro } from './recover/parse-page.js';
 import { downloadImage } from './recover/download-image.js';
 import {
   writeSiteConfig,
@@ -81,6 +81,13 @@ async function main(): Promise<void> {
   allWarnings.push(...homepageParse.warnings);
   const siteConfig = homepageParse.value;
   const baseUrl = siteConfig.base_url;
+
+  // Homepage intro content (site/content/pages/index.md), if present
+  const homepageIntro = parseHomepageIntro(landingHtml);
+  if (homepageIntro) {
+    allWarnings.push(...homepageIntro.warnings);
+    await writePage(args.targetDir, homepageIntro.value);
+  }
 
   const sitemapXml = await fetchText(`${baseUrl}/sitemap.xml`);
   const urls = categoriseSitemap(sitemapXml, baseUrl);

@@ -21,6 +21,51 @@ function deriveSlug(pageUrl: string): string {
   return m[1];
 }
 
+/**
+ * Extract the homepage intro section (`<section class="homepage-intro">`)
+ * from the landing page HTML and return it as a ParsedPage with slug "index".
+ * Editorial wraps content from site/content/pages/index.md in this section.
+ * Returns null when no homepage-intro section is present.
+ */
+export function parseHomepageIntro(
+  html: string,
+): ParseResult<ParsedPage> | null {
+  const $ = cheerio.load(html);
+  const section = $('section.homepage-intro').first();
+  if (section.length === 0) return null;
+
+  const warnings: RecoveryWarning[] = [];
+  rewritePhotoCards(section, $);
+  const bodyHtml = section.html() ?? '';
+
+  let markdownBody = '';
+  let conversionFailed = false;
+  let rawHtml: string | undefined;
+  try {
+    markdownBody = postProcessShortcodes(turndown.turndown(bodyHtml).trim());
+  } catch {
+    conversionFailed = true;
+    rawHtml = bodyHtml;
+    warnings.push({
+      category: 'page',
+      subject: 'index',
+      message:
+        'Turndown threw on the homepage intro; saved raw HTML alongside the .md stub',
+    });
+  }
+
+  return {
+    value: {
+      slug: 'index',
+      frontmatter: {},
+      markdownBody,
+      conversionFailed,
+      ...(rawHtml !== undefined && { rawHtml }),
+    },
+    warnings,
+  };
+}
+
 export function parsePage(
   html: string,
   pageUrl: string,

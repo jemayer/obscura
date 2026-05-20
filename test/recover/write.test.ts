@@ -111,6 +111,21 @@ describe('writePost / writePage', () => {
     expect(content).toContain('title: About');
   });
 
+  it('omits the --- frontmatter block when frontmatter is empty', async () => {
+    await writePage(workDir, {
+      slug: 'index',
+      frontmatter: {},
+      markdownBody: 'Welcome home',
+      conversionFailed: false,
+    });
+    const content = await readFile(
+      resolve(workDir, 'site', 'content', 'pages', 'index.md'),
+      'utf-8',
+    );
+    expect(content.startsWith('---')).toBe(false);
+    expect(content).toContain('Welcome home');
+  });
+
   it('writes raw HTML beside the stub when conversion failed', async () => {
     await writePost(workDir, {
       slug: 'broken',

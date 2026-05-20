@@ -73,6 +73,7 @@ export async function writeSidecar(
 
 function renderFrontmatter(fm: Record<string, unknown>): string {
   const out = toSerialisable(fm) as Record<string, unknown>;
+  if (Object.keys(out).length === 0) return '';
   return `---\n${stringifyYaml(out)}---\n`;
 }
 

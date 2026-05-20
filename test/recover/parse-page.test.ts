@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { parsePage } from '../../src/recover/parse-page.js';
+import { parsePage, parseHomepageIntro } from '../../src/recover/parse-page.js';
 
 const fixture = (name: string): string =>
   readFileSync(resolve(import.meta.dirname, 'fixtures', name), 'utf-8');
@@ -24,5 +24,23 @@ describe('parsePage', () => {
       '{{< photo "sample/sample-02" >}}',
     );
     expect(result.value.markdownBody).not.toContain('photo-card');
+  });
+});
+
+describe('parseHomepageIntro', () => {
+  it('extracts the homepage-intro section as a page with slug "index"', () => {
+    const html = fixture('homepage-full.html');
+    const result = parseHomepageIntro(html);
+    expect(result).not.toBeNull();
+    expect(result?.value.slug).toBe('index');
+    expect(result?.value.markdownBody).toContain('Welcome to my');
+    expect(result?.value.markdownBody).toContain('Updated weekly');
+    expect(result?.value.conversionFailed).toBe(false);
+  });
+
+  it('returns null when there is no homepage-intro section', () => {
+    const html = fixture('homepage-bare.html');
+    const result = parseHomepageIntro(html);
+    expect(result).toBeNull();
   });
 });
