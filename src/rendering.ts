@@ -1,6 +1,7 @@
 import nunjucks from 'nunjucks';
 import { resolve, dirname } from 'node:path';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import type {
   SiteConfig,
   Gallery,
@@ -69,6 +70,12 @@ export function createRenderingEngine(
     ':' +
     String(now.getSeconds()).padStart(2, '0');
   env.addGlobal('build_timestamp', ts);
+
+  // Obscura version — read from package.json at startup. Used by the
+  // recovery tool to negotiate parsing compatibility (see ADR-015).
+  const pkgPath = resolve(import.meta.dirname, '..', 'package.json');
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as { version: string };
+  env.addGlobal('obscura_version', pkg.version);
 
   // -- Filters --
 
