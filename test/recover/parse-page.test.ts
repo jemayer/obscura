@@ -16,4 +16,13 @@ describe('parsePage', () => {
     expect(result.value.markdownBody).toMatch(/-\s+One/u);
     expect(result.value.conversionFailed).toBe(false);
   });
+
+  it('rewrites .photo-card divs back to shortcodes in page bodies', () => {
+    const html = fixture('page-with-photo.html');
+    const result = parsePage(html, 'https://example.com/showcase/');
+    expect(result.value.markdownBody).toContain(
+      '{{< photo "sample/sample-02" >}}',
+    );
+    expect(result.value.markdownBody).not.toContain('photo-card');
+  });
 });

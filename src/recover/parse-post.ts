@@ -1,7 +1,10 @@
 import * as cheerio from 'cheerio';
 import TurndownService from 'turndown';
-import type { Element } from 'domhandler';
 import type { ParsedPost, ParseResult, RecoveryWarning } from './types.js';
+import {
+  rewritePhotoCards,
+  postProcessShortcodes,
+} from './photo-shortcodes.js';
 
 const turndown = new TurndownService({
   headingStyle: 'atx',
@@ -16,20 +19,6 @@ function deriveSlug(pageUrl: string): string {
     throw new Error(`post URL does not match /blog/<slug>/: ${pageUrl}`);
   }
   return m[1];
-}
-
-/** Replace links/images whose href targets /photography/<g>/<p>/ with shortcodes. */
-function rewritePhotoShortcodes(
-  $body: cheerio.Cheerio<Element>,
-  $: cheerio.CheerioAPI,
-): void {
-  $body.find('a').each((_, el) => {
-    const href = $(el).attr('href') ?? '';
-    const m = /^\/photography\/([^/]+)\/([^/]+)\/$/u.exec(href);
-    if (!m || m[1] === undefined || m[2] === undefined) return;
-    const shortcode = `{{photo:${m[1]}/${m[2]}}}`;
-    $(el).replaceWith($('<p></p>').text(shortcode));
-  });
 }
 
 export function parseBlogPost(
@@ -58,14 +47,14 @@ export function parseBlogPost(
       message: 'no .post-body found; emitting empty Markdown body',
     });
   }
-  rewritePhotoShortcodes(body, $);
+  rewritePhotoCards(body, $);
   const bodyHtml = body.html() ?? '';
 
   let markdownBody = '';
   let conversionFailed = false;
   let rawHtml: string | undefined;
   try {
-    markdownBody = turndown.turndown(bodyHtml).trim();
+    markdownBody = postProcessShortcodes(turndown.turndown(bodyHtml).trim());
   } catch {
     conversionFailed = true;
     rawHtml = bodyHtml;

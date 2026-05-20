@@ -23,16 +23,19 @@ describe('parseBlogPost', () => {
     expect(result.value.conversionFailed).toBe(false);
   });
 
-  it('rewrites photo-page references to {{photo:gallery/slug}} shortcodes', () => {
+  it('rewrites .photo-card divs back to {{< photo "g/s" >}} shortcodes', () => {
     const html = fixture('post-welcome.html');
     const result = parseBlogPost(
       html,
       'https://example.com/blog/welcome/',
     );
-    expect(result.value.markdownBody).toContain('{{photo:sample/sample-01}}');
+    expect(result.value.markdownBody).toContain(
+      '{{< photo "sample/sample-01" >}}',
+    );
     expect(result.value.markdownBody).not.toContain(
       '/photography/sample/sample-01/',
     );
+    expect(result.value.markdownBody).not.toContain('photo-card');
   });
 
   it('preserves non-photo links', () => {

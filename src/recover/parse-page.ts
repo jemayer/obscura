@@ -1,6 +1,10 @@
 import * as cheerio from 'cheerio';
 import TurndownService from 'turndown';
 import type { ParsedPage, ParseResult, RecoveryWarning } from './types.js';
+import {
+  rewritePhotoCards,
+  postProcessShortcodes,
+} from './photo-shortcodes.js';
 
 const turndown = new TurndownService({
   headingStyle: 'atx',
@@ -35,13 +39,14 @@ export function parsePage(
       message: 'no .page-body found; emitting empty Markdown body',
     });
   }
+  rewritePhotoCards(body, $);
   const bodyHtml = body.html() ?? '';
 
   let markdownBody = '';
   let conversionFailed = false;
   let rawHtml: string | undefined;
   try {
-    markdownBody = turndown.turndown(bodyHtml).trim();
+    markdownBody = postProcessShortcodes(turndown.turndown(bodyHtml).trim());
   } catch {
     conversionFailed = true;
     rawHtml = bodyHtml;
