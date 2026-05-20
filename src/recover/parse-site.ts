@@ -138,15 +138,33 @@ export function parseHomepage(
   const $ = cheerio.load(html);
   const warnings: RecoveryWarning[] = [];
 
-  const headerTitle = $('header .site-title').first().text().trim();
+  // Subtitle: editorial wraps it as <span class="site-title__subtitle"> inside
+  // the .site-title link. Fall back to .hero__subtitle if header doesn't have it.
+  const subtitleText =
+    $('.site-title__subtitle').first().text().trim() ||
+    $('.hero__subtitle').first().text().trim();
+  const subtitle = subtitleText.length > 0 ? subtitleText : undefined;
+
+  // Title: clone the .site-title link, strip the separator and subtitle child
+  // elements (so we don't concatenate them into the title), then read text.
+  const titleLink = $('header .site-title a').first();
+  let headerTitle = '';
+  if (titleLink.length > 0) {
+    const clone = titleLink.clone();
+    clone.find('.site-title__separator, .site-title__subtitle').remove();
+    headerTitle = clone.text().trim();
+  }
+  if (headerTitle.length === 0) {
+    headerTitle = $('header .site-title').first().text().trim();
+    if (subtitle && headerTitle.endsWith(subtitle)) {
+      headerTitle = headerTitle.slice(0, -subtitle.length).replace(/\s*-?\s*$/u, '').trim();
+    }
+  }
   const titleTag = $('title').first().text().trim();
   const title =
     headerTitle.length > 0
       ? headerTitle
       : (titleTag.split(' - ')[0] ?? '').trim();
-
-  const subtitle =
-    $('header .site-subtitle').first().text().trim() || undefined;
   const description =
     $('meta[name="description"]').attr('content')?.trim() || undefined;
 
