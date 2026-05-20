@@ -22,7 +22,10 @@ describe('parseHomepage', () => {
       { platform: 'bluesky', url: 'https://bsky.app/profile/jane' },
       { platform: 'github', url: 'https://github.com/jane' },
     ]);
-    expect(result.value.images?.breakpoints).toEqual([400, 800, 1200, 2400]);
+    // We deliberately don't recover images config — it's not reliably derivable
+    // from rendered HTML (srcsets include per-photo source-width variants that
+    // aren't real breakpoints). Let the build fall back to its defaults.
+    expect(result.value.images).toBeUndefined();
   });
 
   it('extracts hero_image from a homepage with a hero section', () => {

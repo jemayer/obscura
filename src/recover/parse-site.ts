@@ -119,18 +119,6 @@ function detectHeroImage($: cheerio.CheerioAPI): string | undefined {
   return undefined;
 }
 
-function collectBreakpoints($: cheerio.CheerioAPI): number[] {
-  const widths = new Set<number>();
-  $('img[srcset]').each((_, el) => {
-    const srcset = $(el).attr('srcset') ?? '';
-    for (const part of srcset.split(',')) {
-      const m = /\s(\d+)w$/u.exec(part.trim());
-      if (m && m[1] !== undefined) widths.add(Number(m[1]));
-    }
-  });
-  return [...widths].sort((a, b) => a - b);
-}
-
 export function parseHomepage(
   html: string,
   theme: string,
@@ -201,7 +189,6 @@ export function parseHomepage(
     if (platform) socialLinks.push({ platform, url: href });
   });
 
-  const breakpoints = collectBreakpoints($);
   const heroImage = detectHeroImage($);
   const baseUrlPath = ((): string => {
     try {
@@ -225,9 +212,6 @@ export function parseHomepage(
       ...(heroImage !== undefined && { hero_image: heroImage }),
       ...(navigation !== undefined && { navigation }),
       social_links: socialLinks,
-      ...(breakpoints.length > 0 && {
-        images: { breakpoints, webp_quality: 85 },
-      }),
     },
     warnings,
   };
