@@ -75,3 +75,23 @@ export function categoriseSitemap(
 
   return { homepage, galleryIndex, galleries, photos, posts, pages };
 }
+
+/**
+ * Return the unique set of gallery slugs referenced by a list of photo URLs.
+ * Used to discover unlisted galleries: Obscura's sitemap omits gallery-index
+ * URLs for `listed: false` galleries but still emits each photo's URL.
+ */
+export function gallerySlugsFromPhotoUrls(
+  photoUrls: readonly string[],
+  baseUrl: string,
+): Set<string> {
+  const base = baseUrl.replace(/\/+$/u, '');
+  const slugs = new Set<string>();
+  for (const url of photoUrls) {
+    if (!url.startsWith(base)) continue;
+    const path = url.slice(base.length) || '/';
+    const m = /^\/photography\/([^/]+)\/[^/]+\/$/u.exec(path);
+    if (m && m[1] !== undefined) slugs.add(m[1]);
+  }
+  return slugs;
+}

@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { categoriseSitemap } from '../../src/recover/sitemap.js';
+import {
+  categoriseSitemap,
+  gallerySlugsFromPhotoUrls,
+} from '../../src/recover/sitemap.js';
 
 const SITEMAP = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -55,5 +58,34 @@ describe('categoriseSitemap', () => {
     expect(result.pages).not.toContain(
       'https://example.com/locations/hamburg/',
     );
+  });
+});
+
+describe('gallerySlugsFromPhotoUrls', () => {
+  it('returns the unique set of gallery slugs across photo URLs', () => {
+    const photos = [
+      'https://example.com/photography/sample/photo-01/',
+      'https://example.com/photography/sample/photo-02/',
+      'https://example.com/photography/post-assets/header/',
+    ];
+    const result = gallerySlugsFromPhotoUrls(photos, 'https://example.com');
+    expect([...result].sort()).toEqual(['post-assets', 'sample']);
+  });
+
+  it('handles a base_path subdirectory deploy', () => {
+    const photos = [
+      'https://example.com/portfolio/photography/sample/photo-01/',
+      'https://example.com/portfolio/photography/unlisted/x/',
+    ];
+    const result = gallerySlugsFromPhotoUrls(
+      photos,
+      'https://example.com/portfolio',
+    );
+    expect([...result].sort()).toEqual(['sample', 'unlisted']);
+  });
+
+  it('returns an empty set for an empty input', () => {
+    const result = gallerySlugsFromPhotoUrls([], 'https://example.com');
+    expect(result.size).toBe(0);
   });
 });

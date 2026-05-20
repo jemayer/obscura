@@ -22,6 +22,7 @@ import {
   parseGalleryIndex,
 } from '../../src/recover/parse-gallery.js';
 import { parsePhotoPage } from '../../src/recover/parse-photo.js';
+import { gallerySlugsFromPhotoUrls } from '../../src/recover/sitemap.js';
 import {
   writeSiteConfig,
   writeGalleriesConfig,
@@ -115,13 +116,21 @@ describe('site recovery round-trip', () => {
       ? parseGalleryIndex(await fetchText(urls.galleryIndex), baseUrl)
       : new Set<string>();
 
-    // Galleries
+    // Galleries (mirrors orchestrator: parse index URLs, then synthesize unlisted)
     const galleries: GalleryEntry[] = [];
+    const parsedSlugs = new Set<string>();
     for (const u of urls.galleries) {
       const parsed = parseGalleryPage(await fetchText(u), u, listedSlugs);
       galleries.push(parsed.value.entry);
+      parsedSlugs.add(parsed.value.entry.slug);
+    }
+    const allGallerySlugs = gallerySlugsFromPhotoUrls(urls.photos, baseUrl);
+    for (const slug of allGallerySlugs) {
+      if (parsedSlugs.has(slug)) continue;
+      galleries.push({ slug, title: slug, listed: false });
     }
     expect(galleries.length).toBeGreaterThan(0);
+    expect(galleries.map((g) => g.slug).sort()).toContain('post-assets');
 
     // Photos
     for (const u of urls.photos) {

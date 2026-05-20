@@ -23,7 +23,7 @@ describe('full build pipeline', () => {
   it('completes a build successfully', async () => {
     const result = await build(WORK_DIR);
     expect(result.success).toBe(true);
-    expect(result.photoCount).toBe(1);
+    expect(result.photoCount).toBe(2);
     expect(result.pageCount).toBeGreaterThan(0);
   });
 

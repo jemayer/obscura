@@ -3,3 +3,6 @@ galleries:
     title: Test Gallery
     description: A gallery for testing
     listed: true
+  - slug: post-assets
+    title: Post Assets
+    listed: false

@@ -3,7 +3,10 @@ import { existsSync } from 'node:fs';
 import { readdir, writeFile, mkdir } from 'node:fs/promises';
 import { fetchText } from './recover/fetch.js';
 import { identifyFromHtml } from './recover/identify.js';
-import { categoriseSitemap } from './recover/sitemap.js';
+import {
+  categoriseSitemap,
+  gallerySlugsFromPhotoUrls,
+} from './recover/sitemap.js';
 import { parseHomepage } from './recover/parse-site.js';
 import {
   parseGalleryPage,
@@ -90,12 +93,14 @@ async function main(): Promise<void> {
     : new Set<string>();
 
   const galleries: GalleryEntry[] = [];
+  const parsedSlugs = new Set<string>();
   for (const url of urls.galleries) {
     try {
       const html = await fetchText(url);
       const parsed = parseGalleryPage(html, url, listedSlugs);
       allWarnings.push(...parsed.warnings);
       galleries.push(parsed.value.entry);
+      parsedSlugs.add(parsed.value.entry.slug);
     } catch (e) {
       allWarnings.push({
         category: 'gallery',
@@ -103,6 +108,21 @@ async function main(): Promise<void> {
         message: `failed to fetch/parse: ${e instanceof Error ? e.message : String(e)}`,
       });
     }
+  }
+
+  // Discover unlisted galleries: Obscura's sitemap emits no index URL for
+  // listed:false galleries, only their photo URLs. Synthesize entries so the
+  // build pipeline loads their photos into the slug index.
+  const allGallerySlugs = gallerySlugsFromPhotoUrls(urls.photos, baseUrl);
+  for (const slug of allGallerySlugs) {
+    if (parsedSlugs.has(slug)) continue;
+    galleries.push({ slug, title: slug, listed: false });
+    allWarnings.push({
+      category: 'gallery',
+      subject: slug,
+      message:
+        'unlisted gallery (no index page in sitemap); title derived from slug, no description/layout available',
+    });
   }
 
   let photoCount = 0;
