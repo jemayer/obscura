@@ -46,4 +46,20 @@ describe('parseHomepage', () => {
     expect(result.value.description).toBeUndefined();
     expect(result.value.social_links).toEqual([]);
   });
+
+  it('emits navigation when upstream menu differs from default', () => {
+    const html = fixture('homepage-full.html');
+    const result = parseHomepage(html, 'editorial');
+    expect(result.value.navigation).toEqual([
+      { label: 'Photography', url: 'photography' },
+      { label: 'Blog', url: 'blog' },
+      { label: 'About', url: '/about/' },
+    ]);
+  });
+
+  it('omits navigation when upstream uses the exact default menu', () => {
+    const html = fixture('homepage-default-nav.html');
+    const result = parseHomepage(html, 'editorial');
+    expect(result.value.navigation).toBeUndefined();
+  });
 });

@@ -1,10 +1,67 @@
 import * as cheerio from 'cheerio';
-import type { SocialPlatform } from '../types.js';
+import type { NavItem, SocialPlatform } from '../types.js';
 import type {
   ParseResult,
   RecoveredSiteConfig,
   RecoveryWarning,
 } from './types.js';
+
+/** Path → keyword mapping for Obscura's built-in nav routes (mirrors src/navigation.ts). */
+const BUILTIN_PATH_TO_KEYWORD: ReadonlyMap<string, string> = new Map([
+  ['/photography/', 'photography'],
+  ['/tags/', 'tags'],
+  ['/locations/', 'locations'],
+  ['/blog/', 'blog'],
+]);
+
+/** Default 6-item menu Obscura ships with when navigation is omitted. */
+const DEFAULT_NAV: readonly NavItem[] = [
+  { label: 'Photography', url: 'photography' },
+  { label: 'Tags', url: 'tags' },
+  { label: 'Locations', url: 'locations' },
+  { label: 'Blog', url: 'blog' },
+  { label: 'About', url: '/about/' },
+  { label: 'Contact', url: '/contact/' },
+];
+
+function navMatchesDefault(items: readonly NavItem[]): boolean {
+  if (items.length !== DEFAULT_NAV.length) return false;
+  return items.every((item, i) => {
+    const ref = DEFAULT_NAV[i];
+    return ref !== undefined && item.label === ref.label && item.url === ref.url;
+  });
+}
+
+function parseNavigation(
+  $: cheerio.CheerioAPI,
+  basePath: string,
+): readonly NavItem[] | undefined {
+  const links = $('nav.site-nav > a[href]');
+  if (links.length === 0) return undefined;
+  const items: NavItem[] = [];
+  links.each((_, el) => {
+    const href = $(el).attr('href') ?? '';
+    const label = $(el).text().trim();
+    if (label.length === 0) return;
+    const url = navUrlFromHref(href, basePath);
+    if (url === null) return;
+    items.push({ label, url });
+  });
+  if (items.length === 0) return undefined;
+  if (navMatchesDefault(items)) return undefined;
+  return items;
+}
+
+function navUrlFromHref(href: string, basePath: string): string | null {
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    return href;
+  }
+  if (!href.startsWith('/')) return null;
+  const path = basePath && href.startsWith(basePath) ? href.slice(basePath.length) : href;
+  const keyword = BUILTIN_PATH_TO_KEYWORD.get(path);
+  if (keyword) return keyword;
+  return path;
+}
 
 const SOCIAL_HOST_PATTERNS: ReadonlyArray<{
   readonly host: RegExp;
@@ -128,6 +185,14 @@ export function parseHomepage(
 
   const breakpoints = collectBreakpoints($);
   const heroImage = detectHeroImage($);
+  const baseUrlPath = ((): string => {
+    try {
+      return new URL(baseUrl).pathname.replace(/\/+$/u, '');
+    } catch {
+      return '';
+    }
+  })();
+  const navigation = parseNavigation($, baseUrlPath);
 
   return {
     value: {
@@ -140,6 +205,7 @@ export function parseHomepage(
         default_photographer: defaultPhotographer,
       }),
       ...(heroImage !== undefined && { hero_image: heroImage }),
+      ...(navigation !== undefined && { navigation }),
       social_links: socialLinks,
       ...(breakpoints.length > 0 && {
         images: { breakpoints, webp_quality: 85 },
