@@ -16,7 +16,7 @@ describe('parseBlogPost', () => {
     expect(result.value.slug).toBe('welcome');
     expect(result.value.frontmatter.title).toBe('Welcome to my blog');
     expect(result.value.frontmatter.date).toEqual(new Date('2026-01-15'));
-    expect(result.value.frontmatter.tags).toEqual(['intro']);
+    expect(result.value.frontmatter.tags).toEqual(['intro', 'meta']);
     expect(result.value.frontmatter.summary).toBe(
       'Welcome to my photography blog.',
     );

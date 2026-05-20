@@ -34,8 +34,9 @@ export function parseBlogPost(
   const dateAttr = article.find('time').first().attr('datetime');
   const date = dateAttr ? new Date(dateAttr) : undefined;
   const tags: string[] = [];
-  article.find('.tag-chips a').each((_, el) => {
-    tags.push($(el).text().trim());
+  article.find('.post-list__tags .tag').each((_, el) => {
+    const text = $(el).text().trim();
+    if (text.length > 0) tags.push(text);
   });
   const summary = $('meta[name="description"]').attr('content')?.trim();
 
