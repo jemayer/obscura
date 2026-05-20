@@ -64,6 +64,22 @@ my-portfolio/
 
 Everything under `site/` is yours. Everything else is Obscura's engine — pull updates without touching your content.
 
+## I lost my local setup
+
+If your local Obscura project is gone but your site is still live, you can rebuild a working project straight from the deployed URL:
+
+```bash
+git clone https://github.com/jemayer/obscura.git my-portfolio
+cd my-portfolio
+npm install
+npm run recover -- https://your-site.example
+npm run build
+```
+
+`recover` reconstructs `site/config/site.yaml`, `site/config/galleries.yaml`, every photo's sidecar YAML, blog posts, and pages, and downloads the largest available image variant for each photo. It writes `recovery-report.md` next to `site/` listing anything that couldn't be fully recovered (e.g. GPS coordinates and other EXIF that isn't published).
+
+Recovery requires the upstream site to have been built by Obscura — it identifies sites via the `<meta name="generator">` tag every Obscura theme emits. Older builds without `data-theme` / `data-version` attributes are recovered with sensible defaults (theme `editorial`, current Obscura version), with the assumptions noted in the report.
+
 ## Documentation
 
 - **[Getting Started](docs/getting-started.md)** — install, first build, adding photos
