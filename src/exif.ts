@@ -1,4 +1,5 @@
 import exifr from 'exifr';
+import { readFile } from 'node:fs/promises';
 import type { ExifData } from './types.js';
 
 export interface ExifWarning {
@@ -139,7 +140,13 @@ export async function readExif(filePath: string): Promise<ExifResult> {
   let parsed: ExifrOutput | null | undefined;
 
   try {
-    parsed = (await exifr.parse(filePath, {
+    // Read the file ourselves rather than handing exifr a path. exifr's
+    // chunked file reader calls `FileHandle.stat(path)`, passing a string
+    // where Node expects an options object; Node rejects that, so every
+    // path-based parse throws and leaks the open handle. exifr 7.1.3 is the
+    // final release, so this is not fixable by upgrading.
+    const buffer = await readFile(filePath);
+    parsed = (await exifr.parse(buffer, {
       pick: EXIF_PICK_FIELDS,
       gps: true,
     })) as ExifrOutput | null | undefined;
