@@ -2,11 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { stringify as stringifyYaml } from 'yaml';
 import type { GalleryEntry, PhotoMetadata } from '../types.js';
-import type {
-  ParsedPage,
-  ParsedPost,
-  RecoveredSiteConfig,
-} from './types.js';
+import type { ParsedPage, ParsedPost, RecoveredSiteConfig } from './types.js';
 
 function isoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -45,10 +41,7 @@ export async function writeGalleriesConfig(
   galleries: readonly GalleryEntry[],
 ): Promise<void> {
   const yaml = stringifyYaml(toSerialisable({ galleries }));
-  await writeText(
-    resolve(targetDir, 'site', 'config', 'galleries.yaml'),
-    yaml,
-  );
+  await writeText(resolve(targetDir, 'site', 'config', 'galleries.yaml'), yaml);
 }
 
 export async function writeGalleryIndexContent(

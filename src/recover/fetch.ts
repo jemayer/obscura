@@ -32,9 +32,7 @@ async function fetchWithRetry(
       if (response.status >= 400 && response.status < 500) {
         throw new Error(`HTTP ${String(response.status)} fetching ${url}`);
       }
-      lastError = new Error(
-        `HTTP ${String(response.status)} fetching ${url}`,
-      );
+      lastError = new Error(`HTTP ${String(response.status)} fetching ${url}`);
     } catch (e) {
       lastError = e;
       // 4xx errors are thrown above and shouldn't be retried.

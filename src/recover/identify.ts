@@ -12,9 +12,7 @@ export function identifyFromHtml(html: string): Identified {
   const $ = cheerio.load(html);
   const meta = $('meta[name="generator"]').first();
   if (meta.length === 0) {
-    throw new Error(
-      'not an Obscura site: missing <meta name="generator"> tag',
-    );
+    throw new Error('not an Obscura site: missing <meta name="generator"> tag');
   }
   const content = meta.attr('content') ?? '';
   if (!content.startsWith('Obscura ')) {

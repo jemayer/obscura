@@ -38,17 +38,15 @@ export function hoistCommonFields(
   const siteLicense = uniformValue((m) => m.license);
   const defaultPhotographer = uniformValue((m) => m.photographer);
 
-  const strippedMetadata = metadataList.map(
-    (m): Partial<PhotoMetadata> => {
-      const result: Partial<PhotoMetadata> = {};
-      for (const [key, val] of Object.entries(m)) {
-        if (key === 'license' && val === siteLicense) continue;
-        if (key === 'photographer' && val === defaultPhotographer) continue;
-        (result as Record<string, unknown>)[key] = val;
-      }
-      return result;
-    },
-  );
+  const strippedMetadata = metadataList.map((m): Partial<PhotoMetadata> => {
+    const result: Partial<PhotoMetadata> = {};
+    for (const [key, val] of Object.entries(m)) {
+      if (key === 'license' && val === siteLicense) continue;
+      if (key === 'photographer' && val === defaultPhotographer) continue;
+      (result as Record<string, unknown>)[key] = val;
+    }
+    return result;
+  });
 
   return {
     ...(siteLicense !== undefined && { siteLicense }),

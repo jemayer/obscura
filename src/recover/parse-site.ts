@@ -28,7 +28,9 @@ function navMatchesDefault(items: readonly NavItem[]): boolean {
   if (items.length !== DEFAULT_NAV.length) return false;
   return items.every((item, i) => {
     const ref = DEFAULT_NAV[i];
-    return ref !== undefined && item.label === ref.label && item.url === ref.url;
+    return (
+      ref !== undefined && item.label === ref.label && item.url === ref.url
+    );
   });
 }
 
@@ -57,7 +59,8 @@ function navUrlFromHref(href: string, basePath: string): string | null {
     return href;
   }
   if (!href.startsWith('/')) return null;
-  const path = basePath && href.startsWith(basePath) ? href.slice(basePath.length) : href;
+  const path =
+    basePath && href.startsWith(basePath) ? href.slice(basePath.length) : href;
   const keyword = BUILTIN_PATH_TO_KEYWORD.get(path);
   if (keyword) return keyword;
   return path;
@@ -109,9 +112,10 @@ function detectHeroImage($: cheerio.CheerioAPI): string | undefined {
         return candidate;
       }
     })();
-    const m = /\/assets\/images\/([^/]+)\/([^/]+?)(?:-\d+w|-thumb)?\.[a-zA-Z0-9]+$/u.exec(
-      path,
-    );
+    const m =
+      /\/assets\/images\/([^/]+)\/([^/]+?)(?:-\d+w|-thumb)?\.[a-zA-Z0-9]+$/u.exec(
+        path,
+      );
     if (m && m[1] !== undefined && m[2] !== undefined) {
       return `${m[1]}/${m[2]}`;
     }
@@ -145,7 +149,10 @@ export function parseHomepage(
   if (headerTitle.length === 0) {
     headerTitle = $('header .site-title').first().text().trim();
     if (subtitle && headerTitle.endsWith(subtitle)) {
-      headerTitle = headerTitle.slice(0, -subtitle.length).replace(/\s*-?\s*$/u, '').trim();
+      headerTitle = headerTitle
+        .slice(0, -subtitle.length)
+        .replace(/\s*-?\s*$/u, '')
+        .trim();
     }
   }
   const titleTag = $('title').first().text().trim();
