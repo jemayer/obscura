@@ -5,6 +5,12 @@
 export interface ImageConfig {
   readonly breakpoints: readonly number[];
   readonly webp_quality: number;
+  /**
+   * Upper bound on the longest side of any generated variant, in pixels.
+   * Sources larger than this are scaled down before breakpoints are applied;
+   * smaller sources are never enlarged.
+   */
+  readonly max_dimension: number;
 }
 
 /**

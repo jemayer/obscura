@@ -74,3 +74,7 @@ license: all-rights-reserved
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85
+  # Cap on the longest side of any generated variant, in pixels. A 6000x4000
+  # original is scaled to 2400x1600; a 4000x6000 portrait to 1600x2400.
+  # Sources smaller than this are never enlarged.
+  # max_dimension: 2400

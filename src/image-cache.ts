@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import type { ImageConfig, ImageVariant } from './types.js';
-import { processPhoto } from './image-processing.js';
+import { processPhoto, IMAGE_PIPELINE_VERSION } from './image-processing.js';
 import type { ProcessPhotoResult } from './image-processing.js';
 
 const CACHE_DIR = '.cache';
@@ -53,8 +53,12 @@ async function computeFileHash(filePath: string): Promise<string> {
 
 function computeParamsHash(config: ImageConfig): string {
   const params = JSON.stringify({
+    // The pipeline version is part of the key so that changes to the image
+    // processing code invalidate the cache, not just changes to config.
+    pipeline: IMAGE_PIPELINE_VERSION,
     breakpoints: config.breakpoints,
     webp_quality: config.webp_quality,
+    max_dimension: config.max_dimension,
   });
   return createHash('sha256').update(params).digest('hex');
 }

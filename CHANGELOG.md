@@ -1,5 +1,48 @@
 # Changelog
 
+## Unreleased
+
+### Image variants: longest-side cap and better use of source resolution
+
+Image variant generation now caps output and stops throwing away resolution.
+
+A new optional setting controls the maximum size of any generated variant:
+
+```yaml
+images:
+  max_dimension: 2400   # default
+```
+
+It caps the **longest side** — width for landscape photos, height for
+portraits — so orientations get a comparable pixel budget. A 6000x4000 original
+becomes 2400x1600; a 4000x6000 portrait becomes 1600x2400. Sources already
+within the cap are never enlarged.
+
+**What changed in practice:**
+
+- **Large originals are now bounded.** Previously a source wider than every
+  breakpoint was emitted at its native size with no resize at all, so a 6000px
+  original produced a 6000px WebP. Panoramas were the worst case: a 2400x7200
+  source emitted 2400x7200 (17.3 MP), and now emits 800x2400 (1.9 MP).
+- **Mid-size sources keep their detail.** A 2048x1365 photo used to be capped at
+  the 1200px breakpoint — only 600 CSS px on a 2x display. It now also gets a
+  2048w variant.
+- **Portraits get a full srcset.** Breakpoints are matched on width, so a
+  683x2048 portrait previously produced a *single* 400w variant despite having
+  2048px of vertical detail. It now gets 400w and 683w.
+- **Small photos render again.** A source narrower than the smallest breakpoint
+  produced no variants at all and was silently omitted from the page — no
+  warning, no build error. Such photos now get one native-size variant and
+  render, with a build warning noting the low resolution.
+
+**Upgrading:** the change invalidates the image cache automatically, so your
+next `npm run build` re-processes photos and picks up the new variants. Any
+oversized files already written by an earlier build are no longer referenced by
+any page but are not deleted — run `npm run build:clean` once to purge them.
+
+Sites whose originals are all 2400px or smaller on the longest side see no
+change to their output.
+
 ## 0.2.1 — 2026-03-28
 
 ### Photographer field

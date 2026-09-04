@@ -18,7 +18,7 @@ Your content lives in Markdown and YAML. Your site belongs to you.
 
 ## Features
 
-- **Automatic image processing** — resizes at configurable breakpoints, converts to WebP, generates thumbnails and `srcset` for responsive loading. Powered by [sharp](https://sharp.pixelplumbing.com/).
+- **Automatic image processing** — resizes at configurable breakpoints, converts to WebP, generates thumbnails and `srcset` for responsive loading. Output is capped at a configurable longest side (`images.max_dimension`, default 2400px) so huge originals don't ship as huge WebPs. Powered by [sharp](https://sharp.pixelplumbing.com/).
 - **EXIF extraction** — camera, lens, date, GPS coordinates pulled straight from your files. No manual data entry required.
 - **Sidecar metadata** — auto-generated YAML sidecars let you add titles, locations, captions, and tags. An interactive CLI editor (`npm run sidecar`) walks you through each photo.
 - **Photo shortcodes in blog posts** — embed any photo in a blog post with `{{< photo "gallery/shot" >}}`. Renders as a styled card with metadata. Cross-references link back from photos to the posts that feature them.

@@ -145,10 +145,11 @@ The output path is derived from the filename: `site/content/pages/about.md` prod
 **Processing** is handled by sharp. At build time, Obscura:
 
 1. Reads EXIF data from the original file
-2. Generates resized variants at configurable breakpoints (default: `[400, 800, 1200, 2400]`)
-3. Converts all variants to WebP at configurable quality (default: 85)
-4. Generates thumbnails for gallery grids
-5. Produces `srcset` attributes for responsive `<img>` tags
+2. Scales the source down so its longest side fits `max_dimension` (default: 2400px), never enlarging
+3. Generates resized variants at configurable breakpoints (default: `[400, 800, 1200, 2400]`), plus one variant at the capped source width when the breakpoints would otherwise discard resolution
+4. Converts all variants to WebP at configurable quality (default: 85)
+5. Generates thumbnails for gallery grids
+6. Produces `srcset` attributes for responsive `<img>` tags
 
 **Output:** Processed images go to `dist/assets/images/`. Originals are never served or copied to `dist/`.
 
@@ -230,6 +231,7 @@ license: all-rights-reserved
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85
+  max_dimension: 2400
 ```
 
 ### `site/config/galleries.yaml`
@@ -278,7 +280,7 @@ Test coverage is mandatory. A feature is not done until its tests pass.
 **Integration tests** cover:
 
 - Full build pipeline output: correct files at correct paths
-- Image variants exist at all configured breakpoints
+- Image variants exist at all applicable breakpoints, and no variant exceeds `max_dimension` on its longest side
 - Back-links resolve correctly on photo permalink pages
 - RSS feed and sitemap contain correct entries
 

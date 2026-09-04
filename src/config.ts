@@ -18,6 +18,7 @@ import { ALL_DISPLAY_FIELDS, EXIF_SUB_FIELDS } from './types.js';
 const DEFAULT_IMAGE_CONFIG: ImageConfig = {
   breakpoints: [400, 800, 1200, 2400],
   webp_quality: 85,
+  max_dimension: 2400,
 };
 
 const DEFAULT_LICENSE = 'all-rights-reserved';
@@ -72,10 +73,13 @@ interface RawSiteConfig {
   lightbox_display_fields?: string[];
   hero_image?: string;
   navigation?: Array<{ label?: string; url?: string }>;
-  images?: {
-    breakpoints?: number[];
-    webp_quality?: number;
-  };
+  images?: RawImageConfig;
+}
+
+interface RawImageConfig {
+  breakpoints?: number[];
+  webp_quality?: number;
+  max_dimension?: number;
 }
 
 interface RawGalleryEntry {
@@ -203,6 +207,41 @@ export function parseNavigation(
   return result;
 }
 
+/**
+ * Parse and validate the `images:` block from config.
+ *
+ * `max_dimension` caps the longest side of every generated variant. It must be
+ * a positive integer; anything else is a config error rather than something to
+ * silently paper over.
+ */
+export function parseImageConfig(raw: RawImageConfig | undefined): ImageConfig {
+  const breakpoints = raw?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints;
+  const webpQuality = raw?.webp_quality ?? DEFAULT_IMAGE_CONFIG.webp_quality;
+  const maxDimension = raw?.max_dimension ?? DEFAULT_IMAGE_CONFIG.max_dimension;
+
+  if (!Number.isInteger(maxDimension) || maxDimension <= 0) {
+    throw new Error(
+      `images.max_dimension must be a positive integer, got: ${String(maxDimension)}`,
+    );
+  }
+
+  const smallestBreakpoint =
+    breakpoints.length > 0 ? Math.min(...breakpoints) : 0;
+  if (maxDimension < smallestBreakpoint) {
+    console.warn(
+      `Warning: images.max_dimension (${String(maxDimension)}) is smaller than the ` +
+        `smallest breakpoint (${String(smallestBreakpoint)}). Every breakpoint will be ` +
+        `skipped and photos will get a single variant no larger than ${String(maxDimension)}px.`,
+    );
+  }
+
+  return {
+    breakpoints,
+    webp_quality: webpQuality,
+    max_dimension: maxDimension,
+  };
+}
+
 async function loadYamlFile(filePath: string): Promise<unknown> {
   const content = await readFile(filePath, 'utf-8');
   return parseYaml(content) as unknown;
@@ -280,11 +319,7 @@ export async function loadSiteConfig(projectRoot: string): Promise<SiteConfig> {
         ? raw.hero_image
         : undefined,
     navigation: parseNavigation(raw.navigation),
-    images: {
-      breakpoints: raw.images?.breakpoints ?? DEFAULT_IMAGE_CONFIG.breakpoints,
-      webp_quality:
-        raw.images?.webp_quality ?? DEFAULT_IMAGE_CONFIG.webp_quality,
-    },
+    images: parseImageConfig(raw.images),
   };
 }
 

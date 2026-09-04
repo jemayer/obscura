@@ -5,6 +5,35 @@ import type { ImageConfig, ImageVariant, Photo } from './types.js';
 
 const THUMBNAIL_WIDTH = 400;
 
+/**
+ * Version of the image-processing logic itself.
+ *
+ * The image cache keys entries on the source bytes and the config parameters,
+ * neither of which changes when this file does. Bump this whenever a change
+ * here alters the variants a given source produces, so existing caches
+ * invalidate instead of quietly serving stale output.
+ */
+export const IMAGE_PIPELINE_VERSION = 2;
+
+/**
+ * Scale a source down so its longest side fits within `maxDimension`.
+ * Never enlarges: a source already inside the box is returned unchanged.
+ */
+export function effectiveSize(
+  sourceWidth: number,
+  sourceHeight: number,
+  maxDimension: number,
+): { readonly width: number; readonly height: number } {
+  const longest = Math.max(sourceWidth, sourceHeight);
+  if (longest <= 0) return { width: 0, height: 0 };
+
+  const scale = Math.min(1, maxDimension / longest);
+  return {
+    width: Math.round(sourceWidth * scale),
+    height: Math.round(sourceHeight * scale),
+  };
+}
+
 function outputDir(distDir: string, gallerySlug: string): string {
   return resolve(distDir, 'assets', 'images', gallerySlug);
 }
@@ -39,12 +68,23 @@ export async function processPhoto(
   const image = sharp(sourcePath);
   const metadata = await image.metadata();
   const sourceWidth: number = (metadata.width as number | undefined) ?? 0;
+  const sourceHeight: number = (metadata.height as number | undefined) ?? 0;
+
+  // Apply the longest-side cap once, up front. Everything downstream works
+  // from this effective size, so no individual variant can exceed the cap and
+  // breakpoints keep their plain width semantics.
+  const effective = effectiveSize(
+    sourceWidth,
+    sourceHeight,
+    config.max_dimension,
+  );
+  const effectiveWidth = effective.width;
 
   const variants: ImageVariant[] = [];
 
   for (const breakpoint of config.breakpoints) {
-    // Skip breakpoints larger than the source image
-    if (breakpoint > sourceWidth && sourceWidth > 0) {
+    // Skip breakpoints larger than the (capped) source image
+    if (breakpoint > effectiveWidth && effectiveWidth > 0) {
       continue;
     }
 
@@ -63,13 +103,26 @@ export async function processPhoto(
     });
   }
 
-  // Always generate the full-size variant if source is larger than all breakpoints
-  const maxBreakpoint = Math.max(...config.breakpoints);
-  if (sourceWidth > maxBreakpoint) {
-    const filename = variantFilename(photoBase, sourceWidth);
+  // Emit the native (capped) variant whenever the breakpoints leave resolution
+  // on the table. This also covers sources smaller than every breakpoint, which
+  // would otherwise produce no variants at all and render as nothing.
+  const maxGeneratedWidth =
+    variants.length > 0 ? Math.max(...variants.map((v) => v.width)) : 0;
+
+  if (maxGeneratedWidth === 0 && effectiveWidth > 0) {
+    console.warn(
+      `Warning: ${basename(sourcePath)} is only ${String(sourceWidth)}x${String(sourceHeight)}, ` +
+        `smaller than the smallest breakpoint (${String(Math.min(...config.breakpoints))}px). ` +
+        `It will be served at its native size.`,
+    );
+  }
+
+  if (effectiveWidth > maxGeneratedWidth) {
+    const filename = variantFilename(photoBase, effectiveWidth);
     const outPath = resolve(outDir, filename);
 
     const info = await sharp(sourcePath)
+      .resize(effectiveWidth, undefined, { withoutEnlargement: true })
       .webp({ quality: config.webp_quality })
       .toFile(outPath);
 

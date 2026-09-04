@@ -77,6 +77,7 @@ All site-wide settings live in `site/config/site.yaml`. Here is a complete refer
 | `navigation` | object[] | no | default menu | Custom navigation menu items |
 | `images.breakpoints` | number[] | yes | `[400, 800, 1200, 2400]` | Responsive image widths to generate |
 | `images.webp_quality` | number | yes | `85` | WebP compression quality (1–100) |
+| `images.max_dimension` | number | yes | `2400` | Cap on the longest side of any generated variant |
 
 ### Minimal example
 
@@ -103,9 +104,48 @@ gallery_default_layout: masonry
 images:
   breakpoints: [400, 800, 1200, 2400]
   webp_quality: 85
+  max_dimension: 2400
 ```
 
 See the sections below for detailed documentation of `photo_display_fields`, `lightbox_display_fields`, `navigation`, `social_links`, and `gallery_default_layout`.
+
+## Site Configuration — Image Sizing
+
+```yaml
+images:
+  breakpoints: [400, 800, 1200, 2400]
+  webp_quality: 85
+  max_dimension: 2400
+```
+
+`max_dimension` caps the **longest side** of every generated variant — width for
+landscape photos, height for portraits. A 6000x4000 original is scaled to
+2400x1600 before anything else happens; a 4000x6000 portrait becomes 1600x2400.
+Capping the longest side rather than the width keeps orientations comparable: a
+width-only cap of 2400 would let a portrait through at 2400x3600, more than
+twice the pixels of the equivalent landscape.
+
+`breakpoints` are widths, applied to the capped size. Breakpoints wider than the
+capped source are skipped, and when the widest applicable breakpoint still
+leaves resolution unused, one extra variant is emitted at the capped source
+width. Sources are never enlarged.
+
+| Source | Capped to | Variants generated |
+|--------|-----------|--------------------|
+| 6000x4000 landscape | 2400x1600 | 400w, 800w, 1200w, 2400w |
+| 4000x6000 portrait | 1600x2400 | 400w, 800w, 1200w, 1600w |
+| 2048x1365 landscape | unchanged | 400w, 800w, 1200w, 2048w |
+| 2400x7200 panorama | 800x2400 | 400w, 800w |
+| 300x200 small | unchanged | 300w |
+
+Photos smaller than the smallest breakpoint still get one native-size variant
+and render normally; the build prints a warning so you know the source is
+low-resolution.
+
+Lowering `max_dimension` shrinks your output and speeds up builds at the cost of
+detail on HiDPI displays. Raising it above the largest breakpoint lets large
+originals through at higher resolution. Changing it re-processes every photo on
+the next build.
 
 ## Site Configuration — Display Fields
 
