@@ -33,6 +33,7 @@ const VALID_SOCIAL_PLATFORMS: readonly string[] = [
   'instagram',
   'mastodon',
   'pixelfed',
+  'glass',
 ];
 
 const DEFAULT_SITE_CONFIG: SiteConfig = {

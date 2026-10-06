@@ -31,8 +31,9 @@ describe('parseSocialLinks', () => {
       { platform: 'instagram', url: 'https://example.com/5' },
       { platform: 'mastodon', url: 'https://example.com/6' },
       { platform: 'pixelfed', url: 'https://example.com/7' },
+      { platform: 'glass', url: 'https://example.com/8' },
     ]);
-    expect(links).toHaveLength(7);
+    expect(links).toHaveLength(8);
   });
 
   it('drops entries with unrecognised platform', () => {

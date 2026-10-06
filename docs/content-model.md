@@ -267,6 +267,8 @@ social_links:
     url: https://pixelfed.social/yourhandle
   - platform: github
     url: https://github.com/yourhandle
+  - platform: glass
+    url: https://glass.photo/yourhandle
 ```
 
 Supported platforms: `500px`, `bluesky`, `flickr`, `github`, `instagram`, `mastodon`, `pixelfed`. Entries with unrecognised platforms or missing URLs are silently ignored.

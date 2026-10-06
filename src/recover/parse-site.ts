@@ -77,6 +77,7 @@ const SOCIAL_HOST_PATTERNS: ReadonlyArray<{
   { host: /(^|\.)500px\.com$/u, platform: '500px' },
   { host: /(^|\.)pixelfed\.social$/u, platform: 'pixelfed' },
   { host: /(^|\.)mastodon\.social$/u, platform: 'mastodon' },
+  { host: /(^|\.)glass\.photo$/u, platform: 'glass' },
 ];
 
 function detectSocialPlatform(url: string): SocialPlatform | null {

@@ -65,7 +65,8 @@ export type SocialPlatform =
   | 'github'
   | 'instagram'
   | 'mastodon'
-  | 'pixelfed';
+  | 'pixelfed'
+  | 'glass';
 
 export interface SocialLink {
   readonly platform: SocialPlatform;

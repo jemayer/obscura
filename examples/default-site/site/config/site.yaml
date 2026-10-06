@@ -20,7 +20,7 @@ license: all-rights-reserved
 # gallery_default_layout: masonry
 
 # Social media links — shown in the site footer with monochromatic icons.
-# Supported platforms: 500px, bluesky, flickr, github, instagram, mastodon, pixelfed
+# Supported platforms: 500px, bluesky, flickr, github, instagram, mastodon, pixelfed, glass
 # social_links:
 #   - platform: bluesky
 #     url: https://bsky.app/profile/yourhandle
@@ -36,6 +36,8 @@ license: all-rights-reserved
 #     url: https://pixelfed.social/yourhandle
 #   - platform: github
 #     url: https://github.com/yourhandle
+#   - platform: glass
+#     url: https://glass.photo/yourhandle
 # Navigation menu — customise which links appear in the site header.
 # When omitted, the default menu is: Photography, Tags, Locations, Blog, About, Contact.
 # URL values can be: built-in keywords (photography, tags, locations, blog),
