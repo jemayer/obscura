@@ -161,7 +161,7 @@ Reconstruct an editable Obscura project from a deployed site's URL. Use this whe
 - `galleries.yaml`: every gallery's slug, title, description, layout, and listed flag
 - Per-photo sidecar YAML: title, caption, date, camera, lens, focal length, aperture, ISO, shutter speed, location, photographer, license, tags
 - Per-photo image: the largest variant offered by the upstream `<img srcset>` (typically the 2400 px WebP)
-- Blog posts and pages: frontmatter + HTML-to-Markdown body, with photo references restored to `{{photo:gallery/slug}}` shortcodes
+- Blog posts and pages: frontmatter + HTML-to-Markdown body, with photo references restored to `{{< photo "gallery/slug" >}}` shortcodes
 
 **What it does not extract** (not recoverable from published HTML): GPS coordinates, EXIF data not displayed by the theme, the original full-resolution photos.
 
