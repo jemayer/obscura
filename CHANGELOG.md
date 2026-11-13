@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Universal EXIF, XMP, and IPTC metadata extraction
+
+Metadata extraction (`src/exif.ts`) now combines `exifr` with `sharp` container demuxing and expanded tag fallback chains across major camera brands and RAW processors:
+
+- **WebP EXIF/XMP/IPTC support:** WebP photos (including exports from darktable, Lightroom, and Capture One) now have their embedded EXIF, XMP, and IPTC chunks demuxed via `sharp` before parsing with `exifr`, instead of failing with `corrupt EXIF`.
+- **Clean camera brand names:** Corporate entity suffixes in EXIF `Make` tags (such as `NIKON CORPORATION`, `OLYMPUS CORPORATION`, `LEICA CAMERA AG`, `RICOH IMAGING COMPANY, LTD.`) are stripped and deduplicated against `Model` (e.g. `RICOH GR III`, `NIKON D850`, `OLYMPUS E-M1MarkII`, `PENTAX KP`).
+- **Expanded tag fallbacks:**
+  - **Photographer:** falls back from `Artist` to `OwnerName` / `CameraOwnerName` (Canon & darktable), `XPAuthor`, XMP `dc:creator`, and IPTC `Byline`.
+  - **Lens:** falls back from `LensModel` to `Lens` (XMP `aux:Lens`) and formatted `LensInfo` / `DNGLensInfo` tuples, while filtering dummy placeholder strings (`0.0 mm f/0.0`, `65535mm`, `----`).
+  - **ISO & Exposure:** supports CIPA DC-008 sensitivity tags (`RecommendedExposureIndex`, `StandardOutputSensitivity`, `ISOSpeed`, `ExposureIndex`), XMP rational strings, and APEX `ApertureValue` / `ShutterSpeedValue` fallbacks.
+  - **Timezone-stable capture dates:** wall-clock EXIF capture timestamps are anchored in UTC so evening photos no longer shift to the next calendar day in negative UTC offsets.
+
 ### Image variants: longest-side cap and better use of source resolution
 
 Image variant generation now caps output and stops throwing away resolution.
