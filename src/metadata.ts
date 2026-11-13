@@ -1,7 +1,7 @@
-import { readFile } from 'node:fs/promises';
-import { parse as parseYaml } from 'yaml';
-import type { ExifData, PhotoMetadata } from './types.js';
-import { sidecarPathForPhoto } from './sidecar.js';
+import { readFile } from "node:fs/promises";
+import { parse as parseYaml } from "yaml";
+import type { ExifData, PhotoMetadata } from "./types.js";
+import { sidecarPathForPhoto } from "./sidecar.js";
 
 interface RawSidecar {
   title?: string;
@@ -22,13 +22,13 @@ interface RawSidecar {
 }
 
 function isSidecar(value: unknown): value is RawSidecar {
-  return typeof value === 'object' && value !== null;
+  return typeof value === "object" && value !== null;
 }
 
 async function loadSidecar(photoPath: string): Promise<RawSidecar | undefined> {
   const sidecarPath = sidecarPathForPhoto(photoPath);
   try {
-    const content = await readFile(sidecarPath, 'utf-8');
+    const content = await readFile(sidecarPath, "utf-8");
     const parsed: unknown = parseYaml(content);
     if (isSidecar(parsed)) {
       return parsed;
@@ -41,13 +41,19 @@ async function loadSidecar(photoPath: string): Promise<RawSidecar | undefined> {
 
 /** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a default, not a real date. */
 function isEpochDate(date: Date): boolean {
-  return (
-    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
-  );
+  const isUtcEpoch =
+    date.getUTCFullYear() === 1970 &&
+    date.getUTCMonth() === 0 &&
+    date.getUTCDate() === 1;
+  const isLocalEpoch =
+    date.getFullYear() === 1970 &&
+    date.getMonth() === 0 &&
+    date.getDate() === 1;
+  return isUtcEpoch || isLocalEpoch;
 }
 
 function parseDate(value: string | Date | undefined): Date | undefined {
-  if (value === undefined || value === '') return undefined;
+  if (value === undefined || value === "") return undefined;
   if (value instanceof Date) return isEpochDate(value) ? undefined : value;
   const parsed = new Date(value);
   if (isNaN(parsed.getTime())) return undefined;
@@ -56,15 +62,15 @@ function parseDate(value: string | Date | undefined): Date | undefined {
 }
 
 function nonEmpty(value: string | undefined): string | undefined {
-  if (value === undefined || value === '') return undefined;
+  if (value === undefined || value === "") return undefined;
   return value;
 }
 
 export function mergeMetadata(
   exif: ExifData,
   sidecar: RawSidecar | undefined,
-  defaultLicense: string = 'all-rights-reserved',
-  defaultPhotographer: string = '',
+  defaultLicense: string = "all-rights-reserved",
+  defaultPhotographer: string = "",
 ): PhotoMetadata {
   const sidecarDate = sidecar ? parseDate(sidecar.date) : undefined;
   const sidecarCamera = sidecar ? nonEmpty(sidecar.camera) : undefined;
@@ -87,9 +93,9 @@ export function mergeMetadata(
     license: string;
     photographer: string;
   } = {
-    title: sidecar?.title ?? '',
-    location: sidecar?.location ?? '',
-    caption: sidecar?.caption ?? '',
+    title: sidecar?.title ?? "",
+    location: sidecar?.location ?? "",
+    caption: sidecar?.caption ?? "",
     tags: sidecar?.tags ?? [],
     license: nonEmpty(sidecar?.license) ?? defaultLicense,
     photographer:
@@ -127,8 +133,8 @@ export function mergeMetadata(
 export async function loadAndMergeMetadata(
   photoPath: string,
   exif: ExifData,
-  defaultLicense: string = 'all-rights-reserved',
-  defaultPhotographer: string = '',
+  defaultLicense: string = "all-rights-reserved",
+  defaultPhotographer: string = "",
 ): Promise<PhotoMetadata> {
   const sidecar = await loadSidecar(photoPath);
   return mergeMetadata(exif, sidecar, defaultLicense, defaultPhotographer);
