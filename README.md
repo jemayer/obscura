@@ -89,6 +89,10 @@ Recovery requires the upstream site to have been built by Obscura — it identif
 - **[CLI Reference](docs/cli.md)** — all commands and flags
 - **[Product Requirements](docs/product/PRD.md)** — full spec and design decisions
 
+## Contributing
+
+Contributions are welcome! See **[CONTRIBUTING.md](CONTRIBUTING.md)** for setup, checks, and conventions.
+
 ## License
 
 [MIT](LICENSE)
