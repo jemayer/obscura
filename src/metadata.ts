@@ -41,9 +41,15 @@ async function loadSidecar(photoPath: string): Promise<RawSidecar | undefined> {
 
 /** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a default, not a real date. */
 function isEpochDate(date: Date): boolean {
-  return (
-    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
-  );
+  const isUtcEpoch =
+    date.getUTCFullYear() === 1970 &&
+    date.getUTCMonth() === 0 &&
+    date.getUTCDate() === 1;
+  const isLocalEpoch =
+    date.getFullYear() === 1970 &&
+    date.getMonth() === 0 &&
+    date.getDate() === 1;
+  return isUtcEpoch || isLocalEpoch;
 }
 
 function parseDate(value: string | Date | undefined): Date | undefined {
