@@ -21,14 +21,14 @@ Each photo in a gallery can have a companion YAML sidecar file with the same nam
 | `gps_lat`       | number   | GPS latitude (overrides EXIF)                        |
 | `gps_lon`       | number   | GPS longitude (overrides EXIF)                       |
 | `tags`          | string[] | Tags for categorisation                              |
-| `photographer`  | string   | Photographer name (overrides EXIF Artist and site default) |
+| `photographer`  | string   | Photographer name (overrides EXIF/XMP/IPTC author tags and site default) |
 | `license`       | string   | License for this photo (overrides site-wide default) |
 
 Sidecar values always win over EXIF data when both are present. Empty sidecar fields do not override EXIF values.
 
 ### Auto-Generated Sidecars
 
-When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens, focal length, ISO, aperture, shutter speed, photographer from the EXIF Artist tag) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
+When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with embedded EXIF, XMP, and IPTC metadata (date, camera with corporate suffixes normalized, lens, focal length, ISO, aperture, shutter speed, and photographer from `Artist` / `OwnerName` / XMP `creator` / IPTC `Byline`) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
 
 Use `npm run sidecar` to fill in missing fields interactively with terminal image previews, or edit the YAML files by hand. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
 
