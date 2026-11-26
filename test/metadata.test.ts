@@ -69,6 +69,11 @@ describe('mergeMetadata', () => {
     expect(result.lens).toBe('RF 50mm f/1.2L');
   });
 
+  it('keeps the written day of an older timestamp sidecar', () => {
+    const result = mergeMetadata(baseExif, { date: '2026-11-24T23:30:00-05:00' });
+    expect(result.date).toEqual(new Date('2026-11-24'));
+  });
+
   it('handles GPS from sidecar overriding EXIF', () => {
     const sidecar = {
       title: 'Photo',

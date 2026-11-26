@@ -3,6 +3,7 @@ import * as p from '@clack/prompts';
 import sharp from 'sharp';
 import { loadGalleryConfig, loadSiteConfig } from './config.js';
 import { generateSidecars } from './sidecar.js';
+import { formatPhotoDate } from './photo-date.js';
 import type { GalleryEntry } from './types.js';
 import { KNOWN_LICENSE_TYPES, LICENSE_LABELS } from './types.js';
 import {
@@ -18,17 +19,13 @@ import {
   type SidecarEdits,
 } from './sidecar-edit.js';
 
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0] ?? '';
-}
-
 function buildContextLine(target: SidecarEditTarget): string {
   const parts: string[] = [];
   if (target.currentValues.camera) {
     parts.push(target.currentValues.camera);
   }
   if (target.currentValues.date) {
-    parts.push(formatDate(target.currentValues.date));
+    parts.push(formatPhotoDate(target.currentValues.date));
   }
   if (target.currentValues.lens) {
     parts.push(target.currentValues.lens);

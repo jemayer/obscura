@@ -26,6 +26,8 @@ Each photo in a gallery can have a companion YAML sidecar file with the same nam
 
 Sidecar values always win over EXIF data when both are present. Empty sidecar fields do not override EXIF values.
 
+Use `YYYY-MM-DD` for a photo's capture date. Obscura copies the calendar day recorded in EXIF when it generates a sidecar and displays that day in every build timezone. If an older sidecar already contains a shifted date, correct the value or clear the field to use the photo's EXIF date on the next build.
+
 ### Auto-Generated Sidecars
 
 When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens, focal length, ISO, aperture, shutter speed, photographer from the EXIF Artist tag) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
