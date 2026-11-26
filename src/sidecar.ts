@@ -4,6 +4,7 @@ import { stringify as stringifyYaml } from 'yaml';
 import type { ExifData } from './types.js';
 import { readExif } from './exif.js';
 import type { ExifWarning } from './exif.js';
+import { formatPhotoDate } from './photo-date.js';
 
 const SUPPORTED_EXTENSIONS = new Set([
   '.jpg',
@@ -33,14 +34,10 @@ interface SidecarTemplate {
   tags: string[];
 }
 
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0] ?? '';
-}
-
 function buildSidecarTemplate(exif: ExifData): SidecarTemplate {
   return {
     title: 'Untitled',
-    date: exif.date ? formatDate(exif.date) : null,
+    date: exif.date ? formatPhotoDate(exif.date) : null,
     camera: exif.camera ?? null,
     lens: exif.lens ?? null,
     focal_length: exif.focal_length ?? null,

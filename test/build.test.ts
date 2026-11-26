@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { resolve } from 'node:path';
-import { cp, rm, access, readFile, symlink } from 'node:fs/promises';
+import { cp, rm, access, mkdir, readFile, symlink } from 'node:fs/promises';
 import { build } from '../src/build.js';
 
 const FIXTURE_DIR = resolve(import.meta.dirname, 'fixtures', 'site');
@@ -13,6 +13,7 @@ describe('full build pipeline', () => {
     await rm(WORK_DIR, { recursive: true, force: true });
     await cp(FIXTURE_DIR, WORK_DIR, { recursive: true });
     // Symlink the real editorial theme (built-in themes stay at project root)
+    await mkdir(resolve(WORK_DIR, 'themes'), { recursive: true });
     await symlink(THEME_SRC, resolve(WORK_DIR, 'themes', 'editorial'));
   });
 
@@ -54,6 +55,7 @@ describe('full build pipeline', () => {
     expect(html).toContain('Test Photo');
     expect(html).toContain('Berlin, Germany');
     expect(html).toContain('Test Camera');
+    expect(html).toContain('<time datetime="2024-06-15">15 June 2024</time>');
   });
 
   it('photo permalink has backlinks to referencing post', async () => {

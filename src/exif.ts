@@ -1,6 +1,7 @@
 import exifr from 'exifr';
 import { readFile } from 'node:fs/promises';
 import type { ExifData } from './types.js';
+import { parsePhotoDate } from './photo-date.js';
 
 export interface ExifWarning {
   readonly filePath: string;
@@ -20,8 +21,8 @@ export interface ExifResultClean {
 export type ExifResult = ExifResultWithWarning | ExifResultClean;
 
 interface ExifrOutput {
-  DateTimeOriginal?: Date;
-  CreateDate?: Date;
+  DateTimeOriginal?: string;
+  CreateDate?: string;
   Make?: string;
   Model?: string;
   LensModel?: string;
@@ -71,17 +72,14 @@ export function formatShutterSpeed(seconds: number): string {
   return `1/${String(denominator)}`;
 }
 
-/** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a EXIF default, not a real date. */
-function isEpochDate(date: Date): boolean {
-  return (
-    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
-  );
+function parseExifDay(value: string | undefined): Date | undefined {
+  if (typeof value !== 'string') return undefined;
+  const day = /^\d{4}[:-]\d{2}[:-]\d{2}(?=$|[ T])/.exec(value.trim())?.[0];
+  return day ? parsePhotoDate(day.replaceAll(':', '-')) : undefined;
 }
 
 function buildExifData(parsed: ExifrOutput): ExifData {
-  const rawDate = parsed.DateTimeOriginal ?? parsed.CreateDate;
-  const date =
-    rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
+  const date = parseExifDay(parsed.DateTimeOriginal ?? parsed.CreateDate);
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
   const focal_length =
@@ -149,6 +147,8 @@ export async function readExif(filePath: string): Promise<ExifResult> {
     parsed = (await exifr.parse(buffer, {
       pick: EXIF_PICK_FIELDS,
       gps: true,
+      // Read the camera's date text before exifr interprets it in local time.
+      exif: { reviveValues: false },
     })) as ExifrOutput | null | undefined;
   } catch {
     return {

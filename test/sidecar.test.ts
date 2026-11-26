@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdtemp, writeFile, rm, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
+import sharp from 'sharp';
 import { generateSidecars } from '../src/sidecar.js';
 
 describe('generateSidecars', () => {
@@ -28,5 +29,23 @@ describe('generateSidecars', () => {
     const sidecarPath = resolve(tempDir, 'photo.yaml');
     const content = await readFile(sidecarPath, 'utf-8');
     expect(content).toContain('title: Untitled');
+  });
+
+  it.each([
+    { DateTimeOriginal: '2026:11:24 23:30:00', OffsetTimeOriginal: '-05:00' },
+    { DateTimeOriginal: '2026:11:24 00:30:00', OffsetTimeOriginal: '+09:00' },
+    { DateTimeDigitized: '2026:11:24 23:30:00' },
+  ])('writes the calendar day from EXIF (%j)', async (fields) => {
+    await sharp({
+      create: { width: 8, height: 8, channels: 3, background: '#888888' },
+    })
+      .withExif({ IFD2: fields })
+      .jpeg()
+      .toFile(resolve(tempDir, 'photo.jpg'));
+
+    const result = await generateSidecars(tempDir);
+    expect(result.generated).toHaveLength(1);
+    const content = await readFile(resolve(tempDir, 'photo.yaml'), 'utf-8');
+    expect(content).toMatch(/^date: 2026-11-24$/m);
   });
 });

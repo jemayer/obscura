@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { parse as parseYaml } from 'yaml';
 import type { ExifData, PhotoMetadata } from './types.js';
 import { sidecarPathForPhoto } from './sidecar.js';
+import { readPhotoDate } from './photo-date.js';
 
 interface RawSidecar {
   title?: string;
@@ -39,22 +40,6 @@ async function loadSidecar(photoPath: string): Promise<RawSidecar | undefined> {
   }
 }
 
-/** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a default, not a real date. */
-function isEpochDate(date: Date): boolean {
-  return (
-    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
-  );
-}
-
-function parseDate(value: string | Date | undefined): Date | undefined {
-  if (value === undefined || value === '') return undefined;
-  if (value instanceof Date) return isEpochDate(value) ? undefined : value;
-  const parsed = new Date(value);
-  if (isNaN(parsed.getTime())) return undefined;
-  if (isEpochDate(parsed)) return undefined;
-  return parsed;
-}
-
 function nonEmpty(value: string | undefined): string | undefined {
   if (value === undefined || value === '') return undefined;
   return value;
@@ -66,7 +51,7 @@ export function mergeMetadata(
   defaultLicense: string = 'all-rights-reserved',
   defaultPhotographer: string = '',
 ): PhotoMetadata {
-  const sidecarDate = sidecar ? parseDate(sidecar.date) : undefined;
+  const sidecarDate = readPhotoDate(sidecar?.date);
   const sidecarCamera = sidecar ? nonEmpty(sidecar.camera) : undefined;
   const sidecarLens = sidecar ? nonEmpty(sidecar.lens) : undefined;
 
@@ -98,10 +83,7 @@ export function mergeMetadata(
       defaultPhotographer,
   };
 
-  // Sidecar wins on conflict; filter out epoch dates from EXIF too
-  const rawDate = sidecarDate ?? exif.date;
-  const date =
-    rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
+  const date = sidecarDate ?? readPhotoDate(exif.date);
   const camera = sidecarCamera ?? exif.camera;
   const lens = sidecarLens ?? exif.lens;
   const focal_length = sidecar?.focal_length ?? exif.focal_length;

@@ -3,6 +3,7 @@ import { resolve, basename } from 'node:path';
 import { parseDocument } from 'yaml';
 import { writeFile } from 'node:fs/promises';
 import { isPhotoFile, sidecarPathForPhoto } from './sidecar.js';
+import { readPhotoDate } from './photo-date.js';
 
 export type EditableField = 'title' | 'location' | 'caption' | 'tags';
 
@@ -42,15 +43,6 @@ export interface SidecarEdits {
   readonly license?: string;
 }
 
-function parseDate(value: unknown): Date | undefined {
-  if (value === undefined || value === null || value === '') return undefined;
-  if (value instanceof Date) return value;
-  if (typeof value !== 'string') return undefined;
-  const parsed = new Date(value);
-  if (isNaN(parsed.getTime())) return undefined;
-  return parsed;
-}
-
 function asString(value: unknown): string {
   if (typeof value === 'string') return value;
   return '';
@@ -69,7 +61,7 @@ export function loadSidecarSnapshot(content: string): SidecarSnapshot {
   }
   const camera = asString(data['camera']);
   const lens = asString(data['lens']);
-  const date = parseDate(data['date']);
+  const date = readPhotoDate(data['date']);
 
   const license = asString(data['license']);
   const photographer = asString(data['photographer']);
