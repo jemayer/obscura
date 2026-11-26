@@ -26,9 +26,13 @@ Each photo in a gallery can have a companion YAML sidecar file with the same nam
 
 Sidecar values always win over EXIF data when both are present. Empty sidecar fields do not override EXIF values.
 
+A date such as `2026-11-24` displays as 24 November 2026 in any build timezone. Use an ISO 8601 timestamp such as `2026-11-24T15:23:00Z` to record the capture time as well. The page keeps the instant in its HTML and displays the calendar day in the build machine's timezone.
+
 ### Auto-Generated Sidecars
 
 When you run `npm run build`, Obscura creates sidecar files for any photo that doesn't have one yet. These are pre-filled with EXIF data (date, camera, lens, focal length, ISO, aperture, shutter speed, photographer from the EXIF Artist tag) and the title defaults to "Untitled". You only need to add meaningful titles, locations, and captions.
+
+New sidecars record EXIF capture times as UTC timestamps. If EXIF has no timezone offset, Obscura interprets the capture time in the build machine's timezone. To restore a capture time in an older sidecar, clear its `date` field to use EXIF at build time or replace it with a timestamp by hand.
 
 Use `npm run sidecar` to fill in missing fields interactively with terminal image previews, or edit the YAML files by hand. See the [CLI Reference](./cli.md#npm-run-sidecar) for details.
 

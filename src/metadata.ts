@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { parse as parseYaml } from 'yaml';
 import type { ExifData, PhotoMetadata } from './types.js';
 import { sidecarPathForPhoto } from './sidecar.js';
+import { parsePhotoDate, photoDateParts } from './photo-date.js';
 
 interface RawSidecar {
   title?: string;
@@ -41,15 +42,14 @@ async function loadSidecar(photoPath: string): Promise<RawSidecar | undefined> {
 
 /** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a default, not a real date. */
 function isEpochDate(date: Date): boolean {
-  return (
-    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
-  );
+  const [year, month, day] = photoDateParts(date);
+  return date.getTime() === 0 || (year === 1970 && month === 0 && day === 1);
 }
 
 function parseDate(value: string | Date | undefined): Date | undefined {
   if (value === undefined || value === '') return undefined;
   if (value instanceof Date) return isEpochDate(value) ? undefined : value;
-  const parsed = new Date(value);
+  const parsed = parsePhotoDate(value);
   if (isNaN(parsed.getTime())) return undefined;
   if (isEpochDate(parsed)) return undefined;
   return parsed;

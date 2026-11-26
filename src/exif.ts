@@ -20,8 +20,10 @@ export interface ExifResultClean {
 export type ExifResult = ExifResultWithWarning | ExifResultClean;
 
 interface ExifrOutput {
-  DateTimeOriginal?: Date;
-  CreateDate?: Date;
+  DateTimeOriginal?: string;
+  CreateDate?: string;
+  OffsetTimeOriginal?: string;
+  OffsetTimeDigitized?: string;
   Make?: string;
   Model?: string;
   LensModel?: string;
@@ -38,6 +40,8 @@ interface ExifrOutput {
 const EXIF_PICK_FIELDS = [
   'DateTimeOriginal',
   'CreateDate',
+  'OffsetTimeOriginal',
+  'OffsetTimeDigitized',
   'Make',
   'Model',
   'LensModel',
@@ -71,17 +75,29 @@ export function formatShutterSpeed(seconds: number): string {
   return `1/${String(denominator)}`;
 }
 
-/** Treat Unix epoch (1 Jan 1970) as missing — it's almost always a EXIF default, not a real date. */
-function isEpochDate(date: Date): boolean {
-  return (
-    date.getFullYear() === 1970 && date.getMonth() === 0 && date.getDate() === 1
+function parseExifDate(value?: string, offset?: string): Date | undefined {
+  if (typeof value !== 'string') return undefined;
+  const match =
+    /^(\d{4})[:-](\d{2})[:-](\d{2})(?:[ T](\d{2}:\d{2}:\d{2})(?:\s*(Z|UTC|[+-]\d{2}:\d{2}))?)?$/.exec(
+      value.trim(),
+    );
+  if (!match) return undefined;
+  const [, year, month, day, time = '00:00:00', inlineOffset] = match;
+  if (!year || !month || !day) return undefined;
+  // Cameras sometimes use 1 January 1970 as a missing-date placeholder.
+  if (year === '1970' && month === '01' && day === '01') return undefined;
+  const zone =
+    inlineOffset ?? (offset && /^[+-]\d{2}:\d{2}$/.test(offset) ? offset : '');
+  const date = new Date(
+    `${year}-${month}-${day}T${time}${zone === 'UTC' ? 'Z' : zone}`,
   );
+  return Number.isNaN(date.getTime()) ? undefined : date;
 }
 
 function buildExifData(parsed: ExifrOutput): ExifData {
-  const rawDate = parsed.DateTimeOriginal ?? parsed.CreateDate;
-  const date =
-    rawDate !== undefined && !isEpochDate(rawDate) ? rawDate : undefined;
+  const date = parsed.DateTimeOriginal
+    ? parseExifDate(parsed.DateTimeOriginal, parsed.OffsetTimeOriginal)
+    : parseExifDate(parsed.CreateDate, parsed.OffsetTimeDigitized);
   const camera = buildCameraString(parsed.Make, parsed.Model);
   const lens = parsed.LensModel;
   const focal_length =
@@ -149,6 +165,8 @@ export async function readExif(filePath: string): Promise<ExifResult> {
     parsed = (await exifr.parse(buffer, {
       pick: EXIF_PICK_FIELDS,
       gps: true,
+      // exifr's date reviver drops explicit UTC offsets.
+      exif: { reviveValues: false },
     })) as ExifrOutput | null | undefined;
   } catch {
     return {

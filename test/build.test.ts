@@ -54,6 +54,7 @@ describe('full build pipeline', () => {
     expect(html).toContain('Test Photo');
     expect(html).toContain('Berlin, Germany');
     expect(html).toContain('Test Camera');
+    expect(html).toContain('<time datetime="2024-06-15">15 June 2024</time>');
   });
 
   it('photo permalink has backlinks to referencing post', async () => {

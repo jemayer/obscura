@@ -23,6 +23,7 @@ import {
 import { slugifyTag, slugifyLocation } from './slugs.js';
 import type { ResolvedNavItem } from './types.js';
 import { resolveNavigation } from './navigation.js';
+import { isCalendarDate, photoDateParts } from './photo-date.js';
 
 // ---------------------------------------------------------------------------
 // Nunjucks Environment
@@ -83,9 +84,10 @@ export function createRenderingEngine(
   env.addFilter('dateformat', (date: unknown, fmt?: string) => {
     if (!(date instanceof Date)) return '';
     const format = fmt ?? 'YYYY-MM-DD';
-    const y = String(date.getFullYear());
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
+    const [year, month, day] = photoDateParts(date);
+    const y = String(year);
+    const m = String(month + 1).padStart(2, '0');
+    const d = String(day).padStart(2, '0');
     return format.replace('YYYY', y).replace('MM', m).replace('DD', d);
   });
 
@@ -106,13 +108,15 @@ export function createRenderingEngine(
       'November',
       'December',
     ];
-    return `${String(date.getDate())} ${months[date.getMonth()] ?? ''} ${String(date.getFullYear())}`;
+    const [year, month, day] = photoDateParts(date);
+    return `${String(day)} ${months[month] ?? ''} ${String(year)}`;
   });
 
   // ISO date string for <time datetime="">
   env.addFilter('isodate', (date: unknown) => {
     if (!(date instanceof Date)) return '';
-    return date.toISOString();
+    const iso = date.toISOString();
+    return isCalendarDate(date) ? iso.slice(0, 10) : iso;
   });
 
   // Srcset from photo variants: {{ photo.variants | srcset }}
